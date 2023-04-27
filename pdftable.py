@@ -172,7 +172,7 @@ class ImplicitTable(TableBase):
 			for cell in row:
 				result += '<td>'
 				for element in ell:
-					result += unicode(element).replace("<", "&lt;").replace(">", "&gt;")
+					result += str(element).replace("<", "&lt;").replace(">", "&gt;")
 				result += '</td>'
 			result += '</tr>'
 		result += '</table>'
@@ -197,36 +197,38 @@ class Table(TableBase):
 			missingC.sort(key=sort_rect_by_position(Rect.y1, Rect.xmid, self.__columns[-1]))
 			for missing in missingC:
 				rightColumn = self.__data_col_index(missing.xmid())
-				assert rightColumn != 0 and rightColumn != len(self.__columns)
-				leftColumn = rightColumn - 1
-				beginIndex = self.__data_row_index(missing.y1())
-				endIndex = self.__data_row_index(missing.y2())
-				for i in xrange(beginIndex, endIndex):
-					self.__data_layout[i][rightColumn] = self.__data_layout[i][leftColumn]
+				if rightColumn > 0:
+					assert rightColumn != 0 and rightColumn != len(self.__columns)
+					leftColumn = rightColumn - 1
+					beginIndex = self.__data_row_index(missing.y1())
+					endIndex = self.__data_row_index(missing.y2())
+					for i in range(beginIndex, endIndex):
+						self.__data_layout[i][rightColumn] = self.__data_layout[i][leftColumn]
 		
 		if len(self.__rows) > 2:
 			missingR = self.__identify_missing_row_lines(hor)
 			missingR.sort(key=sort_rect_by_position(Rect.x1, Rect.ymid, self.__rows[-1]))
 			for missing in missingR:
 				topRow = self.__data_row_index(missing.ymid())
-				assert topRow != 0 and topRow != len(self.__rows) - 1
-				bottomRow = topRow - 1
-				beginIndex = self.__data_col_index(missing.x1())
-				endIndex = self.__data_col_index(missing.x2())
-			
-				# Do not merge into non-rectangular cells.
-				if beginIndex > 0:
-					prev = beginIndex - 1
-					if self.__data_layout[topRow][prev] == self.__data_layout[topRow][beginIndex]:
-						continue
-			
-				if endIndex < len(self.__rows) - 1:
-					prev = endIndex - 1
-					if self.__data_layout[topRow][prev] == self.__data_layout[topRow][endIndex]:
-						continue
-			
-				for i in xrange(beginIndex, endIndex):
-					self.__data_layout[bottomRow][i] = self.__data_layout[topRow][i]
+				if topRow > 0:
+					assert topRow != 0 and topRow != len(self.__rows) - 1
+					bottomRow = topRow - 1
+					beginIndex = self.__data_col_index(missing.x1())
+					endIndex = self.__data_col_index(missing.x2())
+				
+					# Do not merge into non-rectangular cells.
+					if beginIndex > 0:
+						prev = beginIndex - 1
+						if self.__data_layout[topRow][prev] == self.__data_layout[topRow][beginIndex]:
+							continue
+				
+					if endIndex < len(self.__rows) - 1:
+						prev = endIndex - 1
+						if self.__data_layout[topRow][prev] == self.__data_layout[topRow][endIndex]:
+							continue
+				
+					for i in range(beginIndex, endIndex):
+						self.__data_layout[bottomRow][i] = self.__data_layout[topRow][i]
 		
 		self.__init_data_storage()
 	
@@ -256,6 +258,9 @@ class Table(TableBase):
 	def bounds(self):
 		return Rect(self.__columns[0], self.__rows[0], self.__columns[-1], self.__rows[-1])
 	
+	def set_y1(self, y1): 
+		self.__rows[0] = y1
+		
 	def cell_size(self, x, y):
 		row_index = self.__data_row_index(y)
 		col_index = self.__data_col_index(x)
@@ -267,10 +272,10 @@ class Table(TableBase):
 	def debug_html(self):
 		result = '<table border="1">'
 		print_index = -1
-		for row_index in xrange(0, self.rows()):
+		for row_index in range(0, self.rows()):
 			row = self.__data_layout[row_index]
 			result += "<tr>"
-			for cell_index in xrange(0, len(row)):
+			for cell_index in range(0, len(row)):
 				cell = row[cell_index]
 				if print_index >= cell: continue
 				width, height = self.cell_size(cell_index, row_index)
@@ -278,7 +283,7 @@ class Table(TableBase):
 				rowspan = (' rowspan="%i"' % height) if height != 1 else ""
 				result += "<td%s%s>" % (colspan, rowspan)
 				for element in self.get_at(cell_index, row_index):
-					result += unicode(element).replace("<", "&lt;").replace(">", "&gt;")
+					result += str(element).replace("<", "&lt;").replace(">", "&gt;")
 				result += "</td>"
 				print_index = cell
 			result += "</tr>"
@@ -345,9 +350,9 @@ class Table(TableBase):
 		i = 0
 		row_count = len(self.__rows) - 1
 		col_count = len(self.__columns) - 1
-		for _ in xrange(0, row_count):
+		for _ in range(0, row_count):
 			row = []
-			for _ in xrange(0, col_count):
+			for _ in range(0, col_count):
 				row.append(i)
 				i += 1
 			self.__data_layout.append(row)
@@ -355,16 +360,16 @@ class Table(TableBase):
 	def __init_data_storage(self):
 		i = 0
 		last_index = 0
-		for row_index in xrange(0, len(self.__data_layout)):
+		for row_index in range(0, len(self.__data_layout)):
 			row = self.__data_layout[row_index]
-			for cell_index in xrange(0, len(row)):
+			for cell_index in range(0, len(row)):
 				if row[cell_index] > last_index:
 					i += 1
 					last_index = row[cell_index]
 				row[cell_index] = i
 		
 		self.__data_storage = []
-		for i in xrange(0, self.__data_layout[-1][-1] + 1):
+		for i in range(0, self.__data_layout[-1][-1] + 1):
 			self.__data_storage.append([])
 	
 	def __data_row_index(self, y):
@@ -374,12 +379,12 @@ class Table(TableBase):
 		return self.__dim_index(self.__columns, x)
 	
 	def __dim_index(self, array, value):
-		for i in xrange(1, len(array)):
+		for i in range(1, len(array)):
 			ref_value = array[i]
 			if ref_value > value:
 				return i - 1
-		
-		raise Exception("improbable (%g between %g and %g)" % (value, array[0], array[-1]))
+		return 0
+		#raise Exception("improbable (%g between %g and %g)" % (value, array[0], array[-1]))
 	
 	def __cell_size(self, column, row):
 		value = self.__data_layout[row][column]
@@ -474,7 +479,7 @@ def main():
 	lines = []
 	figures = []
 	tables = []
-	for i in xrange(0, len(rects)):
+	for i in range(0, len(rects)):
 		rect = Rect(*rects[i])
 		(lines if (rect.width() < 9 or rect.height() < 9) else figures).append(rect)
 
@@ -485,7 +490,7 @@ def main():
 
 	for table in tables:
 		t = Table(table)
-		print
+		print()
 
 if __name__ == "__main__":
 	main()

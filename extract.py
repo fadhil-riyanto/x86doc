@@ -12,11 +12,11 @@ from x86manual import x86ManParser
 
 def main(argv):
 	for arg in argv[1:]:
-		fd = open(arg)
+		fd = open(arg, 'rb')
 		parser = PDFParser(fd)
 		document = PDFDocument(parser)
 		if not document.is_extractable:
-			print "Document not extractable."
+			print("Document not extractable.")
 			return 1
 	
 		params = LAParams(char_margin=1)
@@ -27,7 +27,7 @@ def main(argv):
 	
 		i = 1
 		for page in PDFPage.get_pages(fd, set(), caching=True, check_extractable=True):
-			print "Processing page %i" % i
+			print("Processing page %i" % i)
 			interpreter.process_page(page)
 			page = device.get_result()
 			parser.process_page(page)
@@ -35,7 +35,7 @@ def main(argv):
 		parser.flush()
 		fd.close()
 	
-		print "Conversion result: %i/%i" % (parser.success, parser.success + parser.fail)
+		print("Conversion result: %i/%i" % (parser.success, parser.success + parser.fail))
 
 if __name__ == "__main__":
 	result = main(sys.argv)

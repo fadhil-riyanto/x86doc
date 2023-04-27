@@ -1,6 +1,23 @@
-table { border-collapse: collapse }
-th, td { padding: 0px 10px; border: 1px #ddd solid; vertical-align: top }
-svg { display: block; margin: 0px auto }
-svg + h3 { text-align: center; }
+body {font:16px Segoe UI,SegoeUI,Helvetica Neue,Helvetica,Arial,sans-serif;color:#222;background:#fff;margin:0;padding:0;border:0;min-width:320px;-webkit-text-size-adjust:none}
 
-.notes { font-size: 9pt; }
+table{font-size:13px;background:#fff;border:1px solid #e8e8e8;border-collapse:collapse;width:100%}
+th{border:1px solid #e8e8e8; margin:0;padding:5px; text-align:left;background-color:#f2f2f2;font-weight:bold;}
+td{border:1px solid #e8e8e8; margin:0;padding:5px; text-align:left;}
+
+pre {margin:5px 0 2px 0;padding:2px 0;background-color: #C7EDCC33;border:1px solid #C7EDCC66;}
+
+a:visited,a:link,a:active {color: #00f; text-decoration:none}
+a:hover {color: #00f; text-decoration:underline}
+
+h1 {font-size: 19px;font-weight:bold;margin:18px 0 10px 0;padding:0}
+h2 {font-size: 17px;font-weight:bold;margin:18px 0 10px 0;padding:0}
+h3 {font-size: 15px;font-weight:bold;margin:18px 0 10px 0;padding:0}
+
+svg {display: block; margin: 0px auto}
+svg + h3 {text-align: center;}
+
+.notes {font-size: 9pt;}
+
+#head {font-size:14px;line-height:28px;height:28px;border-bottom:1px solid #e1eed0;color:#222;background-color:#e8e8e8;padding-left:5px}
+#head a {color:#222}
+#body {margin:0;padding:0;margin:15px;}
