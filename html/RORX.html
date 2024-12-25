@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>RORX - Rotate Right Logical Without Affecting Flags </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › RORX - Rotate Right Logical Without Affecting Flags </div>
+<div id="body">
+<h1>RORX — Rotate Right Logical Without Affecting Flags</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32-bit Mode</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>VEX.LZ.F2.0F3A.W0 F0 /r ib RORX r32, r/m32, imm8</td>
+<td>RMI</td>
+<td>V/V</td>
+<td>BMI2</td>
+<td>Rotate 32-bit r/m32 right imm8 times without affecting arithmetic flags.</td></tr>
+<tr>
+<td>VEX.LZ.F2.0F3A.W1 F0 /r ib RORX r64, r/m64, imm8</td>
+<td>RMI</td>
+<td>V/N.E.</td>
+<td>BMI2</td>
+<td>Rotate 64-bit r/m64 right imm8 times without affecting arithmetic flags.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>RMI</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Rotates the bits of second operand right by the count value specified in imm8 without affecting arithmetic flags. The RORX instruction does not read or write the arithmetic flags.</p>
+<p>This instruction is not supported in real mode and virtual-8086 mode. The operand size is always 32 bits if not in 64-bit mode. In 64-bit mode operand size 64 requires VEX.W1. VEX.W1 is ignored in non-64-bit modes. An attempt to execute this instruction with VEX.L not equal to 0 will cause #UD.</p>
+<h2>Operation</h2>
+<pre>IF (OperandSize = 32)
+    y := imm8 AND 1FH;
+    DEST := (SRC &gt;&gt; y) | (SRC &lt;&lt; (32-y));
+ELSEIF (OperandSize = 64 )
+    y := imm8 AND 3FH;
+    DEST := (SRC &gt;&gt; y) | (SRC &lt;&lt; (64-y));
+FI;</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>Auto-generated from high-level language.</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>See Table 2-29, “Type 13 Class Exception Conditions.”</p></div></body></html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>XEND - Transactional End </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › XEND - Transactional End </div>
+<div id="body">
+<h1>XEND—Transactional End</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>NP 0F 01 D5 XEND</td>
+<td>A</td>
+<td>V/V</td>
+<td>RTM</td>
+<td>Specifies the end of an RTM code region.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand2</th>
+<th>Operand3</th>
+<th>Operand4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>The instruction marks the end of an RTM code region. If this corresponds to the outermost scope (that is, including this XEND instruction, the number of XBEGIN instructions is the same as number of XEND instructions), the logical processor will attempt to commit the logical processor state atomically. If the commit fails, the logical processor will rollback all architectural register and memory updates performed during the RTM execution. The logical processor will resume execution at the fallback address computed from the outermost XBEGIN instruction. The EAX register is updated to reflect RTM abort information.</p>
+<p>Execution of XEND outside a transactional region causes a general-protection exception (#GP). Execution of XEND while in a suspend read address tracking region causes a transactional abort.</p>
+<h2>Operation</h2>
+<p><strong>XEND</strong></p>
+<pre>IF (RTM_ACTIVE = 0) THEN
+    SIGNAL #GP
+ELSE
+    IF SUSLDTRK_ACTIVE = 1
+         THEN GOTO RTM_ABORT_PROCESSING;
+    FI;
+    RTM_NEST_COUNT--
+    IF (RTM_NEST_COUNT = 0) THEN
+         Try to commit transaction
+         IF fail to commit transactional execution
+              THEN
+                    GOTO RTM_ABORT_PROCESSING;
+              ELSE (* commit success *)
+                    RTM_ACTIVE := 0
+         FI;
+    FI;
+FI;
+(* For any RTM abort condition encountered during RTM execution *)
+RTM_ABORT_PROCESSING:
+    Restore architectural register state
+    Discard memory updates performed in transaction
+    Update EAX with status
+    RTM_NEST_COUNT := 0
+    RTM_ACTIVE := 0
+    SUSLDTRK_ACTIVE := 0
+    IF 64-bit Mode
+         THEN
+              RIP := fallbackRIP
+         ELSE
+              EIP := fallbackEIP
+    FI;
+END</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>XEND void _xend( void );</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>CPUID.(EAX=7, ECX=0):EBX.RTM[bit 11] = 0.</p>
+<p>If LOCK prefix is used.</p></td></tr>
+<tr>
+<td>#GP(0)</td>
+<td>If RTM_ACTIVE = 0.</td></tr></table></div></body></html>

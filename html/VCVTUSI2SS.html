@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VCVTUSI2SS - Convert Unsigned Integer to Scalar Single Precision Floating-Point Value </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VCVTUSI2SS - Convert Unsigned Integer to Scalar Single Precision Floating-Point Value </div>
+<div id="body">
+<h1>VCVTUSI2SS—Convert Unsigned Integer to Scalar Single Precision Floating-Point Value</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.LLIG.F3.0F.W0 7B /r VCVTUSI2SS xmm1, xmm2, r/m32{er}</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Convert one signed doubleword integer from r/m32 to one single precision floating-point value in xmm1.</td></tr>
+<tr>
+<td>EVEX.LLIG.F3.0F.W1 7B /r VCVTUSI2SS xmm1, xmm2, r/m64{er}</td>
+<td>A</td>
+<td>V/N.E.<sup>1</sup></td>
+<td>AVX512F</td>
+<td>Convert one signed quadword integer from r/m64 to one single precision floating-point value in xmm1.</td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1. For this specific instruction, EVEX.W in non-64 bit is ignored; the instruction behaves as if the W0 version is used.</p>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Tuple1 Scalar</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Converts a unsigned doubleword integer (or unsigned quadword integer if operand size is 64 bits) in the source operand (second operand) to a single precision floating-point value in the destination operand (first operand). The source operand can be a general-purpose register or a memory location. The destination operand is an XMM register. The result is stored in the low doubleword of the destination operand. When a conversion is inexact, the value returned is rounded according to the rounding control bits in the MXCSR register or the embedded rounding control bits.</p>
+<p>The second source operand can be a general-purpose register or a 32/64-bit memory location. The first source and destination operands are XMM registers. Bits (127:32) of the XMM register destination are copied from corre-sponding bits in the first source operand. Bits (MAXVL-1:128) of the destination register are zeroed.</p>
+<p>EVEX.W1 version: promotes the instruction to use 64-bit input value in 64-bit mode.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VCVTUSI2SS (EVEX Encoded Version)</strong></p>
+<p>IF (SRC2 *is register*) AND (EVEX.b = 1)</p>
+<p>THEN</p>
+<p>SET_ROUNDING_MODE_FOR_THIS_INSTRUCTION(EVEX.RC);</p>
+<p>ELSE</p>
+<p>SET_ROUNDING_MODE_FOR_THIS_INSTRUCTION(MXCSR.RC);</p>
+<p>FI;</p>
+<p>IF 64-Bit Mode And OperandSize = 64</p>
+<p>THEN</p>
+<p>DEST[31:0] := Convert_UInteger_To_Single_Precision_Floating_Point(SRC[63:0]);</p>
+<p>ELSE</p>
+<p>DEST[31:0] := Convert_UInteger_To_Single_Precision_Floating_Point(SRC[31:0]);</p>
+<p>FI;</p>
+<p>DEST[127:32] := SRC1[127:32]</p>
+<p>DEST[MAXVL-1:128] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VCVTUSI2SS __m128 _mm_cvtu32_ss( __m128 s, unsigned a);</p>
+<p>VCVTUSI2SS __m128 _mm_cvt_roundu32_ss( __m128 s, unsigned a, int r);</p>
+<p>VCVTUSI2SS __m128 _mm_cvtu64_ss( __m128 s, unsigned __int64 a);</p>
+<p>VCVTUSI2SS __m128 _mm_cvt_roundu64_ss( __m128 s, unsigned __int64 a, int r);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Precision.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-48, “Type E3NF Class Exception Conditions.”</p></div></body></html>

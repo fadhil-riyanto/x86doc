@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>CVTPI2PD - Convert Packed Dword Integers to Packed Double Precision Floating-Point Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › CVTPI2PD - Convert Packed Dword Integers to Packed Double Precision Floating-Point Values </div>
+<div id="body">
+<h1>CVTPI2PD—Convert Packed Dword Integers to Packed Double Precision Floating-Point Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64-Bit Mode</th>
+<th>Compat/Leg Mode</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>66 0F 2A /r</p>
+<p>CVTPI2PD xmm, mm/m64<sup>1</sup></p></td>
+<td>RM</td>
+<td>Valid</td>
+<td>Valid</td>
+<td>Convert two packed signed doubleword integers from mm/mem64 to two packed double precision floating-point values in xmm.</td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1. Operation is different for different operand sets; see the Description section.</p>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>RM</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Converts two packed signed doubleword integers in the source operand (second operand) to two packed double precision floating-point values in the destination operand (first operand).</p>
+<p>The source operand can be an MMX technology register or a 64-bit memory location. The destination operand is an XMM register. In addition, depending on the operand configuration:</p>
+<p>In 64-bit mode, use of the REX.R prefix permits this instruction to access additional registers (XMM8-XMM15).</p>
+<h2>Operation</h2>
+<pre>DEST[63:0] := Convert_Integer_To_Double_Precision_Floating_Point(SRC[31:0]);
+DEST[127:64] := Convert_Integer_To_Double_Precision_Floating_Point(SRC[63:32]);</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>CVTPI2PD __m128d _mm_cvtpi32_pd(__m64 a)</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>See Table 23-6, “Exception Conditions for Legacy SIMD/MMX Instructions with XMM and without FP Exception” in the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 3B.</p></div></body></html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VFPCLASSPH - Test Types of Packed FP16 Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VFPCLASSPH - Test Types of Packed FP16 Values </div>
+<div id="body">
+<h1>VFPCLASSPH—Test Types of Packed FP16 Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>EVEX.128.NP.0F3A.W0 66 /r /ib</p>
+<p>VFPCLASSPH  k1{k2},  xmm1/m128/m16bcst,  imm8</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16 AVX512VL</td>
+<td>
+<p>Test the input for the following categories:</p>
+<p> NaN,</p>
+<p>+0, -0, +Infinity, -Infinity, denormal, finite negative.  The immediate field provides a mask bit for each of these category tests.  The masked test results are OR-ed together to form a mask result.</p></td></tr>
+<tr>
+<td>
+<p>EVEX.256.NP.0F3A.W0 66 /r /ib</p>
+<p>VFPCLASSPH  k1{k2},  ymm1/m256/m16bcst,  imm8</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16 AVX512VL</td>
+<td>
+<p>Test the input for the following categories:</p>
+<p> NaN,</p>
+<p>+0, -0, +Infinity, -Infinity, denormal, finite negative.  The immediate field provides a mask bit for each of these category tests.  The masked test results are OR-ed together to form a mask result.</p></td></tr>
+<tr>
+<td>
+<p>EVEX.512.NP.0F3A.W0 66 /r /ib</p>
+<p>VFPCLASSPH  k1{k2},  zmm1/m512/m16bcst,  imm8</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16</td>
+<td>
+<p>Test the input for the following categories:</p>
+<p> NaN,</p>
+<p>+0, -0, +Infinity, -Infinity, denormal, finite negative.  The immediate field provides a mask bit for each of these category tests.  The masked test results are OR-ed together to form a mask result.</p></td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8 (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction checks the packed FP16 values in the source operand for special categories, specified by the set bits in the imm8 byte. Each set bit in imm8 specifies a category of floating-point values that the input data element is classified against; see Table 5-8 for the categories. The classified results of all specified categories of an input value are ORed together to form the final boolean result for the input element. The result is written to the corre-sponding bits in the destination mask register according to the writemask.</p>
+<h3>Table 5-8.  Classifier Operations for VFPCLASSPH/VFPCLASSSH</h3>
+<table>
+<tr>
+<th>Bits</th>
+<th>Category</th>
+<th>Classifier</th></tr>
+<tr>
+<td>imm8[0]</td>
+<td>QNAN</td>
+<td>Checks for QNAN</td></tr>
+<tr>
+<td>imm8[1]</td>
+<td>PosZero</td>
+<td>Checks +0</td></tr>
+<tr>
+<td>imm8[2]</td>
+<td>NegZero</td>
+<td>
+<p>Checks for -0</p>
+<p>Checks for +∞</p></td></tr>
+<tr>
+<td>imm8[3]</td>
+<td>PosINF</td>
+<td>Checks for −∞</td></tr>
+<tr>
+<td>imm8[4]</td>
+<td>NegINF</td>
+<td></td></tr>
+<tr>
+<td>imm8[5]</td>
+<td>Denormal</td>
+<td>Checks for Denormal</td></tr>
+<tr>
+<td>imm8[6]</td>
+<td>Negative</td>
+<td>Checks for Negative finite</td></tr>
+<tr>
+<td>imm8[7]</td>
+<td>SNAN</td>
+<td>Checks for SNAN</td></tr></table>
+<p><strong>Operation</strong></p>
+<p>def check_fp_class_fp16(tsrc, imm8):</p>
+<p>negative := tsrc[15]</p>
+<p>exponent_all_ones := (tsrc[14:10] == 0x1F)</p>
+<p>exponent_all_zeros := (tsrc[14:10] == 0)</p>
+<p>mantissa_all_zeros := (tsrc[9:0] == 0)</p>
+<p>zero := exponent_all_zeros and mantissa_all_zeros</p>
+<p>signaling_bit := tsrc[9]</p>
+<p>snan := exponent_all_ones and not(mantissa_all_zeros) and not(signaling_bit)</p>
+<p>qnan := exponent_all_ones and not(mantissa_all_zeros) and signaling_bit</p>
+<p>positive_zero := not(negative) and zero</p>
+<p>negative_zero := negative and zero</p>
+<p>positive_infinity := not(negative) and exponent_all_ones and mantissa_all_zeros</p>
+<p>negative_infinity := negative and exponent_all_ones and mantissa_all_zeros</p>
+<p>denormal := exponent_all_zeros and not(mantissa_all_zeros)</p>
+<p>finite_negative := negative and not(exponent_all_ones) and not(zero)</p>
+<p>return (imm8[0] and qnan) OR</p>
+<p>(imm8[1] and positive_zero) OR</p>
+<p>(imm8[2] and negative_zero) OR</p>
+<p>(imm8[3] and positive_infinity) OR</p>
+<p>(imm8[4] and negative_infinity) OR</p>
+<p>(imm8[5] and denormal) OR</p>
+<p>(imm8[6] and finite_negative) OR</p>
+<p>(imm8[7] and snan)</p>
+<p><strong>VFPCLASSPH dest{k2}, src, imm8</strong></p>
+<p>VL = 128, 256 or 512</p>
+<p>KL := VL/16</p>
+<p>FOR i := 0 to KL-1:</p>
+<p>IF k2[i] or *no writemask*:</p>
+<p>IF SRC is memory and (EVEX.b = 1):</p>
+<p>tsrc := SRC.fp16[0]</p>
+<p>ELSE:</p>
+<p>tsrc := SRC.fp16[i]</p>
+<p>DEST.bit[i] := check_fp_class_fp16(tsrc, imm8)</p>
+<p>ELSE:</p>
+<p>DEST.bit[i] := 0</p>
+<p>DEST[MAXKL-1:kl] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VFPCLASSPH __mmask8 _mm_fpclass_ph_mask (__m128h a, int imm8);</p>
+<p>VFPCLASSPH __mmask8 _mm_mask_fpclass_ph_mask (__mmask8 k1, __m128h a, int imm8);</p>
+<p>VFPCLASSPH __mmask16 _mm256_fpclass_ph_mask (__m256h a, int imm8);</p>
+<p>VFPCLASSPH __mmask16 _mm256_mask_fpclass_ph_mask (__mmask16 k1, __m256h a, int imm8);</p>
+<p>VFPCLASSPH __mmask32 _mm512_fpclass_ph_mask (__m512h a, int imm8);</p>
+<p>VFPCLASSPH __mmask32 _mm512_mask_fpclass_ph_mask (__mmask32 k1, __m512h a, int imm8);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instructions, see Table 2-49, “Type E4 Class Exception Conditions.”</p></div></body></html>

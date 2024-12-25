@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VALIGND/VALIGNQ - Align Doubleword/Quadword Vectors </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VALIGND/VALIGNQ - Align Doubleword/Quadword Vectors </div>
+<div id="body">
+<h1>VALIGND/VALIGNQ—Align Doubleword/Quadword Vectors</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F3A.W0 03 /r ib VALIGND xmm1 {k1}{z}, xmm2, xmm3/m128/m32bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Shift right and merge vectors xmm2 and xmm3/m128/m32bcst with double-word granularity using imm8 as number of elements to shift, and store the final result in xmm1, under writemask.</td></tr>
+<tr>
+<td>EVEX.128.66.0F3A.W1 03 /r ib VALIGNQ xmm1 {k1}{z}, xmm2, xmm3/m128/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Shift right and merge vectors xmm2 and xmm3/m128/m64bcst with quad-word granularity using imm8 as number of elements to shift, and store the final result in xmm1, under writemask.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W0 03 /r ib VALIGND ymm1 {k1}{z}, ymm2, ymm3/m256/m32bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Shift right and merge vectors ymm2 and ymm3/m256/m32bcst with double-word granularity using imm8 as number of elements to shift, and store the final result in ymm1, under writemask.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W1 03 /r ib VALIGNQ ymm1 {k1}{z}, ymm2, ymm3/m256/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Shift right and merge vectors ymm2 and ymm3/m256/m64bcst with quad-word granularity using imm8 as number of elements to shift, and store the final result in ymm1, under writemask.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W0 03 /r ib VALIGND zmm1 {k1}{z}, zmm2, zmm3/m512/m32bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Shift right and merge vectors zmm2 and zmm3/m512/m32bcst with double-word granularity using imm8 as number of elements to shift, and store the final result in zmm1, under writemask.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W1 03 /r ib VALIGNQ zmm1 {k1}{z}, zmm2, zmm3/m512/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Shift right and merge vectors zmm2 and zmm3/m512/m64bcst with quad-word granularity using imm8 as number of elements to shift, and store the final result in zmm1, under writemask.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Concatenates and shifts right doubleword/quadword elements of the first source operand (the second operand) and the second source operand (the third operand) into a 1024/512/256-bit intermediate vector. The low 512/256/128-bit of the intermediate vector is written to the destination operand (the first operand) using the writemask k1. The destination and first source operands are ZMM/YMM/XMM registers. The second source operand can be a ZMM/YMM/XMM register, a 512/256/128-bit memory location or a 512/256/128-bit vector broadcasted from a 32/64-bit memory location.</p>
+<p>This instruction is writemasked, so only those elements with the corresponding bit set in vector mask register k1 are computed and stored into zmm1. Elements in zmm1 with the corresponding bit clear in k1 retain their previous values (merging-masking) or are set to 0 (zeroing-masking).</p>
+<p><strong>Operation</strong></p>
+<p><strong>VALIGND (EVEX Encoded Versions)</strong></p>
+<p>(KL, VL) = (4, 128), (8, 256), (16, 512)</p>
+<p>IF (SRC2 *is memory*) (AND EVEX.b = 1)</p>
+<p>THEN</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>src[i+31:i] := SRC2[31:0]</p>
+<p>ENDFOR;</p>
+<p>ELSE src := SRC2</p>
+<p>FI</p>
+<p>; Concatenate sources</p>
+<p>tmp[VL-1:0] := src[VL-1:0]</p>
+<p>tmp[2VL-1:VL] := SRC1[VL-1:0]</p>
+<p>; Shift right doubleword elements</p>
+<p>IF VL = 128</p>
+<p>THEN SHIFT = imm8[1:0]</p>
+<p>ELSE</p>
+<p>IF VL = 256</p>
+<p>THEN SHIFT = imm8[2:0]</p>
+<p>ELSE SHIFT = imm8[3:0]</p>
+<p>FI</p>
+<p>FI;</p>
+<p>tmp[2VL-1:0] := tmp[2VL-1:0] &gt;&gt; (32*SHIFT)</p>
+<p>; Apply writemask</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+31:i] := tmp[i+31:i]</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+31:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+31:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR;</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>VALIGNQ (EVEX Encoded Versions)</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256),(8, 512)</p>
+<p>IF (SRC2 *is memory*) (AND EVEX.b = 1)</p>
+<p>THEN</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>src[i+63:i] := SRC2[63:0]</p>
+<p>ENDFOR;</p>
+<p>ELSE src := SRC2</p>
+<p>FI</p>
+<p>; Concatenate sources</p>
+<p>tmp[VL-1:0] := src[VL-1:0]</p>
+<p>tmp[2VL-1:VL] := SRC1[VL-1:0]</p>
+<p>; Shift right quadword elements</p>
+<p>IF VL = 128</p>
+<p>THEN SHIFT = imm8[0]</p>
+<p>ELSE</p>
+<p>IF VL = 256</p>
+<p>THEN SHIFT = imm8[1:0]</p>
+<p>ELSE SHIFT = imm8[2:0]</p>
+<p>FI</p>
+<p>FI;</p>
+<p>tmp[2VL-1:0] := tmp[2VL-1:0] &gt;&gt; (64*SHIFT)</p>
+<p>; Apply writemask</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+63:i] := tmp[i+63:i]</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+63:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR;</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VALIGND __m512i _mm512_alignr_epi32( __m512i a, __m512i b, int cnt);</p>
+<p>VALIGND __m512i _mm512_mask_alignr_epi32(__m512i s, __mmask16 k, __m512i a, __m512i b, int cnt);</p>
+<p>VALIGND __m512i _mm512_maskz_alignr_epi32( __mmask16 k, __m512i a, __m512i b, int cnt);</p>
+<p>VALIGND __m256i _mm256_mask_alignr_epi32(__m256i s, __mmask8 k, __m256i a, __m256i b, int cnt);</p>
+<p>VALIGND __m256i _mm256_maskz_alignr_epi32( __mmask8 k, __m256i a, __m256i b, int cnt);</p>
+<p>VALIGND __m128i _mm_mask_alignr_epi32(__m128i s, __mmask8 k, __m128i a, __m128i b, int cnt);</p>
+<p>VALIGND __m128i _mm_maskz_alignr_epi32( __mmask8 k, __m128i a, __m128i b, int cnt);</p>
+<p>VALIGNQ __m512i _mm512_alignr_epi64( __m512i a, __m512i b, int cnt);</p>
+<p>VALIGNQ __m512i _mm512_mask_alignr_epi64(__m512i s, __mmask8 k, __m512i a, __m512i b, int cnt);</p>
+<p>VALIGNQ __m512i _mm512_maskz_alignr_epi64( __mmask8 k, __m512i a, __m512i b, int cnt);</p>
+<p>VALIGNQ __m256i _mm256_mask_alignr_epi64(__m256i s, __mmask8 k, __m256i a, __m256i b, int cnt);</p>
+<p>VALIGNQ __m256i _mm256_maskz_alignr_epi64( __mmask8 k, __m256i a, __m256i b, int cnt);</p>
+<p>VALIGNQ __m128i _mm_mask_alignr_epi64(__m128i s, __mmask8 k, __m128i a, __m128i b, int cnt);</p>
+<p>VALIGNQ __m128i _mm_maskz_alignr_epi64( __mmask8 k, __m128i a, __m128i b, int cnt);</p>
+<p><strong>Exceptions</strong></p>
+<p>See Table 2-50, “Type E4NF Class Exception Conditions.”</p></div></body></html>

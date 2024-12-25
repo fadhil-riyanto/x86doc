@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VCVTTSH2SI - Convert with Truncation Low FP16 Value to a Signed Integer </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VCVTTSH2SI - Convert with Truncation Low FP16 Value to a Signed Integer </div>
+<div id="body">
+<h1>VCVTTSH2SI—Convert with Truncation Low FP16 Value to a Signed Integer</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.LLIG.F3.MAP5.W0 2C /r VCVTTSH2SI r32, xmm1/m16 {sae}</td>
+<td>A</td>
+<td>V/V<sup>1</sup></td>
+<td>AVX512-FP16</td>
+<td>Convert FP16 value in the low element of xmm1/m16 to a signed integer and store the result in r32 using truncation.</td></tr>
+<tr>
+<td>EVEX.LLIG.F3.MAP5.W1 2C /r VCVTTSH2SI r64, xmm1/m16 {sae}</td>
+<td>A</td>
+<td>V/N.E.</td>
+<td>AVX512-FP16</td>
+<td>Convert FP16 value in the low element of xmm1/m16 to a signed integer and store the result in r64 using truncation.</td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1. Outside of 64b mode, the EVEX.W field is ignored. The instruction behaves as if W=0 was used.</p>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Scalar</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction converts the low FP16 element in the source operand to a signed integer in the destination general purpose register.</p>
+<p>When a conversion is inexact, a truncated (round toward zero) value is returned. If a converted result cannot be represented in the destination format, the floating-point invalid exception is raised, and if this exception is masked, the integer indefinite value is returned.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VCVTTSH2SI dest, src</strong></p>
+<p>IF 64-mode and OperandSize == 64:</p>
+<p>DEST.qword := Convert_fp16_to_integer64_truncate(SRC.fp16[0])</p>
+<p>ELSE:</p>
+<p>DEST.dword := Convert_fp16_to_integer32_truncate(SRC.fp16[0])</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VCVTTSH2SI int _mm_cvtt_roundsh_i32 (__m128h a, int sae);</p>
+<p>VCVTTSH2SI __int64 _mm_cvtt_roundsh_i64 (__m128h a, int sae);</p>
+<p>VCVTTSH2SI int _mm_cvttsh_i32 (__m128h a);</p>
+<p>VCVTTSH2SI __int64 _mm_cvttsh_i64 (__m128h a);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Precision.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instructions, see Table 2-48, “Type E3NF Class Exception Conditions.”</p></div></body></html>

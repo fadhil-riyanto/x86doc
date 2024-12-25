@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>BNDMOV - Move Bounds </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › BNDMOV - Move Bounds </div>
+<div id="body">
+<h1>BNDMOV—Move Bounds</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>66 0F 1A /r BNDMOV bnd1, bnd2/m64</td>
+<td>RM</td>
+<td>NE/V</td>
+<td>MPX</td>
+<td>Move lower and upper bound from bnd2/m64 to bound register bnd1.</td></tr>
+<tr>
+<td>66 0F 1A /r BNDMOV bnd1, bnd2/m128</td>
+<td>RM</td>
+<td>V/NE</td>
+<td>MPX</td>
+<td>Move lower and upper bound from bnd2/m128 to bound register bnd1.</td></tr>
+<tr>
+<td>66 0F 1B /r BNDMOV bnd1/m64, bnd2</td>
+<td>MR</td>
+<td>NE/V</td>
+<td>MPX</td>
+<td>Move lower and upper bound from bnd2 to bnd1/m64.</td></tr>
+<tr>
+<td>66 0F 1B /r BNDMOV bnd1/m128, bnd2</td>
+<td>MR</td>
+<td>V/NE</td>
+<td>MPX</td>
+<td>Move lower and upper bound from bnd2 to bound register bnd1/m128.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th></tr>
+<tr>
+<td>RM</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>MR</td>
+<td>ModRM:r/m (w)</td>
+<td>ModRM:reg (r)</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>BNDMOV moves a pair of lower and upper bound values from the source operand (the second operand) to the destination (the first operand). Each operation is 128-bit move. The exceptions are same as the MOV instruction. The memory format for loading/store bounds in 64-bit mode is shown in Figure 3-5.</p>
+<svg width="745.1999849999999" height="273.6899774999911" viewBox="53.580000 78000.000010 496.799990 182.459985">
+<text x="395.93869272999996" y="78028.515" style="font-size:6.932300pt" textLength="110.21941062000008" lengthAdjust="spacingAndGlyphs">BNDMOV to memory in 64-bit mode</text>
+<text x="133.44" y="78032.415" style="font-size:6.932300pt" textLength="56.67848480000001" lengthAdjust="spacingAndGlyphs">Upper Bound (UB)</text>
+<text x="259.13923652" y="78032.475" style="font-size:6.932300pt" textLength="55.46186615000005" lengthAdjust="spacingAndGlyphs">Lower Bound (LB)</text>
+<text x="458.99932715" y="78061.635" style="font-size:6.932300pt" textLength="3.8543588" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="132.06" y="78062.115" style="font-size:6.932300pt" textLength="7.693466540000003" lengthAdjust="spacingAndGlyphs">16</text>
+<text x="306.0" y="78062.175" style="font-size:6.932300pt" textLength="3.8543588" lengthAdjust="spacingAndGlyphs">8</text>
+<text x="470.5780736" y="78062.415" style="font-size:6.932300pt" textLength="32.40364989" lengthAdjust="spacingAndGlyphs">Byte offset</text>
+<text x="388.31838172000005" y="78112.755" style="font-size:6.932300pt" textLength="110.13206364000001" lengthAdjust="spacingAndGlyphs">BNDMOV to memory in 32-bit mode</text>
+<text x="125.82" y="78116.595" style="font-size:6.932300pt" textLength="56.61886702000001" lengthAdjust="spacingAndGlyphs">Upper Bound (UB)</text>
+<text x="251.51923652" y="78116.655" style="font-size:6.932300pt" textLength="55.47503752" lengthAdjust="spacingAndGlyphs">Lower Bound (LB)</text>
+<text x="451.37901614" y="78145.815" style="font-size:6.932300pt" textLength="3.8543588" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="124.5" y="78146.295" style="font-size:6.932300pt" textLength="7.693466540000003" lengthAdjust="spacingAndGlyphs">16</text>
+<text x="298.44" y="78146.355" style="font-size:6.932300pt" textLength="3.8543588" lengthAdjust="spacingAndGlyphs">8</text>
+<text x="379.44" y="78146.355" style="font-size:6.932300pt" textLength="3.8543588" lengthAdjust="spacingAndGlyphs">4</text>
+<text x="462.95776259" y="78146.655" style="font-size:6.932300pt" textLength="32.40919573000002" lengthAdjust="spacingAndGlyphs">Byte offset</text>
+<rect x="76.44" y="78108.06" width="285.9" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="144.24" y="78066.66" width="320.1" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="136.62" y="78150.84" width="320.1" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<h3>Figure 3-5.  Memory Layout of BNDMOV to/from Memory</h3>
+<p>This instruction does not change flags.</p>
+<h2>Operation</h2>
+<p><strong>BNDMOV register to register</strong></p>
+<pre>DEST.LB := SRC.LB;
+DEST.UB := SRC.UB;</pre>
+<p><strong>BNDMOV from memory</strong></p>
+<pre>IF 64-bit mode THEN
+         DEST.LB := LOAD_QWORD(SRC);
+         DEST.UB := LOAD_QWORD(SRC+8);
+    ELSE
+         DEST.LB := LOAD_DWORD_ZERO_EXT(SRC);
+         DEST.UB := LOAD_DWORD_ZERO_EXT(SRC+4);
+FI;</pre>
+<p><strong>BNDMOV to memory</strong></p>
+<pre>IF 64-bit mode THEN
+         DEST[63:0] := SRC.LB;
+         DEST[127:64] := SRC.UB;
+    ELSE
+         DEST[31:0] := SRC.LB;
+         DEST[63:32] := SRC.UB;
+FI;</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>BNDMOV void * _bnd_copy_ptr_bounds(const void *q, const void *r)</p>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Protected Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used but the destination is not a memory operand.</p>
+<p>If ModRM.r/m encodes BND4-BND7 when Intel MPX is enabled.</p>
+<p>If 67H prefix is not used and CS.D=0.</p>
+<p>If 67H prefix is used and CS.D=1.</p></td></tr>
+<tr>
+<td>#SS(0)</td>
+<td>If the memory operand effective address is outside the SS segment limit.</td></tr>
+<tr>
+<td>#GP(0)</td>
+<td>
+<p>If the memory operand effective address is outside the CS, DS, ES, FS, or GS segment limit.</p>
+<p>If the destination operand points to a non-writable segment</p>
+<p>If the DS, ES, FS, or GS segment register contains a NULL segment selector.</p></td></tr>
+<tr>
+<td>#AC(0)</td>
+<td>If alignment checking is enabled and an unaligned memory reference is made while CPL is 3.</td></tr>
+<tr>
+<td>#PF(fault code)</td>
+<td>If a page fault occurs.</td></tr></table>
+<h2>Real-Address Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used but the destination is not a memory operand.</p>
+<p>If ModRM.r/m encodes BND4-BND7 when Intel MPX is enabled.</p>
+<p>If 16-bit addressing is used.</p></td></tr>
+<tr>
+<td>#GP(0)</td>
+<td>If the memory operand effective address is outside the CS, DS, ES, FS, or GS segment limit.</td></tr>
+<tr>
+<td>#SS</td>
+<td>If the memory operand effective address is outside the SS segment limit.</td></tr></table>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used but the destination is not a memory operand.</p>
+<p>If ModRM.r/m encodes BND4-BND7 when Intel MPX is enabled.</p>
+<p>If 16-bit addressing is used.</p></td></tr>
+<tr>
+<td>#GP(0)</td>
+<td>If the memory operand effective address is outside the CS, DS, ES, FS, or GS segment limit.</td></tr>
+<tr>
+<td>#SS(0)</td>
+<td>If the memory operand effective address is outside the SS segment limit.</td></tr>
+<tr>
+<td>#AC(0)</td>
+<td>If alignment checking is enabled and an unaligned memory reference is made while CPL is 3.</td></tr>
+<tr>
+<td>#PF(fault code)</td>
+<td>If a page fault occurs.</td></tr></table>
+<h2>Compatibility Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>64-Bit Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used but the destination is not a memory operand.</p>
+<p>If ModRM.r/m and REX encodes BND4-BND15 when Intel MPX is enabled.</p></td></tr>
+<tr>
+<td>#SS(0)</td>
+<td>If the memory address referencing the SS segment is in a non-canonical form.</td></tr>
+<tr>
+<td>#GP(0)</td>
+<td>If the memory address is in a non-canonical form.</td></tr>
+<tr>
+<td>#AC(0)</td>
+<td>If alignment checking is enabled and an unaligned memory reference is made while CPL is 3.</td></tr>
+<tr>
+<td>#PF(fault code)</td>
+<td>If a page fault occurs.</td></tr></table></div></body></html>

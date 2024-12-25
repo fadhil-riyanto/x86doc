@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VFIXUPIMMPD - Fix Up Special Packed Float64 Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VFIXUPIMMPD - Fix Up Special Packed Float64 Values </div>
+<div id="body">
+<h1>VFIXUPIMMPD—Fix Up Special Packed Float64 Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F3A.W1 54 /r ib VFIXUPIMMPD xmm1 {k1}{z}, xmm2, xmm3/m128/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Fix up special numbers in float64 vector xmm1, float64 vector xmm2 and int64 vector xmm3/m128/m64bcst and store the result in xmm1, under writemask.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W1 54 /r ib VFIXUPIMMPD ymm1 {k1}{z}, ymm2, ymm3/m256/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Fix up special numbers in float64 vector ymm1, float64 vector ymm2 and int64 vector ymm3/m256/m64bcst and store the result in ymm1, under writemask.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W1 54 /r ib VFIXUPIMMPD zmm1 {k1}{z}, zmm2, zmm3/m512/m64bcst{sae}, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Fix up elements of float64 vector in zmm2 using int64 vector table in zmm3/m512/m64bcst, combine with preserved elements from zmm1, and store the result in zmm1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (r, w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Perform fix-up of quad-word elements encoded in double precision floating-point format in the first source operand (the second operand) using a 32-bit, two-level look-up table specified in the corresponding quadword element of the second source operand (the third operand) with exception reporting specifier imm8. The elements that are fixed-up are selected by mask bits of 1 specified in the opmask k1. Mask bits of 0 in the opmask k1 or table response action of 0000b preserves the corresponding element of the first operand. The fixed-up elements from the first source operand and the preserved element in the first operand are combined as the final results in the destination operand (the first operand).</p>
+<p>The destination and the first source operands are ZMM/YMM/XMM registers. The second source operand can be a ZMM/YMM/XMM register, a 512/256/128-bit memory location or a 512/256/128-bit vector broadcasted from a 64-bit memory location.</p>
+<p>The two-level look-up table perform a fix-up of each double precision floating-point input data in the first source operand by decoding the input data encoding into 8 token types. A response table is defined for each token type that converts the input encoding in the first source operand with one of 16 response actions.</p>
+<p>This instruction is specifically intended for use in fixing up the results of arithmetic calculations involving one source so that they match the spec, although it is generally useful for fixing up the results of multiple-instruction sequences to reflect special-number inputs. For example, consider rcp(0). Input 0 to rcp, and you should get INF according to the DX10 spec. However, evaluating rcp via Newton-Raphson, where x=approx(1/0), yields an incor-rect result. To deal with this, VFIXUPIMMPD can be used after the N-R reciprocal sequence to set the result to the correct value (i.e., INF when the input is 0).</p>
+<p>If MXCSR.DAZ is not set, denormal input elements in the first source operand are considered as normal inputs and do not trigger any fixup nor fault reporting.</p>
+<p>Imm8 is used to set the required flags reporting. It supports #ZE and #IE fault reporting (see details below).</p>
+<p>MXCSR mask bits are ignored and are treated as if all mask bits are set to masked response). If any of the imm8 bits is set and the condition met for fault reporting, MXCSR.IE or MXCSR.ZE might be updated.</p>
+<p>This instruction is writemasked, so only those elements with the corresponding bit set in vector mask register k1 are computed and stored into zmm1. Elements in the destination with the corresponding bit clear in k1 retain their previous values or are set to 0.</p>
+<p><strong>Operation</strong></p>
+<p>enum TOKEN_TYPE</p>
+<p>{</p>
+<p>QNAN_TOKEN := 0,</p>
+<p>SNAN_TOKEN := 1,</p>
+<p>ZERO_VALUE_TOKEN := 2,</p>
+<p>POS_ONE_VALUE_TOKEN := 3,</p>
+<p>NEG_INF_TOKEN := 4,</p>
+<p>POS_INF_TOKEN := 5,</p>
+<p>NEG_VALUE_TOKEN := 6,</p>
+<p>POS_VALUE_TOKEN := 7</p>
+<p>}</p>
+<p>FIXUPIMM_DP (dest[63:0], src1[63:0],tbl3[63:0], imm8 [7:0]){</p>
+<p>tsrc[63:0] := ((src1[62:52] = 0) AND (MXCSR.DAZ =1)) ? 0.0 : src1[63:0]</p>
+<p>CASE(tsrc[63:0] of TOKEN_TYPE) {</p>
+<p>QNAN_TOKEN: j := 0;</p>
+<p>SNAN_TOKEN: j := 1;</p>
+<p>ZERO_VALUE_TOKEN: j := 2;</p>
+<p>POS_ONE_VALUE_TOKEN: j := 3;</p>
+<p>NEG_INF_TOKEN: j := 4;</p>
+<p>POS_INF_TOKEN: j := 5;</p>
+<p>NEG_VALUE_TOKEN: j := 6;</p>
+<p>POS_VALUE_TOKEN: j := 7;</p>
+<p>}</p>
+<p>; end source special CASE(tsrc…)</p>
+<p>; The required response from src3 table is extracted</p>
+<p>token_response[3:0] = tbl3[3+4*j:4*j];</p>
+<p>CASE(token_response[3:0]) {</p>
+<p>0000: dest[63:0] := dest[63:0];</p>
+<p>; preserve content of DEST</p>
+<p>0001: dest[63:0] := tsrc[63:0];</p>
+<p>; pass through src1 normal input value, denormal as zero</p>
+<p>0010: dest[63:0] := QNaN(tsrc[63:0]);</p>
+<p>0011: dest[63:0] := QNAN_Indefinite;</p>
+<p>0100: dest[63:0] := -INF;</p>
+<p>0101: dest[63:0] := +INF;</p>
+<p>0110: dest[63:0] := tsrc.sign? –INF : +INF;</p>
+<p>0111: dest[63:0] := -0;</p>
+<p>1000: dest[63:0] := +0;</p>
+<p>1001: dest[63:0] := -1;</p>
+<p>1010: dest[63:0] := +1;</p>
+<p>1011: dest[63:0] := ½;</p>
+<p>1100: dest[63:0] := 90.0;</p>
+<p>1101: dest[63:0] := PI/2;</p>
+<p>1110: dest[63:0] := MAX_FLOAT;</p>
+<p>1111: dest[63:0] := -MAX_FLOAT;</p>
+<p>}</p>
+<p>; end of token_response CASE</p>
+<p>; The required fault reporting from imm8 is extracted</p>
+<p>; TOKENs are mutually exclusive and TOKENs priority defines the order.</p>
+<p>; Multiple faults related to a single token can occur simultaneously.</p>
+<p>IF (tsrc[63:0] of TOKEN_TYPE: ZERO_VALUE_TOKEN) AND imm8[0] then set #ZE;</p>
+<p>IF (tsrc[63:0] of TOKEN_TYPE: ZERO_VALUE_TOKEN) AND imm8[1] then set #IE;</p>
+<p>IF (tsrc[63:0] of TOKEN_TYPE: ONE_VALUE_TOKEN) AND imm8[2] then set #ZE;</p>
+<p>IF (tsrc[63:0] of TOKEN_TYPE: ONE_VALUE_TOKEN) AND imm8[3] then set #IE;</p>
+<p>IF (tsrc[63:0] of TOKEN_TYPE: SNAN_TOKEN) AND imm8[4] then set #IE;</p>
+<p>IF (tsrc[63:0] of TOKEN_TYPE: NEG_INF_TOKEN) AND imm8[5] then set #IE;</p>
+<p>IF (tsrc[63:0] of TOKEN_TYPE: NEG_VALUE_TOKEN) AND imm8[6] then set #IE;</p>
+<p>IF (tsrc[63:0] of TOKEN_TYPE: POS_INF_TOKEN) AND imm8[7] then set #IE;</p>
+<p>; end fault reporting</p>
+<p>return dest[63:0];</p>
+<p>}</p>
+<p>; end of FIXUPIMM_DP()</p>
+<p><strong>VFIXUPIMMPD</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN</p>
+<p>IF (EVEX.b = 1) AND (SRC2 *is memory*)</p>
+<p>THEN</p>
+<p>DEST[i+63:i] := FIXUPIMM_DP(DEST[i+63:i], SRC1[i+63:i], SRC2[63:0], imm8 [7:0])</p>
+<p>ELSE</p>
+<p>DEST[i+63:i] := FIXUPIMM_DP(DEST[i+63:i], SRC1[i+63:i], SRC2[i+63:i], imm8 [7:0])</p>
+<p>FI;</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE  DEST[i+63:i] := 0</p>
+<p>; zeroing-masking</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p>Immediate Control Description:</p>
+<svg width="594.0899850000001" height="295.109977500033" viewBox="103.440000 140643.000010 396.059990 196.739985">
+<text x="327.18" y="140671.5359256" style="font-size:12.001000pt" textLength="6.672555999999986" lengthAdjust="spacingAndGlyphs">7</text>
+<text x="345.18" y="140671.5359256" style="font-size:12.001000pt" textLength="6.672555999999986" lengthAdjust="spacingAndGlyphs">6</text>
+<text x="363.18" y="140671.5359256" style="font-size:12.001000pt" textLength="6.672555999999986" lengthAdjust="spacingAndGlyphs">5</text>
+<text x="381.18" y="140671.5359256" style="font-size:12.001000pt" textLength="6.672555999999986" lengthAdjust="spacingAndGlyphs">4</text>
+<text x="399.18" y="140671.5359256" style="font-size:12.001000pt" textLength="6.672555999999986" lengthAdjust="spacingAndGlyphs">3</text>
+<text x="417.18" y="140671.5359256" style="font-size:12.001000pt" textLength="6.672555999999986" lengthAdjust="spacingAndGlyphs">2</text>
+<text x="435.18" y="140671.5359256" style="font-size:12.001000pt" textLength="6.672555999999986" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="453.18" y="140671.5359256" style="font-size:12.001000pt" textLength="6.672555999999986" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="148.68" y="140698.63193519998" style="font-size:12.001000pt" textLength="41.69987470000001" lengthAdjust="spacingAndGlyphs">+ INF </text>
+<text x="219.17987449999998" y="140698.63193519998" style="font-size:12.001000pt" textLength="22.201850000000007" lengthAdjust="spacingAndGlyphs">#IE</text>
+<text x="148.68" y="140716.63193519998" style="font-size:12.001000pt" textLength="7.2006000000000085" lengthAdjust="spacingAndGlyphs">-</text>
+<text x="164.4601149" y="140716.63193519998" style="font-size:12.001000pt" textLength="29.702474999999993" lengthAdjust="spacingAndGlyphs">VE  </text>
+<text x="219.17987449999998" y="140716.63193519998" style="font-size:12.001000pt" textLength="22.201850000000007" lengthAdjust="spacingAndGlyphs">#IE</text>
+<text x="148.68" y="140734.63193519998" style="font-size:12.001000pt" textLength="41.69987470000001" lengthAdjust="spacingAndGlyphs">- INF </text>
+<text x="219.17987449999998" y="140734.63193519998" style="font-size:12.001000pt" textLength="22.201850000000007" lengthAdjust="spacingAndGlyphs">#IE</text>
+<text x="153.96" y="140752.63193519998" style="font-size:12.001000pt" textLength="37.203100000000006" lengthAdjust="spacingAndGlyphs">SNaN </text>
+<text x="219.18063460000002" y="140752.63193519998" style="font-size:12.001000pt" textLength="22.201850000000007" lengthAdjust="spacingAndGlyphs">#IE</text>
+<text x="157.68" y="140770.63193519998" style="font-size:12.001000pt" textLength="37.20430010000001" lengthAdjust="spacingAndGlyphs">ONE  </text>
+<text x="219.1803246" y="140770.63193519998" style="font-size:12.001000pt" textLength="22.201850000000007" lengthAdjust="spacingAndGlyphs">#IE</text>
+<text x="157.68" y="140787.8519352" style="font-size:12.001000pt" textLength="37.20430010000001" lengthAdjust="spacingAndGlyphs">ONE  </text>
+<text x="219.1803246" y="140787.8519352" style="font-size:12.001000pt" textLength="22.201850000000007" lengthAdjust="spacingAndGlyphs">#ZE</text>
+<text x="153.96" y="140805.8519352" style="font-size:12.001000pt" textLength="37.203100000000006" lengthAdjust="spacingAndGlyphs">ZERO </text>
+<text x="219.18063460000002" y="140805.8519352" style="font-size:12.001000pt" textLength="22.201850000000007" lengthAdjust="spacingAndGlyphs">#IE</text>
+<text x="153.96" y="140823.8519352" style="font-size:12.001000pt" textLength="37.203100000000006" lengthAdjust="spacingAndGlyphs">ZERO </text>
+<text x="219.18063460000002" y="140823.8519352" style="font-size:12.001000pt" textLength="22.201850000000007" lengthAdjust="spacingAndGlyphs">#ZE</text>
+<rect x="337.68" y="140659.5" width="17.21999999999997" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140758.5" width="108.0" height="17.220000000001164" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140686.5" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140704.5" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140722.5" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140740.5" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140775.72" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140793.72" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140811.72" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M319.680000,140659.500000 L319.680000,140677.500000 L337.680000,140677.500000 L337.680000,140659.500000 " style="stroke:black"></path>
+<path d="M319.680000,140659.500000 L319.680000,140677.500000 L337.680000,140677.500000 L337.680000,140659.500000 " style="stroke:black"></path>
+<path d="M354.900000,140659.500000 L354.900000,140677.500000 L372.900000,140677.500000 L372.900000,140659.500000 " style="stroke:black"></path>
+<path d="M354.900000,140659.500000 L354.900000,140677.500000 L372.900000,140677.500000 L372.900000,140659.500000 " style="stroke:black"></path>
+<path d="M372.900000,140659.500000 L372.900000,140677.500000 L390.900000,140677.500000 L390.900000,140659.500000 " style="stroke:black"></path>
+<path d="M372.900000,140659.500000 L372.900000,140677.500000 L390.900000,140677.500000 L390.900000,140659.500000 " style="stroke:black"></path>
+<path d="M390.900000,140659.500000 L390.900000,140677.500000 L408.900000,140677.500000 L408.900000,140659.500000 " style="stroke:black"></path>
+<path d="M390.900000,140659.500000 L390.900000,140677.500000 L408.900000,140677.500000 L408.900000,140659.500000 " style="stroke:black"></path>
+<path d="M408.900000,140659.500000 L408.900000,140677.500000 L426.900000,140677.500000 L426.900000,140659.500000 " style="stroke:black"></path>
+<path d="M408.900000,140659.500000 L408.900000,140677.500000 L426.900000,140677.500000 L426.900000,140659.500000 " style="stroke:black"></path>
+<path d="M426.900000,140659.500000 L426.900000,140677.500000 L444.900000,140677.500000 L444.900000,140659.500000 " style="stroke:black"></path>
+<path d="M426.900000,140659.500000 L426.900000,140677.500000 L444.900000,140677.500000 L444.900000,140659.500000 " style="stroke:black"></path>
+<path d="M444.900000,140659.500000 L444.900000,140677.500000 L462.900000,140677.500000 L462.900000,140659.500000 " style="stroke:black"></path>
+<path d="M444.900000,140659.500000 L444.900000,140677.500000 L462.900000,140677.500000 L462.900000,140659.500000 " style="stroke:black"></path>
+<path d="M324.900000,140687.220000 L328.680000,140677.500000 L331.680000,140687.220000 L324.900000,140687.220000 " style="stroke:black"></path>
+<path d="M342.900000,140687.220000 L345.900000,140677.500000 L349.680000,140687.220000 L342.900000,140687.220000 " style="stroke:black"></path>
+<path d="M360.900000,140687.220000 L363.900000,140677.500000 L367.680000,140687.220000 L360.900000,140687.220000 " style="stroke:black"></path>
+<path d="M378.900000,140687.220000 L381.900000,140677.500000 L385.680000,140687.220000 L378.900000,140687.220000 " style="stroke:black"></path>
+<path d="M396.900000,140687.220000 L399.900000,140677.500000 L403.680000,140687.220000 L396.900000,140687.220000 " style="stroke:black"></path>
+<path d="M414.900000,140687.220000 L417.900000,140677.500000 L420.900000,140687.220000 L414.900000,140687.220000 " style="stroke:black"></path>
+<path d="M432.900000,140687.220000 L435.900000,140677.500000 L438.900000,140687.220000 L432.900000,140687.220000 " style="stroke:black"></path>
+<path d="M450.900000,140687.220000 L453.900000,140677.500000 L456.900000,140687.220000 L450.900000,140687.220000 " style="stroke:black"></path>
+<path d="M247.680000,140695.500000 L328.680000,140695.500000 L328.680000,140686.500000 " style="stroke:black"></path>
+<path d="M247.680000,140713.500000 L345.900000,140713.500000 L345.900000,140686.500000 " style="stroke:black"></path>
+<path d="M247.680000,140731.500000 L363.900000,140731.500000 L363.900000,140686.500000 " style="stroke:black"></path>
+<path d="M247.680000,140749.500000 L381.900000,140749.500000 L381.900000,140686.500000 " style="stroke:black"></path>
+<path d="M247.680000,140767.500000 L399.900000,140767.500000 L399.900000,140686.500000 " style="stroke:black"></path>
+<path d="M247.680000,140785.500000 L417.900000,140785.500000 L417.900000,140686.500000 " style="stroke:black"></path>
+<path d="M247.680000,140802.720000 L435.900000,140802.720000 L435.900000,140686.500000 " style="stroke:black"></path>
+<path d="M247.680000,140820.720000 L453.900000,140820.720000 L453.900000,140686.500000 " style="stroke:black"></path>
+<rect x="337.68" y="140659.5" width="17.21999999999997" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140758.5" width="108.0" height="17.220000000001164" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140686.5" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140704.5" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140722.5" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140740.5" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140775.72" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140793.72" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="139.68" y="140811.72" width="108.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<h3>Figure 5-9.  VFIXUPIMMPD Immediate Control Description</h3>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VFIXUPIMMPD __m512d _mm512_fixupimm_pd( __m512d a, __m512i tbl, int imm);</p>
+<p>VFIXUPIMMPD __m512d _mm512_mask_fixupimm_pd(__m512d s, __mmask8 k, __m512d a, __m512i tbl, int imm);</p>
+<p>VFIXUPIMMPD __m512d _mm512_maskz_fixupimm_pd( __mmask8 k, __m512d a, __m512i tbl, int imm);</p>
+<p>VFIXUPIMMPD __m512d _mm512_fixupimm_round_pd( __m512d a, __m512i tbl, int imm, int sae);</p>
+<p>VFIXUPIMMPD __m512d _mm512_mask_fixupimm_round_pd(__m512d s, __mmask8 k, __m512d a, __m512i tbl, int imm, int sae);</p>
+<p>VFIXUPIMMPD __m512d _mm512_maskz_fixupimm_round_pd( __mmask8 k, __m512d a, __m512i tbl, int imm, int sae);</p>
+<p>VFIXUPIMMPD __m256d _mm256_fixupimm_pd( __m256d a, m256d b, __m256i c, int imm8);</p>
+<p>VFIXUPIMMPD __m256d _mm256_mask_fixupimm_pd(__m256d a, __mmask8 k, __m256d b, __m256i c, int imm8);</p>
+<p>VFIXUPIMMPD __m256d _mm256_maskz_fixupimm_pd( __mmask8 k, __m256d a, __m256d b, __m256i c, int imm8);</p>
+<p>VFIXUPIMMPD __m128d _mm_fixupimm_pd( __m128d a, __m128d b, __m128i c, int imm8);</p>
+<p>VFIXUPIMMPD __m128d _mm_mask_fixupimm_pd(__m128d a, __mmask8 k, __m128d b, __m128i c, int imm8);</p>
+<p>VFIXUPIMMPD __m128d _mm_maskz_fixupimm_pd( __mmask8 k, __m128d a, __m128d b, 128ic, int imm8);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Zero, Invalid.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-46, “Type E2 Class Exception Conditions.”</p></div></body></html>

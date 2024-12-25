@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VRSQRTPH - Compute Reciprocals of Square Roots of Packed FP16 Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VRSQRTPH - Compute Reciprocals of Square Roots of Packed FP16 Values </div>
+<div id="body">
+<h1>VRSQRTPH—Compute Reciprocals of Square Roots of Packed FP16 Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.MAP6.W0  4E  /r VRSQRTPH  xmm1{k1}{z},  xmm2/m128/m16bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16 AVX512VL</td>
+<td>Compute the approximate reciprocals of the square roots of packed FP16 values in xmm2/m128/m16bcst and store the result in xmm1 subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.MAP6.W0  4E  /r VRSQRTPH  ymm1{k1}{z},  ymm2/m256/m16bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16 AVX512VL</td>
+<td>Compute the approximate reciprocals of the square roots of packed FP16 values in ymm2/m256/m16bcst and store the result in ymm1 subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.MAP6.W0  4E  /r VRSQRTPH  zmm1{k1}{z},  zmm2/m512/m16bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16</td>
+<td>Compute the approximate reciprocals of the square roots of packed FP16 values in zmm2/m512/m16bcst and store the result in zmm1 subject to writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction performs a SIMD computation of the approximate reciprocals square-root of 8/16/32 packed FP16 floating-point values in the source operand (the second operand) and stores the packed FP16 floating-point results in the destination operand.</p>
+<p>The maximum relative error for this approximation is less than 2<sup>−11 </sup>+ 2<sup>−14</sup>. For special cases, see Table 5-28.</p>
+<p>The destination elements are updated according to the writemask.</p>
+<h3>Table 5-28. VRSQRTPH/VRSQRTSH Special Cases</h3>
+<table>
+<tr>
+<th>Input value</th>
+<th>Reset Value</th>
+<th>Comments</th></tr>
+<tr>
+<td>
+<p>Any denormal</p>
+<p>X <em>= </em>2<em><sup>−2n</sup></em></p></td>
+<td>Normal</td>
+<td>Cannot generate overflow</td></tr>
+<tr>
+<td>X <em>&lt; </em>0</td>
+<td>2<em><sup>n</sup></em></td>
+<td>Including −∞</td></tr>
+<tr>
+<td>X <em>= </em>−0</td>
+<td>−∞ QNaN_Indefinite</td>
+<td></td></tr>
+<tr>
+<td>X <em>= </em>+0</td>
+<td>+∞</td>
+<td></td></tr>
+<tr>
+<td>X <em>= </em>+∞</td>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td>+0</td>
+<td></td></tr></table>
+<p><strong>Operation</strong></p>
+<p><strong>VRSQRTPH dest{k1}, src</strong></p>
+<p>VL = 128, 256 or 512</p>
+<p>KL := VL/16</p>
+<p>FOR i := 0 to KL-1:</p>
+<p>IF k1[i] or *no writemask*:</p>
+<p>IF SRC is memory and (EVEX.b = 1):</p>
+<p>tsrc := src.fp16[0]</p>
+<p>ELSE:</p>
+<p>tsrc := src.fp16[i]</p>
+<p>DEST.fp16[i] := APPROXIMATE(1.0 / SQRT(tsrc) )</p>
+<p>ELSE IF *zeroing*:</p>
+<p>DEST.fp16[i] := 0</p>
+<p>//else DEST.fp16[i] remains unchanged</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VRSQRTPH __m128h _mm_mask_rsqrt_ph (__m128h src, __mmask8 k, __m128h a);</p>
+<p>VRSQRTPH __m128h _mm_maskz_rsqrt_ph (__mmask8 k, __m128h a);</p>
+<p>VRSQRTPH __m128h _mm_rsqrt_ph (__m128h a);</p>
+<p>VRSQRTPH __m256h _mm256_mask_rsqrt_ph (__m256h src, __mmask16 k, __m256h a);</p>
+<p>VRSQRTPH __m256h _mm256_maskz_rsqrt_ph (__mmask16 k, __m256h a);</p>
+<p>VRSQRTPH __m256h _mm256_rsqrt_ph (__m256h a);</p>
+<p>VRSQRTPH __m512h _mm512_mask_rsqrt_ph (__m512h src, __mmask32 k, __m512h a);</p>
+<p>VRSQRTPH __m512h _mm512_maskz_rsqrt_ph (__mmask32 k, __m512h a);</p>
+<p>VRSQRTPH __m512h _mm512_rsqrt_ph (__m512h a);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instruction, see Table 2-49, “Type E4 Class Exception Conditions.”</p></div></body></html>

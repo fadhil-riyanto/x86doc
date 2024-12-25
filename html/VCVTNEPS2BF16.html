@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VCVTNEPS2BF16 - Convert Packed Single Data to Packed BF16 Data </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VCVTNEPS2BF16 - Convert Packed Single Data to Packed BF16 Data </div>
+<div id="body">
+<h1>VCVTNEPS2BF16—Convert Packed Single Data to Packed BF16 Data</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.F3.0F38.W0 72 /r VCVTNEPS2BF16 xmm1{k1}{z}, xmm2/m128/m32bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512_BF16</td>
+<td>Convert packed single data from xmm2/m128 to packed BF16 data in xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.F3.0F38.W0 72 /r VCVTNEPS2BF16 xmm1{k1}{z}, ymm2/m256/m32bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512_BF16</td>
+<td>Convert packed single data from ymm2/m256 to packed BF16 data in xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.F3.0F38.W0 72 /r VCVTNEPS2BF16 ymm1{k1}{z}, zmm2/m512/m32bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F AVX512_BF16</td>
+<td>Convert packed single data from zmm2/m512 to packed BF16 data in ymm1 with writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Converts one SIMD register of packed single data into a single register of packed BF16 data.</p>
+<p>This instruction uses “Round to nearest (even)” rounding mode. Output denormals are always flushed to zero and input denormals are always treated as zero. MXCSR is not consulted nor updated.</p>
+<p>As the instruction operand encoding table shows, the EVEX.vvvv field is not used for encoding an operand. EVEX.vvvv is reserved and must be 0b1111 otherwise instructions will #UD.</p>
+<p><strong>Operation</strong></p>
+<p>Define convert_fp32_to_bfloat16(x):</p>
+<p>IF x is zero or denormal:</p>
+<p>dest[15] := x[31] // sign preserving zero (denormal go to zero)</p>
+<p>dest[14:0] := 0</p>
+<p>ELSE IF x is infinity:</p>
+<p>dest[15:0] := x[31:16]</p>
+<p>ELSE IF x is NAN:</p>
+<p>dest[15:0] := x[31:16] // truncate and set MSB of the mantissa to force QNAN</p>
+<p>dest[6] := 1</p>
+<p>ELSE // normal number</p>
+<p>LSB := x[16]</p>
+<p>rounding_bias := 0x00007FFF + LSB</p>
+<p>temp[31:0] := x[31:0] + rounding_bias // integer add</p>
+<p>dest[15:0] := temp[31:16]</p>
+<p>RETURN dest</p>
+<p><strong>VCVTNEPS2BF16 dest, src</strong></p>
+<p>VL = (128, 256, 512)</p>
+<p>KL = VL/16</p>
+<p>origdest := dest</p>
+<p>FOR i := 0 to KL/2-1:</p>
+<p>IF k1[ i ] or *no writemask*:</p>
+<p>IF src is memory and evex.b == 1:</p>
+<p>t := src.fp32[0]</p>
+<p>ELSE:</p>
+<p>t := src.fp32[ i ]</p>
+<p>dest.word[i] := convert_fp32_to_bfloat16(t)</p>
+<p>ELSE IF *zeroing*:</p>
+<p>dest.word[ i ] := 0</p>
+<p>ELSE:  // Merge masking, dest element unchanged</p>
+<p>dest.word[ i ] := origdest.word[ i ]</p>
+<p>DEST[MAXVL-1:VL/2] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VCVTNEPS2BF16 __m128bh _mm_cvtneps_pbh (__m128);</p>
+<p>VCVTNEPS2BF16 __m128bh _mm_mask_cvtneps_pbh (__m128bh, __mmask8, __m128);</p>
+<p>VCVTNEPS2BF16 __m128bh _mm_maskz_cvtneps_pbh (__mmask8, __m128);</p>
+<p>VCVTNEPS2BF16 __m128bh _mm256_cvtneps_pbh (__m256);</p>
+<p>VCVTNEPS2BF16 __m128bh _mm256_mask_cvtneps_pbh (__m128bh, __mmask8, __m256);</p>
+<p>VCVTNEPS2BF16 __m128bh _mm256_maskz_cvtneps_pbh (__mmask8, __m256);</p>
+<p>VCVTNEPS2BF16 __m256bh _mm512_cvtneps_pbh (__m512);</p>
+<p>VCVTNEPS2BF16 __m256bh _mm512_mask_cvtneps_pbh (__m256bh, __mmask16, __m512);</p>
+<p>VCVTNEPS2BF16 __m256bh _mm512_maskz_cvtneps_pbh (__mmask16, __m512);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-49, “Type E4 Class Exception Conditions.”</p></div></body></html>

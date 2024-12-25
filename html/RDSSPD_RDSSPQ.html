@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>RDSSPD/RDSSPQ - Read Shadow Stack Pointer </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › RDSSPD/RDSSPQ - Read Shadow Stack Pointer </div>
+<div id="body">
+<h1>RDSSPD/RDSSPQ—Read Shadow Stack Pointer</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>F3 0F 1E /1 (mod=11) RDSSPD r32</td>
+<td>R</td>
+<td>V/V</td>
+<td>CET_SS</td>
+<td>Copy low 32 bits of shadow stack pointer (SSP) to r32.</td></tr>
+<tr>
+<td>F3 REX.W 0F 1E /1 (mod=11) RDSSPQ r64</td>
+<td>R</td>
+<td>V/N.E.</td>
+<td>CET_SS</td>
+<td>Copies shadow stack pointer (SSP) to r64.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>R</td>
+<td>ModRM:r/m (w)</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Copies the current shadow stack pointer (SSP) register to the register destination. This opcode is a NOP when CET shadow stacks are not enabled and on processors that do not support CET.</p>
+<h2>Operation</h2>
+<pre>IF CPL = 3
+    IF CR4.CET &amp; IA32_U_CET.SH_STK_EN
+         IF (operand size is 64 bit)
+              THEN
+                    Dest := SSP;
+              ELSE
+                    Dest := SSP[31:0];
+         FI;
+    FI;
+ELSE
+    IF CR4.CET &amp; IA32_S_CET.SH_STK_EN
+         IF (operand size is 64 bit)
+              THEN
+                    Dest := SSP;
+              ELSE
+                    Dest := SSP[31:0];
+         FI;
+    FI;
+FI;</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>C/C++ Compiler Intrinsic Equivalent</h2>
+<p>RDSSPD__int32 _rdsspd_i32(void);</p>
+<p>RDSSPQ__int64 _rdsspq_i64(void);</p>
+<h2>Protected Mode Exceptions</h2>
+<p>None.</p>
+<h2>Real-Address Mode Exceptions</h2>
+<p>None.</p>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<p>None.</p>
+<h2>Compatibility Mode Exceptions</h2>
+<p>None.</p>
+<h2>64-Bit Mode Exceptions</h2>
+<p>None.</p></div></body></html>

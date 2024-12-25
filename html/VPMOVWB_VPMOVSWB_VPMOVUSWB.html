@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VPMOVWB/VPMOVSWB/VPMOVUSWB - Down Convert Word to Byte </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VPMOVWB/VPMOVSWB/VPMOVUSWB - Down Convert Word to Byte </div>
+<div id="body">
+<h1>VPMOVWB/VPMOVSWB/VPMOVUSWB—Down Convert Word to Byte</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.F3.0F38.W0 30 /r VPMOVWB xmm1/m64 {k1}{z}, xmm2</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Converts 8 packed word integers from xmm2 into 8 packed bytes in xmm1/m64 with truncation under writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.F3.0F38.W0 20 /r VPMOVSWB xmm1/m64 {k1}{z}, xmm2</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Converts 8 packed signed word integers from xmm2 into 8 packed signed bytes in xmm1/m64 using signed saturation under writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.F3.0F38.W0 10 /r VPMOVUSWB xmm1/m64 {k1}{z}, xmm2</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Converts 8 packed unsigned word integers from xmm2 into 8 packed unsigned bytes in 8mm1/m64 using unsigned saturation under writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.F3.0F38.W0 30 /r VPMOVWB xmm1/m128 {k1}{z}, ymm2</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Converts 16 packed word integers from ymm2 into 16 packed bytes in xmm1/m128 with truncation under writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.F3.0F38.W0 20 /r VPMOVSWB xmm1/m128 {k1}{z}, ymm2</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Converts 16 packed signed word integers from ymm2 into 16 packed signed bytes in xmm1/m128 using signed saturation under writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.F3.0F38.W0 10 /r VPMOVUSWB xmm1/m128 {k1}{z}, ymm2</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Converts 16 packed unsigned word integers from ymm2 into 16 packed unsigned bytes in xmm1/m128 using unsigned saturation under writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.F3.0F38.W0 30 /r VPMOVWB ymm1/m256 {k1}{z}, zmm2</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Converts 32 packed word integers from zmm2 into 32 packed bytes in ymm1/m256 with truncation under writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.F3.0F38.W0 20 /r VPMOVSWB ymm1/m256 {k1}{z}, zmm2</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Converts 32 packed signed word integers from zmm2 into 32 packed signed bytes in ymm1/m256 using signed saturation under writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.F3.0F38.W0 10 /r VPMOVUSWB ymm1/m256 {k1}{z}, zmm2</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Converts 32 packed unsigned word integers from zmm2 into 32 packed unsigned bytes in ymm1/m256 using unsigned saturation under writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Half Mem</td>
+<td>ModRM:r/m (w)</td>
+<td>ModRM:reg (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>VPMOVWB down converts 16-bit integers into packed bytes using truncation. VPMOVSWB converts signed 16-bit integers into packed signed bytes using signed saturation. VPMOVUSWB convert unsigned word values into unsigned byte values using unsigned saturation.</p>
+<p>The source operand is a ZMM/YMM/XMM register. The destination operand is a YMM/XMM/XMM register or a 256/128/64-bit memory location.</p>
+<p>Down-converted byte elements are written to the destination operand (the first operand) from the least-significant byte. Byte elements of the destination operand are updated according to the writemask. Bits (MAXVL-1:256/128/64) of the register destination are zeroed.</p>
+<p>Note: EVEX.vvvv is reserved and must be 1111b otherwise instructions will #UD.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VPMOVWB instruction (EVEX encoded versions) when dest is a register</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>FOR j := 0 TO Kl-1</p>
+<p>i := j * 8</p>
+<p>m := j * 16</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+7:i] := TruncateWordToByte (SRC[m+15:m])</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+7:i] remains unchanged*</p>
+<p>ELSE *zeroing-masking*</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+7:i] = 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL/2] := 0;</p>
+<p><strong>VPMOVWB instruction (EVEX encoded versions) when dest is memory</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>FOR j := 0 TO Kl-1</p>
+<p>i := j * 8</p>
+<p>m := j * 16</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+7:i] := TruncateWordToByte (SRC[m+15:m])</p>
+<p>ELSE</p>
+<p>*DEST[i+7:i] remains unchanged*</p>
+<p>; merging-masking</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p><strong>VPMOVSWB instruction (EVEX encoded versions) when dest is a register</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>FOR j := 0 TO Kl-1</p>
+<p>i := j * 8</p>
+<p>m := j * 16</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+7:i] := SaturateSignedWordToByte (SRC[m+15:m])</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+7:i] remains unchanged*</p>
+<p>ELSE *zeroing-masking*</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+7:i] = 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL/2] := 0;</p>
+<p><strong>VPMOVSWB instruction (EVEX encoded versions) when dest is memory</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>FOR j := 0 TO Kl-1</p>
+<p>i := j * 8</p>
+<p>m := j * 16</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+7:i] := SaturateSignedWordToByte (SRC[m+15:m])</p>
+<p>ELSE</p>
+<p>*DEST[i+7:i] remains unchanged*</p>
+<p>; merging-masking</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p><strong>VPMOVUSWB instruction (EVEX encoded versions) when dest is a register</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>FOR j := 0 TO Kl-1</p>
+<p>i := j * 8</p>
+<p>m := j * 16</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+7:i] := SaturateUnsignedWordToByte (SRC[m+15:m])</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+7:i] remains unchanged*</p>
+<p>ELSE *zeroing-masking*</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+7:i] = 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL/2] := 0;</p>
+<p><strong>VPMOVUSWB instruction (EVEX encoded versions) when dest is memory</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>FOR j := 0 TO Kl-1</p>
+<p>i := j * 8</p>
+<p>m := j * 16</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+7:i] := SaturateUnsignedWordToByte (SRC[m+15:m])</p>
+<p>ELSE</p>
+<p>*DEST[i+7:i] remains unchanged*</p>
+<p>; merging-masking</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalents</strong></p>
+<p>VPMOVUSWB __m256i _mm512_cvtusepi16_epi8(__m512i a);</p>
+<p>VPMOVUSWB __m256i _mm512_mask_cvtusepi16_epi8(__m256i a, __mmask32 k, __m512i b);</p>
+<p>VPMOVUSWB __m256i _mm512_maskz_cvtusepi16_epi8( __mmask32 k, __m512i b);</p>
+<p>VPMOVUSWB void _mm512_mask_cvtusepi16_storeu_epi8(void * , __mmask32 k, __m512i b);</p>
+<p>VPMOVSWB __m256i _mm512_cvtsepi16_epi8(__m512i a);</p>
+<p>VPMOVSWB __m256i _mm512_mask_cvtsepi16_epi8(__m256i a, __mmask32 k, __m512i b);</p>
+<p>VPMOVSWB __m256i _mm512_maskz_cvtsepi16_epi8( __mmask32 k, __m512i b);</p>
+<p>VPMOVSWB void _mm512_mask_cvtsepi16_storeu_epi8(void * , __mmask32 k, __m512i b);</p>
+<p>VPMOVWB __m256i _mm512_cvtepi16_epi8(__m512i a);</p>
+<p>VPMOVWB __m256i _mm512_mask_cvtepi16_epi8(__m256i a, __mmask32 k, __m512i b);</p>
+<p>VPMOVWB __m256i _mm512_maskz_cvtepi16_epi8( __mmask32 k, __m512i b);</p>
+<p>VPMOVWB void _mm512_mask_cvtepi16_storeu_epi8(void * , __mmask32 k, __m512i b);</p>
+<p>VPMOVUSWB __m128i _mm256_cvtusepi16_epi8(__m256i a);</p>
+<p>VPMOVUSWB __m128i _mm256_mask_cvtusepi16_epi8(__m128i a, __mmask16 k, __m256i b);</p>
+<p>VPMOVUSWB __m128i _mm256_maskz_cvtusepi16_epi8( __mmask16 k, __m256i b);</p>
+<p>VPMOVUSWB void _mm256_mask_cvtusepi16_storeu_epi8(void * , __mmask16 k, __m256i b);</p>
+<p>VPMOVUSWB __m128i _mm_cvtusepi16_epi8(__m128i a);</p>
+<p>VPMOVUSWB __m128i _mm_mask_cvtusepi16_epi8(__m128i a, __mmask8 k, __m128i b);</p>
+<p>VPMOVUSWB __m128i _mm_maskz_cvtusepi16_epi8( __mmask8 k, __m128i b);</p>
+<p>VPMOVUSWB void _mm_mask_cvtusepi16_storeu_epi8(void * , __mmask8 k, __m128i b);</p>
+<p>VPMOVSWB __m128i _mm256_cvtsepi16_epi8(__m256i a);</p>
+<p>VPMOVSWB __m128i _mm256_mask_cvtsepi16_epi8(__m128i a, __mmask16 k, __m256i b);</p>
+<p>VPMOVSWB __m128i _mm256_maskz_cvtsepi16_epi8( __mmask16 k, __m256i b);</p>
+<p>VPMOVSWB void _mm256_mask_cvtsepi16_storeu_epi8(void * , __mmask16 k, __m256i b);</p>
+<p>VPMOVSWB __m128i _mm_cvtsepi16_epi8(__m128i a);</p>
+<p>VPMOVSWB __m128i _mm_mask_cvtsepi16_epi8(__m128i a, __mmask8 k, __m128i b);</p>
+<p>VPMOVSWB __m128i _mm_maskz_cvtsepi16_epi8( __mmask8 k, __m128i b);</p>
+<p>VPMOVSWB void _mm_mask_cvtsepi16_storeu_epi8(void * , __mmask8 k, __m128i b);</p>
+<p>VPMOVWB __m128i _mm256_cvtepi16_epi8(__m256i a);</p>
+<p>VPMOVWB __m128i _mm256_mask_cvtepi16_epi8(__m128i a, __mmask16 k, __m256i b);</p>
+<p>VPMOVWB __m128i _mm256_maskz_cvtepi16_epi8( __mmask16 k, __m256i b);</p>
+<p>VPMOVWB void _mm256_mask_cvtepi16_storeu_epi8(void * , __mmask16 k, __m256i b);</p>
+<p>VPMOVWB __m128i _mm_cvtepi16_epi8(__m128i a);</p>
+<p>VPMOVWB __m128i _mm_mask_cvtepi16_epi8(__m128i a, __mmask8 k, __m128i b);</p>
+<p>VPMOVWB __m128i _mm_maskz_cvtepi16_epi8( __mmask8 k, __m128i b);</p>
+<p>VPMOVWB void _mm_mask_cvtepi16_storeu_epi8(void * , __mmask8 k, __m128i b);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instruction, see Table 2-53, “Type E6 Class Exception Conditions.”</p>
+<p>Additionally:</p>
+<table>
+<tr>
+<td>#UD</td>
+<td>If EVEX.vvvv != 1111B.</td></tr></table></div></body></html>

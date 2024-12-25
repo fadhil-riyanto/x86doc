@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>SETSSBSY - Mark Shadow Stack Busy </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › SETSSBSY - Mark Shadow Stack Busy </div>
+<div id="body">
+<h1>SETSSBSY—Mark Shadow Stack Busy</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>F3 0F 01 E8 SETSSBSY</td>
+<td>ZO</td>
+<td>V/V</td>
+<td>CET_SS</td>
+<td>Set busy flag in supervisor shadow stack token reference by IA32_PL0_SSP.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>ZO</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>The SETSSBSY instruction verifies the presence of a non-busy supervisor shadow stack token at the address in the IA32_PL0_SSP MSR and marks it busy. Following successful execution of the instruction, the SSP is set to the value of the IA32_PL0_SSP MSR.</p>
+<h2>Operation</h2>
+<pre>IF (CR4.CET = 0)
+    THEN #UD; FI;
+IF (IA32_S_CET.SH_STK_EN = 0)
+    THEN #UD; FI;
+IF CPL &gt; 0
+    THEN GP(0); FI;
+SSP_LA = IA32_PL0_SSP
+If SSP_LA not aligned to 8 bytes
+    THEN #GP(0); FI;
+expected_token_value = SSP_LA
+                                                         (* busy bit must not be set *)
+new_token_value          = SSP_LA | BUSY_BIT
+                                                         (* set busy bit; bit position 0 *)
+IF shadow_stack_lock_cmpxchg8B(SSP_LA, new_token_value, expected_token_value) != expected_token_value
+    THEN #CP(SETSSBSY); FI;
+SSP = SSP_LA</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>C/C++ Compiler Intrinsic Equivalent</h2>
+<p>SETSSBSYvoid _setssbsy(void);</p>
+<h2>Protected Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used.</p>
+<p>If CR4.CET = 0.</p>
+<p>IF IA32_S_CET.SH_STK_EN = 0.</p></td></tr>
+<tr>
+<td>#GP(0)</td>
+<td>
+<p>If IA32_PL0_SSP not aligned to 8 bytes.</p>
+<p>If CPL is not 0.</p></td></tr>
+<tr>
+<td>#CP(setssbsy)</td>
+<td>
+<p>If busy bit in token is set.</p>
+<p>If in 32-bit or compatibility mode, and the address in token is not below 4G.</p></td></tr>
+<tr>
+<td>#PF(fault-code)</td>
+<td>If a page fault occurs.</td></tr></table>
+<h2>Real-Address Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>The SETSSBSY instruction is not recognized in real-address mode.</td></tr></table>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>The SETSSBSY instruction is not recognized in virtual-8086 mode.</td></tr></table>
+<h2>Compatibility Mode Exceptions</h2>
+<p>Same as protected mode exceptions.</p>
+<h2>64-Bit Mode Exceptions</h2>
+<p>Same as protected mode exceptions.</p></div></body></html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>ENDBR64 - Terminate an Indirect Branch in 64-bit Mode </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › ENDBR64 - Terminate an Indirect Branch in 64-bit Mode </div>
+<div id="body">
+<h1>ENDBR64—Terminate an Indirect Branch in 64-bit Mode</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>F3 0F 1E FA ENDBR64</td>
+<td>ZO</td>
+<td>V/V</td>
+<td>CET_IBT</td>
+<td>Terminate indirect branch in 64-bit mode.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>ZO</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Terminate an indirect branch in 64 bit mode.</p>
+<h2>Operation</h2>
+<pre>IF EndbranchEnabled(CPL) &amp; IA32_EFER.LMA = 1 &amp; CS.L = 1
+    IF CPL = 3
+         THEN
+              IA32_U_CET.TRACKER = IDLE
+              IA32_U_CET.SUPPRESS = 0
+         ELSE
+              IA32_S_CET.TRACKER = IDLE
+              IA32_S_CET.SUPPRESS = 0
+    FI;
+FI;</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Exceptions</h2>
+<p>None.</p></div></body></html>

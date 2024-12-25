@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>INVPCID - Invalidate Process-Context Identifier </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › INVPCID - Invalidate Process-Context Identifier </div>
+<div id="body">
+<h1>INVPCID—Invalidate Process-Context Identifier</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32-bit Mode</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>66 0F 38 82 /r INVPCID r32, m128</td>
+<td>RM</td>
+<td>NE/V</td>
+<td>INVPCID</td>
+<td>Invalidates entries in the TLBs and paging-structure caches based on invalidation type in r32 and descrip-tor in m128.</td></tr>
+<tr>
+<td>66 0F 38 82 /r INVPCID r64, m128</td>
+<td>RM</td>
+<td>V/NE</td>
+<td>INVPCID</td>
+<td>Invalidates entries in the TLBs and paging-structure caches based on invalidation type in r64 and descrip-tor in m128.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>RM</td>
+<td>ModRM:reg (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Invalidates mappings in the translation lookaside buffers (TLBs) and paging-structure caches based on process-context identifier (PCID). (See Section 4.10, “Caching Translation Information,” in <em>Intel 64 and IA-32 Architecture Software Developer’s Manual, Volume 3A</em>.) Invalidation is based on the INVPCID type specified in the register operand and the INVPCID descriptor specified in the memory operand.</p>
+<p>Outside 64-bit mode, the register operand is always 32 bits, regardless of the value of CS.D. In 64-bit mode the register operand has 64 bits.</p>
+<p>There are four INVPCID types currently defined:</p>
+<p>The INVPCID descriptor comprises 128 bits and consists of a PCID and a linear address as shown in Figure 3-25. For INVPCID type 0, the processor uses the full 64 bits of the linear address even outside 64-bit mode; the linear address is not used for other INVPCID types.</p>
+<svg width="568.7999849999999" height="113.13001500000246" viewBox="112.380000 409251.000000 379.199990 75.420010">
+<text x="150.0" y="409275.87865820003" style="font-size:9.053900pt" textLength="14.991447620000002" lengthAdjust="spacingAndGlyphs">127</text>
+<text x="295.5" y="409275.87865820003" style="font-size:9.053900pt" textLength="21.530174199999976" lengthAdjust="spacingAndGlyphs">64 63</text>
+<text x="419.70049481000007" y="409275.87865820003" style="font-size:9.053900pt" textLength="10.012708009999983" lengthAdjust="spacingAndGlyphs">12</text>
+<text x="431.22067717000004" y="409275.87865820003" style="font-size:9.053900pt" textLength="9.352678700000013" lengthAdjust="spacingAndGlyphs">11</text>
+<text x="456.05552487" y="409275.87865820003" style="font-size:9.053900pt" textLength="5.033968399999992" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="200.39964518000005" y="409291.17884381" style="font-size:9.053900pt" textLength="59.92685871000003" lengthAdjust="spacingAndGlyphs">Linear Address</text>
+<text x="319.26014977000006" y="409291.17884381" style="font-size:9.053900pt" textLength="98.86134487999999" lengthAdjust="spacingAndGlyphs">Reserved (must be zero)</text>
+<text x="434.4203254300001" y="409291.17884381" style="font-size:9.053900pt" textLength="21.55190355999997" lengthAdjust="spacingAndGlyphs">PCID</text>
+<rect x="153.6" y="409280.04" width="306.05999999999995" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="306.66" y="409280.04" width="124.25999999999999" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<h3>Figure 3-25.  INVPCID Descriptor</h3>
+<p>1.</p>
+<p>If the paging structures map the linear address using a page larger than 4 KBytes and there are multiple TLB entries for that page (see Section 4.10.2.3, “Details of TLB Use,” in the Intel<em><sup>® </sup></em>64 and IA-32 Architectures Software Developer’s Manual, Volume 3A), the instruction invalidates all of them.</p>
+<p>If CR4.PCIDE = 0, a logical processor does not cache information for any PCID other than 000H. In this case, executions with INVPCID types 0 and 1 are allowed only if the PCID specified in the INVPCID descriptor is 000H; executions with INVPCID types 2 and 3 invalidate mappings only for PCID 000H. Note that CR4.PCIDE must be 0 outside IA-32e mode (see Chapter 4.10.1, “Process-Context Identifiers (PCIDs)‚” of the Intel<em><sup>® </sup></em>64 and IA-32 Archi-tectures Software Developer’s Manual, Volume 3A).</p>
+<h2>Operation</h2>
+<pre>INVPCID_TYPE := value of register operand;
+                                                         // must be in the range of 0–3
+INVPCID_DESC := value of memory operand;
+CASE INVPCID_TYPE OF
+    0:
+                         // individual-address invalidation
+         PCID := INVPCID_DESC[11:0];
+         L_ADDR := INVPCID_DESC[127:64];
+         Invalidate mappings for L_ADDR associated with PCID except global translations;
+         BREAK;
+    1:
+                         // single PCID invalidation
+         PCID := INVPCID_DESC[11:0];
+         Invalidate all mappings associated with PCID except global translations;
+         BREAK;
+    2:
+                         // all PCID invalidation including global translations
+         Invalidate all mappings for all PCIDs, including global translations;
+         BREAK;
+    3:
+                         // all PCID invalidation retaining global translations
+         Invalidate all mappings for all PCIDs except global translations;
+         BREAK;
+ESAC;</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>INVPCID void _invpcid(unsigned __int32 type, void * descriptor);</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Protected Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#GP(0)</td>
+<td>
+<p>If the current privilege level is not 0.</p>
+<p>If the memory operand effective address is outside the CS, DS, ES, FS, or GS segment limit.</p>
+<p>If the DS, ES, FS, or GS register contains an unusable segment.</p>
+<p>If the source operand is located in an execute-only code segment.</p>
+<p>If an invalid type is specified in the register operand, i.e., INVPCID_TYPE &gt; 3.</p>
+<p>If bits 63:12 of INVPCID_DESC are not all zero.</p>
+<p>If INVPCID_TYPE is either 0 or 1 and INVPCID_DESC[11:0] is not zero.</p>
+<p>If INVPCID_TYPE is 0 and the linear address in INVPCID_DESC[127:64] is not canonical.</p></td></tr>
+<tr>
+<td>#PF(fault-code)</td>
+<td>If a page fault occurs in accessing the memory operand.</td></tr>
+<tr>
+<td>#SS(0)</td>
+<td>
+<p>If the memory operand effective address is outside the SS segment limit.</p>
+<p>If the SS register contains an unusable segment.</p></td></tr>
+<tr>
+<td>#UD</td>
+<td>
+<p>If if CPUID.(EAX=07H, ECX=0H):EBX.INVPCID (bit 10) = 0.</p>
+<p>If the LOCK prefix is used.</p></td></tr></table>
+<h2>Real-Address Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#GP</td>
+<td>
+<p>If an invalid type is specified in the register operand, i.e., INVPCID_TYPE &gt; 3.</p>
+<p>If bits 63:12 of INVPCID_DESC are not all zero.</p>
+<p>If INVPCID_TYPE is either 0 or 1 and INVPCID_DESC[11:0] is not zero.</p>
+<p>If INVPCID_TYPE is 0 and the linear address in INVPCID_DESC[127:64] is not canonical.</p></td></tr>
+<tr>
+<td>#UD</td>
+<td>
+<p>If CPUID.(EAX=07H, ECX=0H):EBX.INVPCID (bit 10) = 0.</p>
+<p>If the LOCK prefix is used.</p></td></tr></table>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#GP(0)</td>
+<td>The INVPCID instruction is not recognized in virtual-8086 mode.</td></tr></table>
+<h2>Compatibility Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>64-Bit Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#GP(0)</td>
+<td>
+<p>If the current privilege level is not 0.</p>
+<p>If the memory operand is in the CS, DS, ES, FS, or GS segments and the memory address is in a non-canonical form.</p>
+<p>If an invalid type is specified in the register operand, i.e., INVPCID_TYPE &gt; 3.</p>
+<p>If bits 63:12 of INVPCID_DESC are not all zero.</p>
+<p>If CR4.PCIDE=0, INVPCID_TYPE is either 0 or 1, and INVPCID_DESC[11:0] is not zero.</p>
+<p>If INVPCID_TYPE is 0 and the linear address in INVPCID_DESC[127:64] is not canonical.</p></td></tr>
+<tr>
+<td>#PF(fault-code)</td>
+<td>If a page fault occurs in accessing the memory operand.</td></tr>
+<tr>
+<td>#SS(0)</td>
+<td>If the memory destination operand is in the SS segment and the memory address is in a non-canonical form.</td></tr>
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used.</p>
+<p>If CPUID.(EAX=07H, ECX=0H):EBX.INVPCID (bit 10) = 0.</p></td></tr></table></div></body></html>

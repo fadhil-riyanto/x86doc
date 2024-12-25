@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>BNDCL - Check Lower Bound </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › BNDCL - Check Lower Bound </div>
+<div id="body">
+<h1>BNDCL—Check Lower Bound</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>F3 0F 1A /r BNDCL bnd, r/m32</td>
+<td>RM</td>
+<td>NE/V</td>
+<td>MPX</td>
+<td>Generate a #BR if the address in r/m32 is lower than the lower bound in bnd.LB.</td></tr>
+<tr>
+<td>F3 0F 1A /r BNDCL bnd, r/m64</td>
+<td>RM</td>
+<td>V/NE</td>
+<td>MPX</td>
+<td>Generate a #BR if the address in r/m64 is lower than the lower bound in bnd.LB.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th></tr>
+<tr>
+<td>RM</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Compare the address in the second operand with the lower bound in bnd. The second operand can be either a register or memory operand. If the address is lower than the lower bound in bnd.LB, it will set BNDSTATUS to 01H and signal a #BR exception.</p>
+<p>This instruction does not cause any memory access, and does not read or write any flags.</p>
+<h2>Operation</h2>
+<p><strong>BNDCL BND, reg</strong></p>
+<pre>IF reg &lt; BND.LB Then
+    BNDSTATUS := 01H;
+    #BR;
+FI;</pre>
+<p><strong>BNDCL BND, mem</strong></p>
+<pre>TEMP := LEA(mem);
+IF TEMP &lt; BND.LB Then
+    BNDSTATUS := 01H;
+    #BR;
+FI;</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>BNDCL void   _bnd_chk_ptr_lbounds(const void *q)</p>
+<h2>Flags Affected</h2>
+<p>None</p>
+<h2>Protected Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#BR</td>
+<td>If lower bound check fails.</td></tr>
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used.</p>
+<p>If ModRM.r/m encodes BND4-BND7 when Intel MPX is enabled.</p>
+<p>If 67H prefix is not used and CS.D=0.</p>
+<p>If 67H prefix is used and CS.D=1.</p></td></tr></table>
+<h2>Real-Address Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#BR</td>
+<td>If lower bound check fails.</td></tr>
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used.</p>
+<p>If ModRM.r/m encodes BND4-BND7 when Intel MPX is enabled.</p>
+<p>If 16-bit addressing is used.</p></td></tr></table>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#BR</td>
+<td>If lower bound check fails.</td></tr>
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used.</p>
+<p>If ModRM.r/m encodes BND4-BND7 when Intel MPX is enabled.</p>
+<p>If 16-bit addressing is used.</p></td></tr></table>
+<h2>Compatibility Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>64-Bit Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>If ModRM.r/m and REX encodes BND4-BND15 when Intel MPX is enabled.</td></tr></table>
+<p>Same exceptions as in protected mode.</p></div></body></html>

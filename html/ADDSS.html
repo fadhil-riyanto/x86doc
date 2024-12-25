@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>ADDSS - Add Scalar Single Precision Floating-Point Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › ADDSS - Add Scalar Single Precision Floating-Point Values </div>
+<div id="body">
+<h1>ADDSS—Add Scalar Single Precision Floating-Point Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>F3 0F 58 /r ADDSS xmm1, xmm2/m32</td>
+<td>A</td>
+<td>V/V</td>
+<td>SSE</td>
+<td>Add the low single precision floating-point value from xmm2/mem to xmm1 and store the result in xmm1.</td></tr>
+<tr>
+<td>VEX.LIG.F3.0F.WIG 58 /r VADDSS xmm1,xmm2, xmm3/m32</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Add the low single precision floating-point value from xmm3/mem to xmm2 and store the result in xmm1.</td></tr>
+<tr>
+<td>EVEX.LLIG.F3.0F.W0 58 /r VADDSS xmm1{k1}{z}, xmm2, xmm3/m32{er}</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Add the low single precision floating-point value from xmm3/m32 to xmm2 and store the result in xmm1with writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:reg (r, w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>C</td>
+<td>Tuple1 Scalar</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Adds the low single precision floating-point values from the second source operand and the first source operand, and stores the double precision floating-point result in the destination operand.</p>
+<p>The second source operand can be an XMM register or a 64-bit memory location. The first source and destination operands are XMM registers.</p>
+<p>128-bit Legacy SSE version: The first source and destination operands are the same. Bits (MAXVL-1:32) of the corresponding the destination register remain unchanged.</p>
+<p>EVEX and VEX.128 encoded version: The first source operand is encoded by EVEX.vvvv/VEX.vvvv. Bits (127:32) of the XMM register destination are copied from corresponding bits in the first source operand. Bits (MAXVL-1:128) of the destination register are zeroed.</p>
+<p>EVEX version: The low doubleword element of the destination is updated according to the writemask.</p>
+<p>Software should ensure VADDSS is encoded with VEX.L=0. Encoding VADDSS with VEX.L=1 may encounter unpre-dictable behavior across different processor generations.</p>
+<h2>Operation</h2>
+<p><strong>VADDSS (EVEX Encoded Versions)</strong></p>
+<pre>IF (EVEX.b = 1) AND SRC2 *is a register*
+    THEN
+         SET_ROUNDING_MODE_FOR_THIS_INSTRUCTION(EVEX.RC);
+    ELSE
+         SET_ROUNDING_MODE_FOR_THIS_INSTRUCTION(MXCSR.RC);
+FI;
+IF k1[0] or *no writemask*
+    THEN
+              DEST[31:0] := SRC1[31:0] + SRC2[31:0]
+    ELSE
+         IF *merging-masking*
+                                                    ; merging-masking
+              THEN *DEST[31:0] remains unchanged*
+              ELSE
+                                                    ; zeroing-masking
+                    THEN DEST[31:0] := 0
+         FI;
+FI;
+DEST[127:32] := SRC1[127:32]
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>VADDSS DEST, SRC1, SRC2 (VEX.128 Encoded Version)</strong></p>
+<pre>DEST[31:0] := SRC1[31:0] + SRC2[31:0]
+DEST[127:32] := SRC1[127:32]
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>ADDSS DEST, SRC (128-bit Legacy SSE Version)</strong></p>
+<pre>DEST[31:0] := DEST[31:0] + SRC[31:0]
+DEST[MAXVL-1:32] (Unmodified)</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>VADDSS __m128 _mm_mask_add_ss (__m128 s, __mmask8 k, __m128 a, __m128 b);</p>
+<p>VADDSS __m128 _mm_maskz_add_ss (__mmask8 k, __m128 a, __m128 b);</p>
+<p>VADDSS __m128 _mm_add_round_ss (__m128 a, __m128 b, int);</p>
+<p>VADDSS __m128 _mm_mask_add_round_ss (__m128 s, __mmask8 k, __m128 a, __m128 b, int);</p>
+<p>VADDSS __m128 _mm_maskz_add_round_ss (__mmask8 k, __m128 a, __m128 b, int);</p>
+<p>ADDSS __m128 _mm_add_ss (__m128 a, __m128 b);</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>Overflow, Underflow, Invalid, Precision, Denormal.</p>
+<h2>Other Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>VEX-encoded instruction, see Table 2-20, “Type 3 Class Exception Conditions.”</td></tr>
+<tr>
+<td>EVEX-encoded instruction, see Table 2-47, “Type E3 Class Exception Conditions.”</td></tr></table></div></body></html>

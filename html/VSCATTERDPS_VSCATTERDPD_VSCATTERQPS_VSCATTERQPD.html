@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VSCATTERDPS/VSCATTERDPD/VSCATTERQPS/VSCATTERQPD - Scatter Packed Single, Packed Double with Signed Dword and Qword Indices </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VSCATTERDPS/VSCATTERDPD/VSCATTERQPS/VSCATTERQPD - Scatter Packed Single, Packed Double with Signed Dword and Qword Indices </div>
+<div id="body">
+<h1>VSCATTERDPS/VSCATTERDPD/VSCATTERQPS/VSCATTERQPD—Scatter Packed Single, Packed Double with Signed Dword and Qword Indices</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/E n</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 A2 /vsib VSCATTERDPS vm32x {k1}, xmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed dword indices, scatter single-precision floating-point values to memory using writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 A2 /vsib VSCATTERDPS vm32y {k1}, ymm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed dword indices, scatter single-precision floating-point values to memory using writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 A2 /vsib VSCATTERDPS vm32z {k1}, zmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Using signed dword indices, scatter single-precision floating-point values to memory using writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 A2 /vsib VSCATTERDPD vm32x {k1}, xmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed dword indices, scatter double precision floating-point values to memory using writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 A2 /vsib VSCATTERDPD vm32x {k1}, ymm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed dword indices, scatter double precision floating-point values to memory using writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 A2 /vsib VSCATTERDPD vm32y {k1}, zmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Using signed dword indices, scatter double precision floating-point values to memory using writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 A3 /vsib VSCATTERQPS vm64x {k1}, xmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed qword indices, scatter single-precision floating-point values to memory using writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 A3 /vsib VSCATTERQPS vm64y {k1}, xmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed qword indices, scatter single-precision floating-point values to memory using writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 A3 /vsib VSCATTERQPS vm64z {k1}, ymm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Using signed qword indices, scatter single-precision floating-point values to memory using writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 A3 /vsib VSCATTERQPD vm64x {k1}, xmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed qword indices, scatter double precision floating-point values to memory using writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 A3 /vsib VSCATTERQPD vm64y {k1}, ymm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed qword indices, scatter double precision floating-point values to memory using writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 A3 /vsib VSCATTERQPD vm64z {k1}, zmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Using signed qword indices, scatter double precision floating-point values to memory using writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Tuple1 Scalar</td>
+<td>
+<p>BaseReg (R): VSIB:base,</p>
+<p>VectorReg(R): VSIB:index</p></td>
+<td>ModRM:reg (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Stores up to 16 elements (or 8 elements) in doubleword/quadword vector zmm1 to the memory locations pointed by base address BASE_ADDR and index vector VINDEX, with scale SCALE. The elements are specified via the VSIB (i.e., the index register is a vector register, holding packed indices). Elements will only be stored if their corre-sponding mask bit is one. The entire mask register will be set to zero by this instruction unless it triggers an excep-tion.</p>
+<p>This instruction can be suspended by an exception if at least one element is already scattered (i.e., if the exception is triggered by an element other than the rightmost one with its mask bit set). When this happens, the destination register and the mask register (k1) are partially updated. If any traps or interrupts are pending from already scat-tered elements, they will be delivered in lieu of the exception; in this case, EFLAG.RF is set to one so an instruction breakpoint is not re-triggered when the instruction is continued.</p>
+<p>Note that:</p>
+<p>ordering model. Note that this does not account for non-overlapping indices that map into the same physical address locations.</p>
+<p>Note that the presence of VSIB byte is enforced in this instruction. Hence, the instruction will #UD fault if ModRM.rm is different than 100b.</p>
+<p>This instruction has special disp8*N and alignment rules. N is considered to be the size of a single vector element.</p>
+<p>The scaled index may require more bits to represent than the address bits used by the processor (e.g., in 32-bit mode, if the scale is greater than one). In this case, the most significant bits beyond the number of address bits are ignored.</p>
+<p>The instruction will #UD fault if the k0 mask register is specified.</p>
+<p><strong>Operation</strong></p>
+<p>BASE_ADDR stands for the memory operand base address (a GPR); may not exist</p>
+<p>VINDEX stands for the memory operand vector of indices (a ZMM register)</p>
+<p>SCALE stands for the memory operand scalar (1, 2, 4 or 8)</p>
+<p>DISP is the optional 1 or 4 byte displacement</p>
+<p><strong>VSCATTERDPS (EVEX encoded versions)</strong></p>
+<p>(KL, VL)= (4, 128), (8, 256), (16, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN MEM[BASE_ADDR +SignExtend(VINDEX[i+31:i]) * SCALE + DISP] :=</p>
+<p>SRC[i+31:i]</p>
+<p>k1[j] := 0</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>k1[MAX_KL-1:KL] := 0</p>
+<p><strong>VSCATTERDPD (EVEX encoded versions)</strong></p>
+<p>(KL, VL)= (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>k := j * 32</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN MEM[BASE_ADDR +SignExtend(VINDEX[k+31:k]) * SCALE + DISP] :=</p>
+<p>SRC[i+63:i]</p>
+<p>k1[j] := 0</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>k1[MAX_KL-1:KL] := 0 VSCATTERQPS (EVEX encoded versions)</p>
+<p>(KL, VL)= (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>k := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN MEM[BASE_ADDR + (VINDEX[k+63:k]) * SCALE + DISP] :=</p>
+<p>SRC[i+31:i]</p>
+<p>k1[j] := 0</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>k1[MAX_KL-1:KL] := 0</p>
+<p><strong>VSCATTERQPD (EVEX encoded versions)</strong></p>
+<p>(KL, VL)= (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN MEM[BASE_ADDR + (VINDEX[i+63:i]) * SCALE + DISP] :=</p>
+<p>SRC[i+63:i]</p>
+<p>k1[j] := 0</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>k1[MAX_KL-1:KL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VSCATTERDPD void _mm512_i32scatter_pd(void * base, __m256i vdx, __m512d a, int scale);</p>
+<p>VSCATTERDPD void _mm512_mask_i32scatter_pd(void * base, __mmask8 k, __m256i vdx, __m512d a, int scale);</p>
+<p>VSCATTERDPS void _mm512_i32scatter_ps(void * base, __m512i vdx, __m512 a, int scale);</p>
+<p>VSCATTERDPS void _mm512_mask_i32scatter_ps(void * base, __mmask16 k, __m512i vdx, __m512 a, int scale);</p>
+<p>VSCATTERQPD void _mm512_i64scatter_pd(void * base, __m512i vdx, __m512d a, int scale);</p>
+<p>VSCATTERQPD void _mm512_mask_i64scatter_pd(void * base, __mmask8 k, __m512i vdx, __m512d a, int scale);</p>
+<p>VSCATTERQPS void _mm512_i64scatter_ps(void * base, __m512i vdx, __m256 a, int scale);</p>
+<p>VSCATTERQPS void _mm512_mask_i64scatter_ps(void * base, __mmask8 k, __m512i vdx, __m256 a, int scale);</p>
+<p>VSCATTERDPD void _mm256_i32scatter_pd(void * base, __m128i vdx, __m256d a, int scale);</p>
+<p>VSCATTERDPD void _mm256_mask_i32scatter_pd(void * base, __mmask8 k, __m128i vdx, __m256d a, int scale);</p>
+<p>VSCATTERDPS void _mm256_i32scatter_ps(void * base, __m256i vdx, __m256 a, int scale);</p>
+<p>VSCATTERDPS void _mm256_mask_i32scatter_ps(void * base, __mmask8 k, __m256i vdx, __m256 a, int scale);</p>
+<p>VSCATTERQPD void _mm256_i64scatter_pd(void * base, __m256i vdx, __m256d a, int scale);</p>
+<p>VSCATTERQPD void _mm256_mask_i64scatter_pd(void * base, __mmask8 k, __m256i vdx, __m256d a, int scale);</p>
+<p>VSCATTERQPS void _mm256_i64scatter_ps(void * base, __m256i vdx, __m128 a, int scale);</p>
+<p>VSCATTERQPS void _mm256_mask_i64scatter_ps(void * base, __mmask8 k, __m256i vdx, __m128 a, int scale);</p>
+<p>VSCATTERDPD void _mm_i32scatter_pd(void * base, __m128i vdx, __m128d a, int scale);</p>
+<p>VSCATTERDPD void _mm_mask_i32scatter_pd(void * base, __mmask8 k, __m128i vdx, __m128d a, int scale);</p>
+<p>VSCATTERDPS void _mm_i32scatter_ps(void * base, __m128i vdx, __m128 a, int scale);</p>
+<p>VSCATTERDPS void _mm_mask_i32scatter_ps(void * base, __mmask8 k, __m128i vdx, __m128 a, int scale);</p>
+<p>VSCATTERQPD void _mm_i64scatter_pd(void * base, __m128i vdx, __m128d a, int scale);</p>
+<p>VSCATTERQPD void _mm_mask_i64scatter_pd(void * base, __mmask8 k, __m128i vdx, __m128d a, int scale);</p>
+<p>VSCATTERQPS void _mm_i64scatter_ps(void * base, __m128i vdx, __m128 a, int scale);</p>
+<p>VSCATTERQPS void _mm_mask_i64scatter_ps(void * base, __mmask8 k, __m128i vdx, __m128 a, int scale);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Overflow, Underflow, Precision, Denormal.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-61, “Type E12 Class Exception Conditions.”</p></div></body></html>

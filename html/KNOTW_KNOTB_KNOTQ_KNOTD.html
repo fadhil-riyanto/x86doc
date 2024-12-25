@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>KNOTW/KNOTB/KNOTQ/KNOTD - NOT Mask Register </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › KNOTW/KNOTB/KNOTQ/KNOTD - NOT Mask Register </div>
+<div id="body">
+<h1>KNOTW/KNOTB/KNOTQ/KNOTD—NOT Mask Register</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>VEX.L0.0F.W0 44 /r KNOTW k1, k2</td>
+<td>RR</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Bitwise NOT of 16 bits mask k2.</td></tr>
+<tr>
+<td>VEX.L0.66.0F.W0 44 /r KNOTB k1, k2</td>
+<td>RR</td>
+<td>V/V</td>
+<td>AVX512DQ</td>
+<td>Bitwise NOT of 8 bits mask k2.</td></tr>
+<tr>
+<td>VEX.L0.0F.W1 44 /r KNOTQ k1, k2</td>
+<td>RR</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Bitwise NOT of 64 bits mask k2.</td></tr>
+<tr>
+<td>VEX.L0.66.0F.W1 44 /r KNOTD k1, k2</td>
+<td>RR</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Bitwise NOT of 32 bits mask k2.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th></tr>
+<tr>
+<td>RR</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r, ModRM:[7:6] must be 11b)</td></tr></table>
+<h2>Description</h2>
+<p>Performs a bitwise NOT of vector mask k2 and writes the result into vector mask k1.</p>
+<h2>Operation</h2>
+<p><strong>KNOTW</strong></p>
+<pre>DEST[15:0] := BITWISE NOT SRC[15:0]
+DEST[MAX_KL-1:16] := 0</pre>
+<p><strong>KNOTB</strong></p>
+<pre>DEST[7:0] := BITWISE NOT SRC[7:0]
+DEST[MAX_KL-1:8] := 0</pre>
+<p><strong>KNOTQ</strong></p>
+<pre>DEST[63:0] := BITWISE NOT SRC[63:0]
+DEST[MAX_KL-1:64] := 0</pre>
+<p><strong>KNOTD</strong></p>
+<pre>DEST[31:0] := BITWISE NOT SRC[31:0]
+DEST[MAX_KL-1:32] := 0</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>KNOTW __mmask16 _mm512_knot(__mmask16 a);</p>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>See Table 2-63, “TYPE K20 Exception Definition (VEX-Encoded OpMask Instructions w/o Memory Arg).”</p></div></body></html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>KTESTW/KTESTB/KTESTQ/KTESTD - Packed Bit Test Masks and Set Flags </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › KTESTW/KTESTB/KTESTQ/KTESTD - Packed Bit Test Masks and Set Flags </div>
+<div id="body">
+<h1>KTESTW/KTESTB/KTESTQ/KTESTD—Packed Bit Test Masks and Set Flags</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>VEX.L0.0F.W0 99 /r KTESTW k1, k2</td>
+<td>RR</td>
+<td>V/V</td>
+<td>AVX512DQ</td>
+<td>Set ZF and CF depending on sign bit AND and ANDN of 16 bits mask register sources.</td></tr>
+<tr>
+<td>VEX.L0.66.0F.W0 99 /r KTESTB k1, k2</td>
+<td>RR</td>
+<td>V/V</td>
+<td>AVX512DQ</td>
+<td>Set ZF and CF depending on sign bit AND and ANDN of 8 bits mask reg-ister sources.</td></tr>
+<tr>
+<td>VEX.L0.0F.W1 99 /r KTESTQ k1, k2</td>
+<td>RR</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Set ZF and CF depending on sign bit AND and ANDN of 64 bits mask register sources.</td></tr>
+<tr>
+<td>VEX.L0.66.0F.W1 99 /r KTESTD k1, k2</td>
+<td>RR</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Set ZF and CF depending on sign bit AND and ANDN of 32 bits mask register sources.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th></tr>
+<tr>
+<td>RR</td>
+<td>ModRM:reg (r)</td>
+<td>ModRM:r/m (r, ModRM:[7:6] must be 11b)</td></tr></table>
+<h2>Description</h2>
+<p>Performs a bitwise comparison of the bits of the first source operand and corresponding bits in the second source operand. If the AND operation produces all zeros, the ZF is set else the ZF is clear. If the bitwise AND operation of the inverted first source operand with the second source operand produces all zeros the CF is set else the CF is clear. Only the EFLAGS register is updated.</p>
+<p>Note: In VEX-encoded versions, VEX.vvvv is reserved and must be 1111b, otherwise instructions will #UD.</p>
+<h2>Operation</h2>
+<p><strong>KTESTW</strong></p>
+<pre>TEMP[15:0] := SRC2[15:0] AND SRC1[15:0]
+IF (TEMP[15:0] = = 0)
+    THEN ZF :=1;
+    ELSE ZF := 0;
+FI;
+TEMP[15:0] := SRC2[15:0] AND NOT SRC1[15:0]
+IF (TEMP[15:0] = = 0)
+    THEN CF :=1;
+    ELSE CF := 0;
+FI;
+AF := OF := PF := SF := 0;</pre>
+<p><strong>KTESTB</strong></p>
+<pre>TEMP[7:0] := SRC2[7:0] AND SRC1[7:0]
+IF (TEMP[7:0] = = 0)
+    THEN ZF :=1;
+    ELSE ZF := 0;
+FI;
+TEMP[7:0] := SRC2[7:0] AND NOT SRC1[7:0]
+IF (TEMP[7:0] = = 0)
+    THEN CF :=1;
+    ELSE CF := 0;
+FI;
+AF := OF := PF := SF := 0;</pre>
+<p><strong>KTESTQ</strong></p>
+<pre>TEMP[63:0] := SRC2[63:0] AND SRC1[63:0]
+IF (TEMP[63:0] = = 0)
+    THEN ZF :=1;
+    ELSE ZF := 0;
+FI;
+TEMP[63:0] := SRC2[63:0] AND NOT SRC1[63:0]
+IF (TEMP[63:0] = = 0)
+    THEN CF :=1;
+    ELSE CF := 0;
+FI;
+AF := OF := PF := SF := 0;</pre>
+<p><strong>KTESTD</strong></p>
+<pre>TEMP[31:0] := SRC2[31:0] AND SRC1[31:0]
+IF (TEMP[31:0] = = 0)
+    THEN ZF :=1;
+    ELSE ZF := 0;
+FI;
+TEMP[31:0] := SRC2[31:0] AND NOT SRC1[31:0]
+IF (TEMP[31:0] = = 0)
+    THEN CF :=1;
+    ELSE CF := 0;
+FI;
+AF := OF := PF := SF := 0;</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>See Table 2-63, “TYPE K20 Exception Definition (VEX-Encoded OpMask Instructions w/o Memory Arg).”</p></div></body></html>

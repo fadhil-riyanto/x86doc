@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>XSUSLDTRK - Suspend Tracking Load Addresses </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › XSUSLDTRK - Suspend Tracking Load Addresses </div>
+<div id="body">
+<h1>XSUSLDTRK—Suspend Tracking Load Addresses</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>F2 0F 01 E8 XSUSLDTRK</td>
+<td>ZO</td>
+<td>V/V</td>
+<td>TSXLDTRK</td>
+<td>Specifies the start of an Intel TSX suspend read address tracking region.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>ZO</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>The instruction marks the start of an Intel TSX (RTM) suspend load address tracking region. If the instruction is used inside a transactional region, subsequent loads are not added to the read set of the transaction. If the instruc-tion is used inside a suspend load address tracking region it will cause transaction abort.</p>
+<p>If the instruction is used outside of a transactional region it behaves like a NOP.</p>
+<p>Chapter 16, “Programming with Intel<em><sup>®</sup></em> Transactional Synchronization Extensions” in the Intel<em><sup>®</sup></em> 64 and IA-32 Archi-tectures Software Developer’s Manual, Volume 1 provides additional information on Intel<sup>®</sup> TSX Suspend Load Address Tracking.</p>
+<p><strong>Operation</strong></p>
+<p><strong>XSUSLDTRK</strong></p>
+<p>IF RTM_ACTIVE = 1:</p>
+<p>IF SUSLDTRK_ACTIVE = 0:</p>
+<p>SUSLDTRK_ACTIVE := 1</p>
+<p>ELSE:</p>
+<p>RTM_ABORT</p>
+<p>ELSE:</p>
+<p>NOP</p>
+<p><strong>Flags Affected</strong></p>
+<p>None.</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>XSUSLDTRK void _xsusldtrk(void);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<table>
+<tr>
+<td>#UD</td>
+<td>
+<p>If CPUID.(EAX=7, ECX=0):EDX.TSXLDTRK[bit 16] = 0.</p>
+<p>If the LOCK prefix is used.</p></td></tr></table></div></body></html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title> VRANGEPS - Range Restriction Calculation for Packed Pairs of Float32 Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> ›  VRANGEPS - Range Restriction Calculation for Packed Pairs of Float32 Values </div>
+<div id="body">
+<h1> VRANGEPS—Range Restriction Calculation for Packed Pairs of Float32 Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F3A.W0 50 /r ib VRANGEPS xmm1 {k1}{z}, xmm2, xmm3/m128/m32bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Calculate four RANGE operation output value from 4 pairs of single-precision floating-point values in xmm2 and xmm3/m128/m32bcst, store the results to xmm1 under the writemask k1. Imm8 specifies the comparison and sign of the range operation.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W0 50 /r ib VRANGEPS ymm1 {k1}{z}, ymm2, ymm3/m256/m32bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Calculate eight RANGE operation output value from 8 pairs of single-precision floating-point values in ymm2 and ymm3/m256/m32bcst, store the results to ymm1 under the writemask k1. Imm8 specifies the comparison and sign of the range operation.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W0 50 /r ib VRANGEPS zmm1 {k1}{z}, zmm2, zmm3/m512/m32bcst{sae}, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512DQ</td>
+<td>Calculate 16 RANGE operation output value from 16 pairs of single-precision floating-point values in zmm2 and zmm3/m512/m32bcst, store the results to zmm1 under the writemask k1. Imm8 specifies the comparison and sign of the range operation.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction calculates 4/8/16 range operation outputs from two sets of packed input single-precision floating-point values in the first source operand (the second operand) and the second source operand (the third operand). The range outputs are written to the destination operand (the first operand) under the writemask k1.</p>
+<p>Bits7:4 of imm8 byte must be zero. The range operation output is performed in two parts, each configured by a two-bit control field within imm8[3:0]:</p>
+<p>The encodings of imm8[1:0] and imm8[3:2] are shown in Figure 5-27.</p>
+<p>When one or more of the input value is a NAN, the comparison operation may signal invalid exception (IE). Details with one of more input value is NAN is listed in Table 5-13. If the comparison raises an IE, the sign select control (imm8[3:2]) has no effect to the range operation output; this is indicated also in Table 5-13.</p>
+<p>When both input values are zeros of opposite signs, the comparison operation of MIN/MAX in the range compare operation is slightly different from the conceptually similar floating-point MIN/MAX operation that are found in the instructions VMAXPD/VMINPD. The details of MIN/MAX/MIN_ABS/MAX_ABS operation for VRANGEPD/PS/SD/SS for magnitude-0, opposite-signed input cases are listed in Table 5-14.</p>
+<p>Additionally, non-zero, equal-magnitude with opposite-sign input values perform MIN_ABS or MAX_ABS compar-ison operation with result listed in Table 5-15.</p>
+<p><strong>Operation</strong></p>
+<p>RangeSP(SRC1[31:0], SRC2[31:0], CmpOpCtl[1:0], SignSelCtl[1:0])</p>
+<p>{</p>
+<p>// Check if SNAN and report IE, see also Table 5-13</p>
+<p>IF (SRC1=SNAN) THEN RETURN (QNAN(SRC1), set IE);</p>
+<p>IF (SRC2=SNAN) THEN RETURN (QNAN(SRC2), set IE);</p>
+<p>Src1.exp := SRC1[30:23];</p>
+<p>Src1.fraction := SRC1[22:0];</p>
+<p>IF ((Src1.exp = 0 ) and (Src1.fraction != 0 )) THEN// Src1 is a denormal number</p>
+<p>IF DAZ THEN Src1.fraction := 0;</p>
+<p>ELSE IF (SRC2 &lt;&gt; QNAN) Set DE; FI;</p>
+<p>FI;</p>
+<p>Src2.exp := SRC2[30:23];</p>
+<p>Src2.fraction := SRC2[22:0];</p>
+<p>IF ((Src2.exp = 0 ) and (Src2.fraction != 0 )) THEN// Src2 is a denormal number</p>
+<p>IF DAZ THEN Src2.fraction := 0;</p>
+<p>ELSE IF (SRC1 &lt;&gt; QNAN) Set DE; FI;</p>
+<p>FI;</p>
+<p>IF</p>
+<p>(SRC2 = QNAN) THEN{TMP[31:0] := SRC1[31:0]}</p>
+<p>ELSE IF(SRC1 = QNAN) THEN{TMP[31:0] := SRC2[31:0]}</p>
+<p>ELSE IF (Both SRC1, SRC2 are magnitude-0 and opposite-signed) TMP[31:0] := from Table 5-14</p>
+<p>ELSE IF (Both SRC1, SRC2 are magnitude-equal and opposite-signed and CmpOpCtl[1:0] &gt; 01) TMP[31:0] := from Table 5-15</p>
+<p>ELSE</p>
+<p>Case(CmpOpCtl[1:0])</p>
+<p>00: TMP[31:0] := (SRC1[31:0] ≤ SRC2[31:0]) ? SRC1[31:0] : SRC2[31:0];</p>
+<p>01: TMP[31:0] := (SRC1[31:0] ≤ SRC2[31:0]) ? SRC2[31:0] : SRC1[31:0];</p>
+<p>10: TMP[31:0] := (ABS(SRC1[31:0]) ≤ ABS(SRC2[31:0])) ? SRC1[31:0] : SRC2[31:0];</p>
+<p>11: TMP[31:0] := (ABS(SRC1[31:0]) ≤ ABS(SRC2[31:0])) ? SRC2[31:0] : SRC1[31:0];</p>
+<p>ESAC;</p>
+<p>FI;</p>
+<p>Case(SignSelCtl[1:0])</p>
+<p>00: dest := (SRC1[31] &lt;&lt; 31) OR (TMP[30:0]);// Preserve Src1 sign bit</p>
+<p>01: dest := TMP[31:0];// Preserve sign of compare result</p>
+<p>10: dest := (0 &lt;&lt; 31) OR (TMP[30:0]);// Zero out sign bit</p>
+<p>11: dest := (1 &lt;&lt; 31) OR (TMP[30:0]);// Set the sign bit</p>
+<p>ESAC;</p>
+<p>RETURN dest[31:0];</p>
+<p>}</p>
+<p>CmpOpCtl[1:0]= imm8[1:0]; SignSelCtl[1:0]=imm8[3:2];</p>
+<p><strong>VRANGEPS</strong></p>
+<p>(KL, VL) = (4, 128), (8, 256), (16, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF k1[j] OR *no writemask* THEN</p>
+<p>IF (EVEX.b == 1) AND (SRC2 *is memory*)</p>
+<p>THEN DEST[i+31:i] := RangeSP (SRC1[i+31:i], SRC2[31:0], CmpOpCtl[1:0], SignSelCtl[1:0]);</p>
+<p>ELSE DEST[i+31:i] := RangeSP (SRC1[i+31:i], SRC2[i+31:i], CmpOpCtl[1:0], SignSelCtl[1:0]);</p>
+<p>FI;</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+31:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+31:i] = 0</p>
+<p>FI;</p>
+<p>FI;</p>
+<p>ENDFOR;</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p>The following example describes a common usage of this instruction for checking that the input operand is bounded between ±150.</p>
+<p>VRANGEPS zmm_dst, zmm_src, zmm_150, 02h;</p>
+<p>Where: zmm_dst is the destination operand. zmm_src is the input operand to compare against ±150. zmm_150 is the reference operand, contains the value of 150. IMM=02(imm8[1:0]=’10) selects the Min Absolute value operation with selection of src1.sign.</p>
+<p>In case |zmm_src| &lt; 150, then its value will be written into zmm_dst. Otherwise, the value stored in zmm_dst will get the value of 150 (received on zmm_150). However, the sign control (imm8[3:2]=’00) instructs to select the sign of SRC1 received from zmm_src. So, even in the case of |zmm_src| ≥ 150, the selected sign of SRC1 is kept. Thus, if zmm_src &lt; -150, the result of VRANGEPS will be the minimal value of -150 while if zmm_src &gt; +150, the result of VRANGE will be the maximal value of +150.</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VRANGEPS __m512 _mm512_range_ps ( __m512 a, __m512 b, int imm); VRANGEPS __m512 _mm512_range_round_ps ( __m512 a, __m512 b, int imm, int sae); VRANGEPS __m512 _mm512_mask_range_ps (__m512 s, __mmask16 k, __m512 a, __m512 b, int imm); VRANGEPS __m512 _mm512_mask_range_round_ps (__m512 s, __mmask16 k, __m512 a, __m512 b, int imm, int sae); VRANGEPS __m512 _mm512_maskz_range_ps ( __mmask16 k, __m512 a, __m512 b, int imm); VRANGEPS __m512 _mm512_maskz_range_round_ps ( __mmask16 k, __m512 a, __m512 b, int imm, int sae); VRANGEPS __m256 _mm256_range_ps ( __m256 a, __m256 b, int imm); VRANGEPS __m256 _mm256_mask_range_ps (__m256 s, __mmask8 k, __m256 a, __m256 b, int imm); VRANGEPS __m256 _mm256_maskz_range_ps ( __mmask8 k, __m256 a, __m256 b, int imm); VRANGEPS __m128 _mm_range_ps ( __m128 a, __m128 b, int imm); VRANGEPS __m128 _mm_mask_range_ps (__m128 s, __mmask8 k, __m128 a, __m128 b, int imm); VRANGEPS __m128 _mm_maskz_range_ps ( __mmask8 k, __m128 a, __m128 b, int imm);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Denormal</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-46, “Type E2 Class Exception Conditions.”</p></div></body></html>

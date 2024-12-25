@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VPCOMPRESSB/VCOMPRESSW - Store Sparse Packed Byte/Word Integer Values Into Dense Memory/Register </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VPCOMPRESSB/VCOMPRESSW - Store Sparse Packed Byte/Word Integer Values Into Dense Memory/Register </div>
+<div id="body">
+<h1>VPCOMPRESSB/VCOMPRESSW—Store Sparse Packed Byte/Word Integer Values Into Dense Memory/Register</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 63 /r VPCOMPRESSB m128{k1}, xmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Compress up to 128 bits of packed byte values from xmm1 to m128 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 63 /r VPCOMPRESSB xmm1{k1}{z}, xmm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Compress up to 128 bits of packed byte values from xmm2 to xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 63 /r VPCOMPRESSB m256{k1}, ymm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Compress up to 256 bits of packed byte values from ymm1 to m256 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 63 /r VPCOMPRESSB ymm1{k1}{z}, ymm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Compress up to 256 bits of packed byte values from ymm2 to ymm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 63 /r VPCOMPRESSB m512{k1}, zmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2</td>
+<td>Compress up to 512 bits of packed byte values from zmm1 to m512 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 63 /r VPCOMPRESSB zmm1{k1}{z}, zmm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2</td>
+<td>Compress up to 512 bits of packed byte values from zmm2 to zmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 63 /r VPCOMPRESSW m128{k1}, xmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Compress up to 128 bits of packed word values from xmm1 to m128 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 63 /r VPCOMPRESSW xmm1{k1}{z}, xmm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Compress up to 128 bits of packed word values from xmm2 to xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 63 /r VPCOMPRESSW m256{k1}, ymm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Compress up to 256 bits of packed word values from ymm1 to m256 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 63 /r VPCOMPRESSW ymm1{k1}{z}, ymm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Compress up to 256 bits of packed word values from ymm2 to ymm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 63 /r VPCOMPRESSW m512{k1}, zmm1</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2</td>
+<td>Compress up to 512 bits of packed word values from zmm1 to m512 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 63 /r VPCOMPRESSW zmm1{k1}{z}, zmm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2</td>
+<td>Compress up to 512 bits of packed word values from zmm2 to zmm1 with writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Tuple1 Scalar</td>
+<td>ModRM:r/m (w)</td>
+<td>ModRM:reg (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>N/A</td>
+<td>ModRM:r/m (w)</td>
+<td>ModRM:reg (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Compress (stores) up to 64 byte values or 32 word values from the source operand (second operand) to the desti-nation operand (first operand), based on the active elements determined by the writemask operand. Note: EVEX.vvvv is reserved and must be 1111b otherwise instructions will #UD.</p>
+<p>Moves up to 512 bits of packed byte values from the source operand (second operand) to the destination operand (first operand). This instruction is used to store partial contents of a vector register into a byte vector or single memory location using the active elements in operand writemask.</p>
+<p>Memory destination version: Only the contiguous vector is written to the destination memory location. EVEX.z must be zero.</p>
+<p>Register destination version: If the vector length of the contiguous vector is less than that of the input vector in the source operand, the upper bits of the destination register are unmodified if EVEX.z is not set, otherwise the upper bits are zeroed.</p>
+<p>This instruction supports memory fault suppression.</p>
+<p>Note that the compressed displacement assumes a pre-scaling (N) corresponding to the size of one single element instead of the size of the full vector.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VPCOMPRESSB store form</strong></p>
+<p>(KL, VL) = (16, 128), (32, 256), (64, 512)</p>
+<p>k := 0</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF k1[j] OR *no writemask*:</p>
+<p>DEST.byte[k] := SRC.byte[j]</p>
+<p>k := k +1</p>
+<p><strong>VPCOMPRESSB reg-reg form</strong></p>
+<p>(KL, VL) = (16, 128), (32, 256), (64, 512)</p>
+<p>k := 0</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF k1[j] OR *no writemask*:</p>
+<p>DEST.byte[k] := SRC.byte[j]</p>
+<p>k := k + 1</p>
+<p>IF *merging-masking*:</p>
+<p>*DEST[VL-1:k*8] remains unchanged*</p>
+<p>ELSE DEST[VL-1:k*8] := 0</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>VPCOMPRESSW store form</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>k := 0</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF k1[j] OR *no writemask*:</p>
+<p>DEST.word[k] := SRC.word[j]</p>
+<p>k := k + 1</p>
+<p><strong>VPCOMPRESSW reg-reg form</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>k := 0</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF k1[j] OR *no writemask*:</p>
+<p>DEST.word[k] := SRC.word[j]</p>
+<p>k := k + 1</p>
+<p>IF *merging-masking*:</p>
+<p>*DEST[VL-1:k*16] remains unchanged*</p>
+<p>ELSE DEST[VL-1:k*16] := 0</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VPCOMPRESSB __m128i _mm_mask_compress_epi8(__m128i, __mmask16, __m128i);</p>
+<p>VPCOMPRESSB __m128i _mm_maskz_compress_epi8(__mmask16, __m128i);</p>
+<p>VPCOMPRESSB __m256i _mm256_mask_compress_epi8(__m256i, __mmask32, __m256i);</p>
+<p>VPCOMPRESSB __m256i _mm256_maskz_compress_epi8(__mmask32, __m256i);</p>
+<p>VPCOMPRESSB __m512i _mm512_mask_compress_epi8(__m512i, __mmask64, __m512i);</p>
+<p>VPCOMPRESSB __m512i _mm512_maskz_compress_epi8(__mmask64, __m512i);</p>
+<p>VPCOMPRESSB  void _mm_mask_compressstoreu_epi8(void*, __mmask16, __m128i);</p>
+<p>VPCOMPRESSB  void _mm256_mask_compressstoreu_epi8(void*, __mmask32, __m256i);</p>
+<p>VPCOMPRESSB  void _mm512_mask_compressstoreu_epi8(void*, __mmask64, __m512i);</p>
+<p>VPCOMPRESSW  __m128i  _mm_mask_compress_epi16(__m128i, __mmask8, __m128i);</p>
+<p>VPCOMPRESSW  __m128i  _mm_maskz_compress_epi16(__mmask8, __m128i);</p>
+<p>VPCOMPRESSW  __m256i  _mm256_mask_compress_epi16(__m256i, __mmask16, __m256i);</p>
+<p>VPCOMPRESSW  __m256i  _mm256_maskz_compress_epi16(__mmask16, __m256i);</p>
+<p>VPCOMPRESSW  __m512i  _mm512_mask_compress_epi16(__m512i, __mmask32, __m512i);</p>
+<p>VPCOMPRESSW  __m512i  _mm512_maskz_compress_epi16(__mmask32, __m512i);</p>
+<p>VPCOMPRESSW  void  _mm_mask_compressstoreu_epi16(void*, __mmask8, __m128i);</p>
+<p>VPCOMPRESSW  void  _mm256_mask_compressstoreu_epi16(void*, __mmask16, __m256i);</p>
+<p>VPCOMPRESSW  void  _mm512_mask_compressstoreu_epi16(void*, __mmask32, __m512i);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-49, “Type E4 Class Exception Conditions.”</p></div></body></html>

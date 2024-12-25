@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>ROUNDPD - Round Packed Double Precision Floating-Point Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › ROUNDPD - Round Packed Double Precision Floating-Point Values </div>
+<div id="body">
+<h1>ROUNDPD—Round Packed Double Precision Floating-Point Values</h1>
+<table>
+<tr>
+<th>Opcode*/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>66 0F 3A 09 /r ib ROUNDPD xmm1, xmm2/m128, imm8</td>
+<td>RMI</td>
+<td>V/V</td>
+<td>SSE4_1</td>
+<td>Round packed double precision floating-point values in xmm2/m128 and place the result in xmm1. The rounding mode is determined by imm8.</td></tr>
+<tr>
+<td>VEX.128.66.0F3A.WIG 09 /r ib VROUNDPD xmm1, xmm2/m128, imm8</td>
+<td>RMI</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Round packed double precision floating-point values in xmm2/m128 and place the result in xmm1. The rounding mode is determined by imm8.</td></tr>
+<tr>
+<td>VEX.256.66.0F3A.WIG 09 /r ib VROUNDPD ymm1, ymm2/m256, imm8</td>
+<td>RMI</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Round packed double precision floating-point values in ymm2/m256 and place the result in ymm1. The rounding mode is determined by imm8.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>RMI</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Round the 2 double precision floating-point values in the source operand (second operand) using the rounding mode specified in the immediate operand (third operand) and place the results in the destination operand (first operand). The rounding process rounds each input floating-point value to an integer value and returns the integer result as a double precision floating-point value.</p>
+<p>The immediate operand specifies control fields for the rounding operation, three bit fields are defined and shown in Figure 4-24. Bit 3 of the immediate byte controls processor behavior for a precision exception, bit 2 selects the source of rounding mode control. Bits 1:0 specify a non-sticky rounding-mode value (Table 4-23 lists the encoded values for rounding-mode field).</p>
+<p>The Precision Floating-Point Exception is signaled according to the immediate operand. If any source operand is an SNaN then it will be converted to a QNaN. If DAZ is set to ‘1 then denormals will be converted to zero before rounding.</p>
+<p>128-bit Legacy SSE version: The second source can be an XMM register or 128-bit memory location. The destina-tion is not distinct from the first source XMM register and the upper bits (MAXVL-1:128) of the corresponding YMM register destination are unmodified.</p>
+<p>VEX.128 encoded version: the source operand second source operand or a 128-bit memory location. The destina-tion operand is an XMM register. The upper bits (MAXVL-1:128) of the corresponding YMM register destination are zeroed.</p>
+<p>VEX.256 encoded version: The source operand is a YMM register or a 256-bit memory location. The destination operand is a YMM register.</p>
+<p>Note: In VEX-encoded versions, VEX.vvvv is reserved and must be 1111b, otherwise instructions will #UD.</p>
+<svg width="570.149985" height="148.59000000008382" viewBox="111.420000 448345.979980 380.099990 99.060000">
+<text x="168.24" y="448358.98848" style="font-size:6.960000pt" textLength="3.8697600000000136" lengthAdjust="spacingAndGlyphs">8</text>
+<text x="407.4" y="448359.22848" style="font-size:6.960000pt" textLength="3.869759999999985" lengthAdjust="spacingAndGlyphs">3</text>
+<text x="424.080336" y="448359.22848" style="font-size:6.960000pt" textLength="3.869759999999985" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="432.53952" y="448359.22848" style="font-size:6.960000pt" textLength="3.869759999999985" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="415.500048" y="448359.408744" style="font-size:6.960000pt" textLength="3.869759999999985" lengthAdjust="spacingAndGlyphs">2</text>
+<text x="269.28" y="448378.54524" style="font-size:7.980000pt" textLength="34.18552199999999" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="184.5" y="448413.70524" style="font-size:7.980000pt" textLength="148.30032000000006" lengthAdjust="spacingAndGlyphs">P — Precision Mask; 0: normal, 1: inexact</text>
+<text x="183.84" y="448423.72524" style="font-size:7.980000pt" textLength="183.94857599999986" lengthAdjust="spacingAndGlyphs">RS — Rounding select; 1: MXCSR.RC, 0: Imm8.RC</text>
+<text x="184.199898" y="448432.54553400003" style="font-size:7.980000pt" textLength="80.42722799999999" lengthAdjust="spacingAndGlyphs">RC — Rounding mode</text>
+<rect x="167.88" y="448363.26" width="237.65999999999997" height="27.239999999990687" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<h3>Figure 4-24.  Bit Control Fields of Immediate Byte for ROUNDxx Instruction</h3>
+<h3>Table 4-23.  Rounding Modes and Encoding of Rounding Control (RC) Field</h3>
+<table>
+<tr>
+<th>Rounding Mode</th>
+<th>RC Field Setting</th>
+<th>Description</th></tr>
+<tr>
+<td>Round to nearest (even)</td>
+<td>00B</td>
+<td>Rounded result is the closest to the infinitely precise result. If two values are equally close, the result is the even value (i.e., the integer value with the least-significant bit of zero).</td></tr>
+<tr>
+<td>Round down (toward −∞)</td>
+<td>01B</td>
+<td>Rounded result is closest to but no greater than the infinitely precise result.</td></tr>
+<tr>
+<td>Round up (toward +∞)</td>
+<td>10B</td>
+<td>Rounded result is closest to but no less than the infinitely precise result.</td></tr>
+<tr>
+<td>Round toward zero (Truncate)</td>
+<td>11B</td>
+<td>Rounded result is closest to but no greater in absolute value than the infinitely precise result.</td></tr></table>
+<h2>Operation</h2>
+<pre>IF (imm[2] = ‘1)
+    THEN
+              // rounding mode is determined by MXCSR.RC
+         DEST[63:0] := ConvertDPFPToInteger_M(SRC[63:0]);
+         DEST[127:64] := ConvertDPFPToInteger_M(SRC[127:64]);
+    ELSE
+              // rounding mode is determined by IMM8.RC
+         DEST[63:0] := ConvertDPFPToInteger_Imm(SRC[63:0]);
+         DEST[127:64] := ConvertDPFPToInteger_Imm(SRC[127:64]);
+FI</pre>
+<p><strong>ROUNDPD (128-bit Legacy SSE Version)</strong></p>
+<pre>DEST[63:0] := RoundToInteger(SRC[63:0]], ROUND_CONTROL)
+DEST[127:64] := RoundToInteger(SRC[127:64]], ROUND_CONTROL)
+DEST[MAXVL-1:128] (Unmodified)</pre>
+<p><strong>VROUNDPD (VEX.128 Encoded Version)</strong></p>
+<pre>DEST[63:0] := RoundToInteger(SRC[63:0]], ROUND_CONTROL)
+DEST[127:64] := RoundToInteger(SRC[127:64]], ROUND_CONTROL)
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>VROUNDPD (VEX.256 Encoded Version)</strong></p>
+<pre>DEST[63:0] := RoundToInteger(SRC[63:0], ROUND_CONTROL)
+DEST[127:64] := RoundToInteger(SRC[127:64]], ROUND_CONTROL)
+DEST[191:128] := RoundToInteger(SRC[191:128]], ROUND_CONTROL)
+DEST[255:192] := RoundToInteger(SRC[255:192] ], ROUND_CONTROL)</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>__m128 _mm_round_pd(__m128d s1, int iRoundMode);</p>
+<p>__m128 _mm_floor_pd(__m128d s1);</p>
+<p>__m128 _mm_ceil_pd(__m128d s1)</p>
+<p>__m256 _mm256_round_pd(__m256d s1, int iRoundMode);</p>
+<p>__m256 _mm256_floor_pd(__m256d s1);</p>
+<p>__m256 _mm256_ceil_pd(__m256d s1)</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>Invalid (signaled only if SRC = SNaN).</p>
+<p>Precision (signaled only if imm[3] = ‘0; if imm[3] = ‘1, then the Precision Mask in the MXSCSR is ignored and preci-sion exception is not signaled.)</p>
+<p>Note that Denormal is not signaled by ROUNDPD.</p>
+<h2>Other Exceptions</h2>
+<p>See Table 2-19, “Type 2 Class Exception Conditions,” additionally:</p>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>If VEX.vvvv ≠ 1111B.</td></tr></table></div></body></html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>MOVLPS - Move Low Packed Single Precision Floating-Point Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › MOVLPS - Move Low Packed Single Precision Floating-Point Values </div>
+<div id="body">
+<h1>MOVLPS—Move Low Packed Single Precision Floating-Point Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op / En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>NP 0F 12 /r MOVLPS xmm1, m64</td>
+<td>A</td>
+<td>V/V</td>
+<td>SSE</td>
+<td>Move two packed single precision floating-point values from m64 to low quadword of xmm1.</td></tr>
+<tr>
+<td>VEX.128.0F.WIG 12 /r VMOVLPS xmm2, xmm1, m64</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Merge two packed single precision floating-point values from m64 and the high quadword of xmm1.</td></tr>
+<tr>
+<td>EVEX.128.0F.W0 12 /r VMOVLPS xmm2, xmm1, m64</td>
+<td>D</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Merge two packed single precision floating-point values from m64 and the high quadword of xmm1.</td></tr>
+<tr>
+<td>0F 13/r MOVLPS m64, xmm1</td>
+<td>C</td>
+<td>V/V</td>
+<td>SSE</td>
+<td>Move two packed single precision floating-point values from low quadword of xmm1 to m64.</td></tr>
+<tr>
+<td>VEX.128.0F.WIG 13/r VMOVLPS m64, xmm1</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Move two packed single precision floating-point values from low quadword of xmm1 to m64.</td></tr>
+<tr>
+<td>EVEX.128.0F.W0 13/r VMOVLPS m64, xmm1</td>
+<td>E</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Move two packed single precision floating-point values from low quadword of xmm1 to m64.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:reg (r, w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>C</td>
+<td>N/A</td>
+<td>ModRM:r/m (w)</td>
+<td>ModRM:reg (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>D</td>
+<td>Tuple2</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>E</td>
+<td>Tuple2</td>
+<td>ModRM:r/m (w)</td>
+<td>ModRM:reg (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>This instruction cannot be used for register to register or memory to memory moves.</p>
+<p>128-bit Legacy SSE load:</p>
+<p>Moves two packed single precision floating-point values from the source 64-bit memory operand and stores them in the low 64-bits of the destination XMM register. The upper 64bits of the XMM register are preserved. Bits (MAXVL-1:128) of the corresponding destination register are preserved.</p>
+<p>VEX.128 &amp; EVEX encoded load:</p>
+<p>Loads two packed single precision floating-point values from the source 64-bit memory operand (the third operand), merges them with the upper 64-bits of the first source operand (the second operand), and stores them in the low 128-bits of the destination register (the first operand). Bits (MAXVL-1:128) of the corresponding desti-nation register are zeroed.</p>
+<p>128-bit store:</p>
+<p>Loads two packed single precision floating-point values from the low 64-bits of the XMM register source (second operand) to the 64-bit memory location (first operand).</p>
+<p>Note: VMOVLPS (store) (VEX.128.0F 13 /r) is legal and has the same behavior as the existing 0F 13 store. For VMOVLPS (store) VEX.vvvv and EVEX.vvvv are reserved and must be 1111b otherwise instruction will #UD.</p>
+<p>If VMOVLPS is encoded with VEX.L or EVEX.L’L= 1, an attempt to execute the instruction encoded with VEX.L or EVEX.L’L= 1 will cause an #UD exception.</p>
+<h2>Operation</h2>
+<p><strong>MOVLPS (128-bit Legacy SSE Load)</strong></p>
+<pre>DEST[63:0] := SRC[63:0]
+DEST[MAXVL-1:64] (Unmodified)</pre>
+<p><strong>VMOVLPS (VEX.128 &amp; EVEX Encoded Load)</strong></p>
+<pre>DEST[63:0] := SRC2[63:0]
+DEST[127:64] := SRC1[127:64]
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>VMOVLPS (Store)</strong></p>
+<pre>DEST[63:0] := SRC[63:0]</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>MOVLPS __m128 _mm_loadl_pi ( __m128 a, __m64 *p)</p>
+<p>MOVLPS void _mm_storel_pi (__m64 *p, __m128 a)</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>Non-EVEX-encoded instruction, see Table 2-22, “Type 5 Class Exception Conditions,” additionally:</p>
+<table class="exception-table">
+<tr>
+<td>
+<p>#UD</p>
+<p>EVEX-encoded instruction, see Table 2-57, “Type E9NF Class Exception Conditions.”</p></td>
+<td>If VEX.L = 1.</td></tr></table></div></body></html>

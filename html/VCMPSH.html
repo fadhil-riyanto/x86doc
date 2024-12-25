@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VCMPSH - Compare Scalar FP16 Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VCMPSH - Compare Scalar FP16 Values </div>
+<div id="body">
+<h1>VCMPSH—Compare Scalar FP16 Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.LLIG.F3.0F3A.W0 C2 /r /ib VCMPSH k1{k2}, xmm2, xmm3/m16 {sae}, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16</td>
+<td>Compare low FP16 values in xmm3/m16 and xmm2 using bits 4:0 of imm8 as a comparison predicate subject to writemask k2, and store the result in mask register k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Scalar</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8 (r)</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction compares the FP16 values from the lowest element of the source operands and stores the result in the destination mask operand. The comparison predicate operand (immediate byte bits 4:0) specifies the type of comparison performed on the pair of packed FP16 values. The low destination bit is updated according to the writemask. Bits MAXKL-1:1 of the destination operand are zeroed.</p>
+<p><strong>Operation</strong></p>
+<p>CASE (imm8 &amp; 0x1F) OF</p>
+<p>0: CMP_OPERATOR := EQ_OQ;</p>
+<p>1: CMP_OPERATOR := LT_OS;</p>
+<p>2: CMP_OPERATOR := LE_OS;</p>
+<p>3: CMP_OPERATOR := UNORD_Q;</p>
+<p>4: CMP_OPERATOR := NEQ_UQ;</p>
+<p>5: CMP_OPERATOR := NLT_US;</p>
+<p>6: CMP_OPERATOR := NLE_US;</p>
+<p>7: CMP_OPERATOR := ORD_Q;</p>
+<p>8: CMP_OPERATOR := EQ_UQ;</p>
+<p>9: CMP_OPERATOR := NGE_US;</p>
+<p>10: CMP_OPERATOR := NGT_US;</p>
+<p>11: CMP_OPERATOR := FALSE_OQ;</p>
+<p>12: CMP_OPERATOR := NEQ_OQ;</p>
+<p>13: CMP_OPERATOR := GE_OS;</p>
+<p>14: CMP_OPERATOR := GT_OS;</p>
+<p>15: CMP_OPERATOR := TRUE_UQ;</p>
+<p>16: CMP_OPERATOR := EQ_OS;</p>
+<p>17: CMP_OPERATOR := LT_OQ;</p>
+<p>18: CMP_OPERATOR := LE_OQ;</p>
+<p>19: CMP_OPERATOR := UNORD_S;</p>
+<p>20: CMP_OPERATOR := NEQ_US;</p>
+<p>21: CMP_OPERATOR := NLT_UQ;</p>
+<p>22: CMP_OPERATOR := NLE_UQ;</p>
+<p>23: CMP_OPERATOR := ORD_S;</p>
+<p>24: CMP_OPERATOR := EQ_US;</p>
+<p>25: CMP_OPERATOR := NGE_UQ;</p>
+<p>26: CMP_OPERATOR := NGT_UQ;</p>
+<p>27: CMP_OPERATOR := FALSE_OS;</p>
+<p>28: CMP_OPERATOR := NEQ_OS;</p>
+<p>29: CMP_OPERATOR := GE_OQ;</p>
+<p>30: CMP_OPERATOR := GT_OQ;</p>
+<p>31: CMP_OPERATOR := TRUE_US;</p>
+<p>ESAC</p>
+<p><strong>VCMPSH (EVEX Encoded Versions)</strong></p>
+<p>IF k2[0] OR *no writemask*:</p>
+<p>DEST.bit[0] := SRC1.fp16[0] CMP_OPERATOR SRC2.fp16[0]</p>
+<p>ELSE</p>
+<p>DEST.bit[0] := 0</p>
+<p>DEST[MAXKL-1:1] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VCMPSH __mmask8 _mm_cmp_round_sh_mask (__m128h a, __m128h b, const int imm8, const int sae);</p>
+<p>VCMPSH __mmask8 _mm_mask_cmp_round_sh_mask (__mmask8 k1, __m128h a, __m128h b, const int imm8, const int sae);</p>
+<p>VCMPSH __mmask8 _mm_cmp_sh_mask (__m128h a, __m128h b, const int imm8);</p>
+<p>VCMPSH __mmask8 _mm_mask_cmp_sh_mask (__mmask8 k1, __m128h a, __m128h b, const int imm8);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Denormal.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instructions, see Table 2-47, “Type E3 Class Exception Conditions.”</p></div></body></html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>STTILECFG - Store Tile Configuration </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › STTILECFG - Store Tile Configuration </div>
+<div id="body">
+<h1>STTILECFG—Store Tile Configuration</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>VEX.128.66.0F38.W0 49 !(11):000:bbb STTILECFG m512</td>
+<td>A</td>
+<td>V/N.E.</td>
+<td>AMX-TILE</td>
+<td>Store tile configuration in m512.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:r/m (w)</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>The STTILECFG instruction takes a pointer to a 64-byte memory location (described in Table 3-10 in the “LDTI-LECFG—Load Tile Configuration” entry) that will, after successful execution of this instruction, contain the descrip-tion of the tiles that were configured. In order to configure tiles, the AMX-TILE bit in CPUID must be set and the operating system has to have enabled the tiles architecture.</p>
+<p>If the tiles are not configured, then STTILECFG stores 64B of zeros to the indicated memory location.</p>
+<p>Any attempt to execute the STTILECFG instruction inside an Intel TSX transaction will result in a transaction abort.</p>
+<h2>Operation</h2>
+<p><strong>STTILECFG mem</strong></p>
+<pre>if TILES_CONFIGURED == 0:
+    //write 64 bytes of zeros at mem pointer
+    buf[0..63] := 0
+    write_memory(mem, 64, buf)
+else:
+    buf.byte[0] := tilecfg.palette_id
+    buf.byte[1] := tilecfg.start_row
+    buf.byte[2..15] := 0
+    p := 16
+    for n in 0 ... palette_table[tilecfg.palette_id].max_names-1:
+         buf.word[p/2] := tilecfg.t[n].colsb
+         p := p + 2
+    if p &lt; 47:
+         buf.byte[p..47] := 0
+    p := 48
+    for n in 0 ... palette_table[tilecfg.palette_id].max_names-1:
+         buf.byte[p++] := tilecfg.t[n].rows
+    if p &lt; 63:
+         buf.byte[p..63] := 0
+    write_memory(mem, 64, buf)</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>STTILECFGvoid _tile_storeconfig(void *);</p>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Exceptions</h2>
+<p>AMX-E2; see Section 2.10, “Intel® AMX Instruction Exception Classes,” for details.</p></div></body></html>

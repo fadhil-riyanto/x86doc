@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VREDUCESH - Perform Reduction Transformation on Scalar FP16 Value </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VREDUCESH - Perform Reduction Transformation on Scalar FP16 Value </div>
+<div id="body">
+<h1>VREDUCESH—Perform Reduction Transformation on Scalar FP16 Value</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.LLIG.NP.0F3A.W0 57 /r /ib VREDUCESH xmm1{k1}{z}, xmm2, xmm3/m16 {sae}, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16</td>
+<td>Perform a reduction transformation on the low binary encoded FP16 value in xmm3/m16 by subtracting a number of fraction bits specified by the imm8 field. Store the result in xmm1 subject to writemask k1. Bits 127:16 from xmm2 are copied to xmm1[127:16].</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Scalar</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8 (r)</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction performs a reduction transformation of the low binary encoded FP16 value in the source operand (the second operand) and store the reduced result in binary FP format to the low element of the destination operand (the first operand) under the writemask k1. For further details see the description of VREDUCEPH.</p>
+<p>Bits 127:16 of the destination operand are copied from the corresponding bits of the first source operand. Bits MAXVL-1:128 of the destination operand are zeroed. The low FP16 element of the destination is updated according to the writemask.</p>
+<p>This instruction might end up with a precision exception set. However, in case of SPE set (i.e., Suppress Precision Exception, which is imm8[3]=1), no precision exception is reported.</p>
+<p>This instruction may generate tiny non-zero result. If it does so, it does not report underflow exception, even if underflow exceptions are unmasked (UM flag in MXCSR register is 0).</p>
+<p>For special cases, see Table 5-20.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VREDUCESH dest{k1}, src, imm8</strong></p>
+<p>IF k1[0] or *no writemask*:</p>
+<p>dest.fp16[0] := reduce_fp16(src2.fp16[0], imm8)</p>
+<p>// see VREDUCEPH</p>
+<p>ELSE IF *zeroing*:</p>
+<p>dest.fp16[0] := 0</p>
+<p>//else dest.fp16[0] remains unchanged</p>
+<p>DEST[127:16] := src1[127:16]</p>
+<p>DEST[MAXVL-1:128] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VREDUCESH __m128h _mm_mask_reduce_round_sh (__m128h src, __mmask8 k, __m128h a, __m128h b, int imm8, const int sae);</p>
+<p>VREDUCESH __m128h _mm_maskz_reduce_round_sh (__mmask8 k, __m128h a, __m128h b, int imm8, const int sae);</p>
+<p>VREDUCESH __m128h _mm_reduce_round_sh (__m128h a, __m128h b, int imm8, const int sae);</p>
+<p>VREDUCESH __m128h _mm_mask_reduce_sh (__m128h src, __mmask8 k, __m128h a, __m128h b, int imm8);</p>
+<p>VREDUCESH __m128h _mm_maskz_reduce_sh (__mmask8 k, __m128h a, __m128h b, int imm8);</p>
+<p>VREDUCESH __m128h _mm_reduce_sh (__m128h a, __m128h b, int imm8);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Precision.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instructions, see Table 2-47, “Type E3 Class Exception Conditions.”</p></div></body></html>

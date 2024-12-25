@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VPBLENDMD/VPBLENDMQ - Blend Int32/Int64 Vectors Using an OpMask Control </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VPBLENDMD/VPBLENDMQ - Blend Int32/Int64 Vectors Using an OpMask Control </div>
+<div id="body">
+<h1>VPBLENDMD/VPBLENDMQ—Blend Int32/Int64 Vectors Using an OpMask Control</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 64 /r VPBLENDMD xmm1 {k1}{z}, xmm2, xmm3/m128/m32bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Blend doubleword integer vector xmm2 and doubleword vector xmm3/m128/m32bcst and store the result in xmm1, under control mask.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 64 /r VPBLENDMD ymm1 {k1}{z}, ymm2, ymm3/m256/m32bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Blend doubleword integer vector ymm2 and doubleword vector ymm3/m256/m32bcst and store the result in ymm1, under control mask.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 64 /r VPBLENDMD zmm1 {k1}{z}, zmm2, zmm3/m512/m32bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Blend doubleword integer vector zmm2 and doubleword vector zmm3/m512/m32bcst and store the result in zmm1, under control mask.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 64 /r VPBLENDMQ xmm1 {k1}{z}, xmm2, xmm3/m128/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Blend quadword integer vector xmm2 and quadword vector xmm3/m128/m64bcst and store the result in xmm1, under control mask.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 64 /r VPBLENDMQ ymm1 {k1}{z}, ymm2, ymm3/m256/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Blend quadword integer vector ymm2 and quadword vector ymm3/m256/m64bcst and store the result in ymm1, under control mask.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 64 /r VPBLENDMQ zmm1 {k1}{z}, zmm2, zmm3/m512/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Blend quadword integer vector zmm2 and quadword vector zmm3/m512/m64bcst and store the result in zmm1, under control mask.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Performs an element-by-element blending of dword/qword elements between the first source operand (the second operand) and the elements of the second source operand (the third operand) using an opmask register as select control. The blended result is written into the destination.</p>
+<p>The destination and first source operands are ZMM registers. The second source operand can be a ZMM register, a 512-bit memory location or a 512-bit vector broadcasted from a 32-bit memory location.</p>
+<p>The opmask register is not used as a writemask for this instruction. Instead, the mask is used as an element selector: every element of the destination is conditionally selected between first source or second source using the value of the related mask bit (0 for the first source operand, 1 for the second source operand).</p>
+<p>If EVEX.z is set, the elements with corresponding mask bit value of 0 in the destination operand are zeroed.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VPBLENDMD (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (4, 128), (8, 256), (16, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF k1[j] OR *no controlmask*</p>
+<p>THEN</p>
+<p>IF (EVEX.b = 1) AND (SRC2 *is memory*)</p>
+<p>THEN</p>
+<p>DEST[i+31:i] := SRC2[31:0]</p>
+<p>ELSE</p>
+<p>DEST[i+31:i] := SRC2[i+31:i]</p>
+<p>FI;</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN DEST[i+31:i] := SRC1[i+31:i]</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+31:i] := 0</p>
+<p>FI;</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0;</p>
+<p><strong>VPBLENDMD (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (4, 128), (8, 256), (16, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF k1[j] OR *no controlmask*</p>
+<p>THEN</p>
+<p>IF (EVEX.b = 1) AND (SRC2 *is memory*)</p>
+<p>THEN</p>
+<p>DEST[i+31:i] := SRC2[31:0]</p>
+<p>ELSE</p>
+<p>DEST[i+31:i] := SRC2[i+31:i]</p>
+<p>FI;</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN DEST[i+31:i] := SRC1[i+31:i]</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+31:i] := 0</p>
+<p>FI;</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VPBLENDMD __m512i _mm512_mask_blend_epi32(__mmask16 k, __m512i a, __m512i b);</p>
+<p>VPBLENDMD __m256i _mm256_mask_blend_epi32(__mmask8 m, __m256i a, __m256i b);</p>
+<p>VPBLENDMD __m128i _mm_mask_blend_epi32(__mmask8 m, __m128i a, __m128i b);</p>
+<p>VPBLENDMQ __m512i _mm512_mask_blend_epi64(__mmask8 k, __m512i a, __m512i b);</p>
+<p>VPBLENDMQ __m256i _mm256_mask_blend_epi64(__mmask8 m, __m256i a, __m256i b);</p>
+<p>VPBLENDMQ __m128i _mm_mask_blend_epi64(__mmask8 m, __m128i a, __m128i b);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-49, “Type E4 Class Exception Conditions.”</p></div></body></html>

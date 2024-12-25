@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>PALIGNR - Packed Align Right </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › PALIGNR - Packed Align Right </div>
+<div id="body">
+<h1>PALIGNR—Packed Align Right</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>NP 0F 3A 0F /r ib<sup>1</sup></p>
+<p>PALIGNR mm1, mm2/m64, imm8</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>SSSE3</td>
+<td>Concatenate destination and source operands, extract byte-aligned result shifted to the right by constant value in imm8 into mm1.</td></tr>
+<tr>
+<td>
+<p>66 0F 3A 0F /r ib</p>
+<p>PALIGNR xmm1, xmm2/m128, imm8</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>SSSE3</td>
+<td>Concatenate destination and source operands, extract byte-aligned result shifted to the right by constant value in imm8 into xmm1.</td></tr>
+<tr>
+<td>
+<p>VEX.128.66.0F3A.WIG 0F /r ib</p>
+<p>VPALIGNR xmm1, xmm2, xmm3/m128, imm8</p></td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Concatenate xmm2 and xmm3/m128, extract byte aligned result shifted to the right by constant value in imm8 and result is stored in xmm1.</td></tr>
+<tr>
+<td>
+<p>VEX.256.66.0F3A.WIG 0F /r ib</p>
+<p>VPALIGNR ymm1, ymm2, ymm3/m256, imm8</p></td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX2</td>
+<td>Concatenate pairs of 16 bytes in ymm2 and ymm3/m256 into 32-byte intermediate result, extract byte-aligned, 16-byte result shifted to the right by constant values in imm8 from each intermediate result, and two 16-byte results are stored in ymm1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F3A.WIG 0F /r ib VPALIGNR xmm1 {k1}{z}, xmm2, xmm3/m128, imm8</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Concatenate xmm2 and xmm3/m128 into a 32-byte intermediate result, extract byte aligned result shifted to the right by constant value in imm8 and result is stored in xmm1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.WIG 0F /r ib VPALIGNR ymm1 {k1}{z}, ymm2, ymm3/m256, imm8</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Concatenate pairs of 16 bytes in ymm2 and ymm3/m256 into 32-byte intermediate result, extract byte-aligned, 16-byte result shifted to the right by constant values in imm8 from each intermediate result, and two 16-byte results are stored in ymm1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.WIG 0F /r ib VPALIGNR zmm1 {k1}{z}, zmm2, zmm3/m512, imm8</td>
+<td>C</td>
+<td>V/V</td>
+<td></td>
+<td>
+<p>AVX512BW Concatenate pairs of 16 bytes in zmm2 and</p>
+<p>zmm3/m512 into 32-byte intermediate result, extract byte-aligned, 16-byte result shifted to the right by constant values in imm8 from each intermediate result, and four 16-byte results are stored in zmm1.</p></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1. See note in Section 2.5, “Intel® AVX and Intel® SSE Instruction Exception Specification” in the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Soft-</p>
+<p>ware Developer’s Manual, Volume 2A and Section 23.25.3, “Exception Conditions of Legacy SIMD Instructions Operating on MMX Reg-isters” in the Intel<em><sup>® </sup></em>64 and IA-32 Architectures Software Developer’s Manual, Volume 3A.</p>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:reg (r, w)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td></tr>
+<tr>
+<td>C</td>
+<td>Full Mem</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td></tr></table>
+<h2>Description</h2>
+<p>(V)PALIGNR concatenates the destination operand (the first operand) and the source operand (the second operand) into an intermediate composite, shifts the composite at byte granularity to the right by a constant imme-diate, and extracts the right-aligned result into the destination. The first and the second operands can be an MMX, XMM or a YMM register. The immediate value is considered unsigned. Immediate shift counts larger than the 2L (i.e., 32 for 128-bit operands, or 16 for 64-bit operands) produce a zero result. Both operands can be MMX regis-ters, XMM registers or YMM registers. When the source operand is a 128-bit memory operand, the operand must be aligned on a 16-byte boundary or a general-protection exception (#GP) will be generated.</p>
+<p>In 64-bit mode and not encoded by VEX/EVEX prefix, use the REX prefix to access additional registers.</p>
+<p>128-bit Legacy SSE version: Bits (MAXVL-1:128) of the corresponding YMM destination register remain unchanged.</p>
+<p>EVEX.512 encoded version: The first source operand is a ZMM register and contains four 16-byte blocks. The second source operand is a ZMM register or a 512-bit memory location containing four 16-byte block. The destina-tion operand is a ZMM register and contain four 16-byte results. The imm8[7:0] is the common shift count</p>
+<p>used for each of the four successive 16-byte block sources. The low 16-byte block of the two source operands produce the low 16-byte result of the destination operand, the high 16-byte block of the two source operands produce the high 16-byte result of the destination operand and so on for the blocks in the middle.</p>
+<p>VEX.256 and EVEX.256 encoded versions: The first source operand is a YMM register and contains two 16-byte blocks. The second source operand is a YMM register or a 256-bit memory location containing two 16-byte block. The destination operand is a YMM register and contain two 16-byte results. The imm8[7:0] is the common shift count used for the two lower 16-byte block sources and the two upper 16-byte block sources. The low 16-byte block of the two source operands produce the low 16-byte result of the destination operand, the high 16-byte block of the two source operands produce the high 16-byte result of the destination operand. The upper bits (MAXVL-1:256) of the corresponding ZMM register destination are zeroed.</p>
+<p>VEX.128 and EVEX.128 encoded versions: The first source operand is an XMM register. The second source operand is an XMM register or 128-bit memory location. The destination operand is an XMM register. The upper bits (MAXVL-1:128) of the corresponding ZMM register destination are zeroed.</p>
+<p>Concatenation is done with 128-bit data in the first and second source operand for both 128-bit and 256-bit instructions. The high 128-bits of the intermediate composite 256-bit result came from the 128-bit data from the first source operand; the low 128-bits of the intermediate result came from the 128-bit data of the second source operand.</p>
+<p>0</p>
+<p>127</p>
+<p>0</p>
+<p>127</p>
+<p>SRC1</p>
+<p>SRC2</p>
+<p>Imm8[7:0]*8</p>
+<p>255</p>
+<p>128</p>
+<p>128</p>
+<p>255</p>
+<p>SRC1</p>
+<p>SRC2</p>
+<p>Imm8[7:0]*8</p>
+<p>127</p>
+<p>0</p>
+<p>128</p>
+<p>255</p>
+<p>DEST</p>
+<p>DEST</p>
+<h3>Figure 4-7.  256-bit VPALIGN Instruction Operation</h3>
+<h2>Operation</h2>
+<p><strong>PALIGNR (With 64-bit Operands)</strong></p>
+<pre>    temp1[127:0] = CONCATENATE(DEST,SRC)&gt;&gt;(imm8*8)
+    DEST[63:0] = temp1[63:0]</pre>
+<p><strong>PALIGNR (With 128-bit Operands)</strong></p>
+<pre>temp1[255:0] := ((DEST[127:0] &lt;&lt; 128) OR SRC[127:0])&gt;&gt;(imm8*8);
+DEST[127:0] := temp1[127:0]
+DEST[MAXVL-1:128] (Unmodified)</pre>
+<p><strong>VPALIGNR (VEX.128 Encoded Version)</strong></p>
+<pre>temp1[255:0] := ((SRC1[127:0] &lt;&lt; 128) OR SRC2[127:0])&gt;&gt;(imm8*8);
+DEST[127:0] := temp1[127:0]
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>VPALIGNR (VEX.256 Encoded Version)</strong></p>
+<pre>temp1[255:0] := ((SRC1[127:0] &lt;&lt; 128) OR SRC2[127:0])&gt;&gt;(imm8[7:0]*8);
+DEST[127:0] := temp1[127:0]
+temp1[255:0] := ((SRC1[255:128] &lt;&lt; 128) OR SRC2[255:128])&gt;&gt;(imm8[7:0]*8);
+DEST[MAXVL-1:128] := temp1[127:0]</pre>
+<p><strong>VPALIGNR (EVEX Encoded Versions)</strong></p>
+<pre>(KL, VL) = (16, 128), (32, 256), (64, 512)
+FOR l := 0 TO VL-1 with increments of 128
+    temp1[255:0] := ((SRC1[l+127:l] &lt;&lt; 128) OR SRC2[l+127:l])&gt;&gt;(imm8[7:0]*8);
+    TMP_DEST[l+127:l] := temp1[127:0]
+ENDFOR;
+FOR j := 0 TO KL-1
+    i := j * 8
+    IF k1[j] OR *no writemask*
+         THEN DEST[i+7:i] := TMP_DEST[i+7:i]
+         ELSE
+              IF *merging-masking*
+                                                         ; merging-masking
+                    THEN *DEST[i+7:i] remains unchanged*
+                    ELSE *zeroing-masking*
+                                                              ; zeroing-masking
+                         DEST[i+7:i] = 0
+              FI
+    FI;
+ENDFOR;
+DEST[MAXVL-1:VL] := 0</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalents</h2>
+<p>PALIGNR __m64 _mm_alignr_pi8 (__m64 a, __m64 b, int n)</p>
+<p>(V)PALIGNR __m128i _mm_alignr_epi8 (__m128i a, __m128i b, int n)</p>
+<p>VPALIGNR __m256i _mm256_alignr_epi8 (__m256i a, __m256i b, const int n)</p>
+<p>VPALIGNR __m512i _mm512_alignr_epi8 (__m512i a, __m512i b, const int n)</p>
+<p>VPALIGNR __m512i _mm512_mask_alignr_epi8 (__m512i s, __mmask64 m, __m512i a, __m512i b, const int n)</p>
+<p>VPALIGNR __m512i _mm512_maskz_alignr_epi8 ( __mmask64 m, __m512i a, __m512i b, const int n)</p>
+<p>VPALIGNR __m256i _mm256_mask_alignr_epi8 (__m256i s, __mmask32 m, __m256i a, __m256i b, const int n)</p>
+<p>VPALIGNR __m256i _mm256_maskz_alignr_epi8 (__mmask32 m, __m256i a, __m256i b, const int n)</p>
+<p>VPALIGNR __m128i _mm_mask_alignr_epi8 (__m128i s, __mmask16 m, __m128i a, __m128i b, const int n)</p>
+<p>VPALIGNR __m128i _mm_maskz_alignr_epi8 (__mmask16 m, __m128i a, __m128i b, const int n)</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>Non-EVEX-encoded instruction, see Table 2-21, “Type 4 Class Exception Conditions.”</p>
+<p>EVEX-encoded instruction, see Exceptions Type E4NF.nb in Table 2-50, “Type E4NF Class Exception Conditions.”</p></div></body></html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>PINSRB/PINSRD/PINSRQ - Insert Byte/Dword/Qword </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › PINSRB/PINSRD/PINSRQ - Insert Byte/Dword/Qword </div>
+<div id="body">
+<h1>PINSRB/PINSRD/PINSRQ—Insert Byte/Dword/Qword</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/ En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>66 0F 3A 20 /r ib PINSRB xmm1, r32/m8, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>SSE4_1</td>
+<td>Insert a byte integer value from r32/m8 into xmm1 at the destination element in xmm1 specified by imm8.</td></tr>
+<tr>
+<td>66 0F 3A 22 /r ib PINSRD xmm1, r/m32, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>SSE4_1</td>
+<td>Insert a dword integer value from r/m32 into the xmm1 at the destination element specified by imm8.</td></tr>
+<tr>
+<td>66 REX.W 0F 3A 22 /r ib PINSRQ xmm1, r/m64, imm8</td>
+<td>A</td>
+<td>V/N. E.</td>
+<td>SSE4_1</td>
+<td>Insert a qword integer value from r/m64 into the xmm1 at the destination element specified by imm8.</td></tr>
+<tr>
+<td>VEX.128.66.0F3A.W0 20 /r ib VPINSRB xmm1, xmm2, r32/m8, imm8</td>
+<td>B</td>
+<td>V<sup>1</sup>/V</td>
+<td>AVX</td>
+<td>Merge a byte integer value from r32/m8 and rest from xmm2 into xmm1 at the byte offset in imm8.</td></tr>
+<tr>
+<td>VEX.128.66.0F3A.W0 22 /r ib VPINSRD xmm1, xmm2, r/m32, imm8</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Insert a dword integer value from r32/m32 and rest from xmm2 into xmm1 at the dword offset in imm8.</td></tr>
+<tr>
+<td>VEX.128.66.0F3A.W1 22 /r ib VPINSRQ xmm1, xmm2, r/m64, imm8</td>
+<td>B</td>
+<td>V/I<sup>2</sup></td>
+<td>AVX</td>
+<td>Insert a qword integer value from r64/m64 and rest from xmm2 into xmm1 at the qword offset in imm8.</td></tr>
+<tr>
+<td>EVEX.128.66.0F3A.WIG 20 /r ib VPINSRB xmm1, xmm2, r32/m8, imm8</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Merge a byte integer value from r32/m8 and rest from xmm2 into xmm1 at the byte offset in imm8.</td></tr>
+<tr>
+<td>EVEX.128.66.0F3A.W0 22 /r ib VPINSRD xmm1, xmm2, r32/m32, imm8</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512DQ</td>
+<td>Insert a dword integer value from r32/m32 and rest from xmm2 into xmm1 at the dword offset in imm8.</td></tr>
+<tr>
+<td>EVEX.128.66.0F3A.W1 22 /r ib VPINSRQ xmm1, xmm2, r64/m64, imm8</td>
+<td>C</td>
+<td>V/N.E.<sup>2</sup></td>
+<td>AVX512DQ</td>
+<td>Insert a qword integer value from r64/m64 and rest from xmm2 into xmm1 at the qword offset in imm8.</td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1. In 64-bit mode, VEX.W1 is ignored for VPINSRB (similar to legacy REX.W=1 prefix with PINSRB).</p>
+<p>2. VEX.W/EVEX.W in non-64 bit is ignored; the instructions behaves as if the W0 version is used.</p>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td></tr>
+<tr>
+<td>C</td>
+<td>Tuple1 Scalar</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td></tr></table>
+<h2>Description</h2>
+<p>Copies a byte/dword/qword from the source operand (second operand) and inserts it in the destination operand (first operand) at the location specified with the count operand (third operand). (The other elements in the desti-nation register are left untouched.) The source operand can be a general-purpose register or a memory location. (When the source operand is a general-purpose register, PINSRB copies the low byte of the register.) The destina-tion operand is an XMM register. The count operand is an 8-bit immediate. When specifying a qword[dword, byte] location in an XMM register, the [2, 4] least-significant bit(s) of the count operand specify the location.</p>
+<p>In 64-bit mode and not encoded with VEX/EVEX, using a REX prefix in the form of REX.R permits this instruction to access additional registers (XMM8-XMM15, R8-15). Use of REX.W permits the use of 64 bit general purpose regis-ters.</p>
+<p>128-bit Legacy SSE version: Bits (MAXVL-1:128) of the corresponding YMM destination register remain unchanged.</p>
+<p>VEX.128 encoded version: Bits (MAXVL-1:128) of the destination register are zeroed. VEX.L must be 0, otherwise the instruction will #UD. Attempt to execute VPINSRQ in non-64-bit mode will cause #UD.</p>
+<p>EVEX.128 encoded version: Bits (MAXVL-1:128) of the destination register are zeroed. EVEX.L’L must be 0, other-wise the instruction will #UD.</p>
+<h2>Operation</h2>
+<pre>CASE OF
+    PINSRB:
+              SEL := COUNT[3:0];
+              MASK := (0FFH &lt;&lt; (SEL * 8));
+              TEMP := (((SRC[7:0] &lt;&lt; (SEL *8)) AND MASK);
+    PINSRD:
+              SEL := COUNT[1:0];
+              MASK := (0FFFFFFFFH &lt;&lt; (SEL * 32));
+              TEMP := (((SRC &lt;&lt; (SEL *32)) AND MASK)
+                                                              ;
+    PINSRQ:
+              SEL := COUNT[0]
+              MASK := (0FFFFFFFFFFFFFFFFH &lt;&lt; (SEL * 64));
+              TEMP := (((SRC &lt;&lt; (SEL *64)) AND MASK)
+                                                              ;
+ESAC;
+         DEST := ((DEST AND NOT MASK) OR TEMP);</pre>
+<p><strong>VPINSRB (VEX/EVEX Encoded Version)</strong></p>
+<pre>SEL := imm8[3:0]
+DEST[127:0] := write_b_element(SEL, SRC2, SRC1)
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>VPINSRD (VEX/EVEX Encoded Version)</strong></p>
+<pre>SEL := imm8[1:0]
+DEST[127:0] := write_d_element(SEL, SRC2, SRC1)
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>VPINSRQ (VEX/EVEX Encoded Version)</strong></p>
+<pre>SEL := imm8[0]
+DEST[127:0] := write_q_element(SEL, SRC2, SRC1)
+DEST[MAXVL-1:128] := 0</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>PINSRB __m128i _mm_insert_epi8 (__m128i s1, int s2, const int ndx);</p>
+<p>PINSRD __m128i _mm_insert_epi32 (__m128i s2, int s, const int ndx);</p>
+<p>PINSRQ __m128i _mm_insert_epi64(__m128i s2, __int64 s, const int ndx);</p>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>EVEX-encoded instruction, see Table 2-22, “Type 5 Class Exception Conditions.”</td></tr>
+<tr>
+<td>EVEX-encoded instruction, see Table 2-57, “Type E9NF Class Exception Conditions.”</td></tr></table>
+<p>Additionally:</p>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>If VEX.L = 1 or EVEX.L’L &gt; 0.</td></tr></table></div></body></html>

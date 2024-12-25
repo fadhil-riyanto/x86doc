@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>HRESET - History Reset </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › HRESET - History Reset </div>
+<div id="body">
+<h1>HRESET—History Reset</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>F3 0F 3A F0 C0 /ib HRESET imm8, &lt;EAX&gt;</td>
+<td>A</td>
+<td>V/V</td>
+<td>HRESET</td>
+<td>Processor history reset request. Controlled by the EAX implicit operand.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Requests the processor to selectively reset selected components of hardware history maintained by the current logical processor. HRESET operation is controlled by the implicit EAX operand. The value of the explicit imm8 operand is ignored. This instruction can only be executed at privilege level 0.</p>
+<p>The HRESET instruction can be used to request reset of multiple components of hardware history. Prior to the execution of HRESET, the system software must take the following steps:</p>
+<p>1.</p>
+<p>Enumerate the HRESET capabilities via CPUID.20H.0H:EBX, which indicates what components of hardware history can be reset.</p>
+<p>2.</p>
+<p>Only the bits enumerated by CPUID.20H.0H:EBX can be set in the IA32_HRESET_ENABLE MSR.</p>
+<p>HRESET causes a general-protection exception (#GP) if EAX sets any bits that are not set in the IA32_HRESET_EN-ABLE MSR.</p>
+<p>Any attempt to execute the HRESET instruction inside a transactional region will result in a transaction abort.</p>
+<p><strong>Operation</strong></p>
+<p>IF EAX = 0</p>
+<p>    THEN NOP</p>
+<p>    ELSE</p>
+<p>         FOREACH i such that EAX[i] = 1</p>
+<p>             Reset prediction history for feature i</p>
+<p>FI</p>
+<p><strong>Flags Affected</strong></p>
+<p>None.</p>
+<h2>Protected Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#GP(0)</td>
+<td>If CPL &gt; 0 or (EAX AND NOT IA32_HRESET_ENABLE) ≠0.</td></tr>
+<tr>
+<td>#UD</td>
+<td>If CPUID.07H.01H:EAX.HRESET[bit 22] = 0.</td></tr></table>
+<h2>Real-Address Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#GP(0)</td>
+<td>HRESET instruction is not recognized in virtual-8086 mode.</td></tr></table>
+<h2>Compatibility Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>64-Bit Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p></div></body></html>

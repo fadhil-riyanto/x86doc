@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VCVTTPH2UW - Convert Packed FP16 Values to Unsigned Word Integers </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VCVTTPH2UW - Convert Packed FP16 Values to Unsigned Word Integers </div>
+<div id="body">
+<h1>VCVTTPH2UW—Convert Packed FP16 Values to Unsigned Word Integers</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.NP.MAP5.W0 7C /r VCVTTPH2UW xmm1{k1}{z}, xmm2/m128/m16bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16 AVX512VL</td>
+<td>Convert eight packed FP16 values in xmm2/m128/m16bcst to eight unsigned word integers, and store the result in xmm1 using truncation subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.NP.MAP5.W0 7C /r VCVTTPH2UW ymm1{k1}{z}, ymm2/m256/m16bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16 AVX512VL</td>
+<td>Convert sixteen packed FP16 values in ymm2/m256/m16bcst to sixteen unsigned word integers, and store the result in ymm1 using truncation subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.NP.MAP5.W0 7C /r VCVTTPH2UW zmm1{k1}{z}, zmm2/m512/m16bcst {sae}</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16</td>
+<td>Convert thirty-two packed FP16 values in zmm2/m512/m16bcst to thirty-two unsigned word integers, and store the result in zmm1 using truncation subject to writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction converts packed FP16 values in the source operand to unsigned word integers in the destination operand.</p>
+<p>When a conversion is inexact, a truncated (round toward zero) value is returned. If a converted result cannot be represented in the destination format, the floating-point invalid exception is raised, and if this exception is masked, the integer indefinite value is returned.</p>
+<p>The destination elements are updated according to the writemask.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VCVTTPH2UW dest, src</strong></p>
+<p>VL = 128, 256 or 512</p>
+<p>KL := VL / 16</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF k1[j] OR *no writemask*:</p>
+<p>IF *SRC is memory* and EVEX.b = 1:</p>
+<p>tsrc := SRC.fp16[0]</p>
+<p>ELSE</p>
+<p>tsrc := SRC.fp16[j]</p>
+<p>DEST.word[j] := Convert_fp16_to_unsigned_integer16_truncate(tsrc)</p>
+<p>ELSE IF *zeroing*:</p>
+<p>DEST.word[j] := 0</p>
+<p>// else dest.word[j] remains unchanged</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VCVTTPH2UW __m512i _mm512_cvtt_roundph_epu16 (__m512h a, int sae);</p>
+<p>VCVTTPH2UW __m512i _mm512_mask_cvtt_roundph_epu16 (__m512i src, __mmask32 k, __m512h a, int sae);</p>
+<p>VCVTTPH2UW __m512i _mm512_maskz_cvtt_roundph_epu16 (__mmask32 k, __m512h a, int sae);</p>
+<p>VCVTTPH2UW __m128i _mm_cvttph_epu16 (__m128h a);</p>
+<p>VCVTTPH2UW __m128i _mm_mask_cvttph_epu16 (__m128i src, __mmask8 k, __m128h a);</p>
+<p>VCVTTPH2UW __m128i _mm_maskz_cvttph_epu16 (__mmask8 k, __m128h a);</p>
+<p>VCVTTPH2UW __m256i _mm256_cvttph_epu16 (__m256h a);</p>
+<p>VCVTTPH2UW __m256i _mm256_mask_cvttph_epu16 (__m256i src, __mmask16 k, __m256h a);</p>
+<p>VCVTTPH2UW __m256i _mm256_maskz_cvttph_epu16 (__mmask16 k, __m256h a);</p>
+<p>VCVTTPH2UW __m512i _mm512_cvttph_epu16 (__m512h a);</p>
+<p>VCVTTPH2UW __m512i _mm512_mask_cvttph_epu16 (__m512i src, __mmask32 k, __m512h a);</p>
+<p>VCVTTPH2UW __m512i _mm512_maskz_cvttph_epu16 (__mmask32 k, __m512h a);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Precision.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instructions, see Table 2-46, “Type E2 Class Exception Conditions.”</p></div></body></html>

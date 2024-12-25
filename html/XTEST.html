@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>XTEST - Test if in Transactional Execution </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › XTEST - Test if in Transactional Execution </div>
+<div id="body">
+<h1>XTEST—Test if in Transactional Execution</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>NP 0F 01 D6 XTEST</td>
+<td>ZO</td>
+<td>V/V</td>
+<td>HLE or RTM</td>
+<td>Test if executing in a transactional region.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand2</th>
+<th>Operand3</th>
+<th>Operand4</th></tr>
+<tr>
+<td>ZO</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>The XTEST instruction queries the transactional execution status. If the instruction executes inside a transaction-ally executing RTM region or a transactionally executing HLE region, then the ZF flag is cleared, else it is set.</p>
+<h2>Operation</h2>
+<p><strong>XTEST</strong></p>
+<pre>IF (RTM_ACTIVE = 1 OR HLE_ACTIVE = 1)
+    THEN
+         ZF := 0
+    ELSE
+         ZF := 1
+FI;</pre>
+<h2>Flags Affected</h2>
+<p>The ZF flag is cleared if the instruction is executed transactionally; otherwise it is set to 1. The CF, OF, SF, PF, and AF, flags are cleared.</p>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>XTEST int _xtest( void );</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>CPUID.(EAX=7, ECX=0):EBX.HLE[bit 4] = 0 and CPUID.(EAX=7, ECX=0):EBX.RTM[bit 11] = 0.</p>
+<p>If LOCK prefix is used.</p></td></tr></table></div></body></html>

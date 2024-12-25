@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>EXTRACTPS - Extract Packed Floating-Point Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › EXTRACTPS - Extract Packed Floating-Point Values </div>
+<div id="body">
+<h1>EXTRACTPS—Extract Packed Floating-Point Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>66 0F 3A 17 /r ib EXTRACTPS reg/m32, xmm1, imm8</td>
+<td>A</td>
+<td>VV</td>
+<td>SSE4_1</td>
+<td>Extract one single precision floating-point value from xmm1 at the offset specified by imm8 and store the result in reg or m32. Zero extend the results in 64-bit register if applicable.</td></tr>
+<tr>
+<td>VEX.128.66.0F3A.WIG 17 /r ib VEXTRACTPS reg/m32, xmm1, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Extract one single precision floating-point value from xmm1 at the offset specified by imm8 and store the result in reg or m32. Zero extend the results in 64-bit register if applicable.</td></tr>
+<tr>
+<td>EVEX.128.66.0F3A.WIG 17 /r ib VEXTRACTPS reg/m32, xmm1, imm8</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Extract one single precision floating-point value from xmm1 at the offset specified by imm8 and store the result in reg or m32. Zero extend the results in 64-bit register if applicable.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:r/m (w)</td>
+<td>ModRM:reg (r)</td>
+<td>imm8</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>Tuple1 Scalar</td>
+<td>ModRM:r/m (w)</td>
+<td>ModRM:reg (r)</td>
+<td>imm8</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Extracts a single precision floating-point value from the source operand (second operand) at the 32-bit offset spec-ified from imm8. Immediate bits higher than the most significant offset for the vector length are ignored.</p>
+<p>The extracted single precision floating-point value is stored in the low 32-bits of the destination operand</p>
+<p>In 64-bit mode, destination register operand has default operand size of 64 bits. The upper 32-bits of the register are filled with zero. REX.W is ignored.</p>
+<p>VEX.128 and EVEX encoded version: When VEX.W1 or EVEX.W1 form is used in 64-bit mode with a general purpose register (GPR) as a destination operand, the packed single quantity is zero extended to 64 bits.</p>
+<p>VEX.vvvv/EVEX.vvvv is reserved and must be 1111b otherwise instructions will #UD.</p>
+<p>128-bit Legacy SSE version: When a REX.W prefix is used in 64-bit mode with a general purpose register (GPR) as a destination operand, the packed single quantity is zero extended to 64 bits.</p>
+<p>The source register is an XMM register. Imm8[1:0] determine the starting DWORD offset from which to extract the 32-bit floating-point value.</p>
+<p>If VEXTRACTPS is encoded with VEX.L= 1, an attempt to execute the instruction encoded with VEX.L= 1 will cause an #UD exception.</p>
+<h2>Operation</h2>
+<p><strong>VEXTRACTPS (EVEX and VEX.128 Encoded Version)</strong></p>
+<pre>SRC_OFFSET := IMM8[1:0]
+IF (64-Bit Mode and DEST is register)
+    DEST[31:0] := (SRC[127:0] &gt;&gt; (SRC_OFFSET*32)) AND 0FFFFFFFFh
+    DEST[63:32] := 0
+ELSE
+    DEST[31:0] := (SRC[127:0] &gt;&gt; (SRC_OFFSET*32)) AND 0FFFFFFFFh
+FI</pre>
+<p><strong>EXTRACTPS (128-bit Legacy SSE Version)</strong></p>
+<pre>SRC_OFFSET := IMM8[1:0]
+IF (64-Bit Mode and DEST is register)
+    DEST[31:0] := (SRC[127:0] &gt;&gt; (SRC_OFFSET*32)) AND 0FFFFFFFFh
+    DEST[63:32] := 0
+ELSE
+    DEST[31:0] := (SRC[127:0] &gt;&gt; (SRC_OFFSET*32)) AND 0FFFFFFFFh
+FI</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>EXTRACTPS int _mm_extract_ps (__m128 a, const int nidx);</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>VEX-encoded instructions, see Table 2-22, “Type 5 Class Exception Conditions.”</td></tr>
+<tr>
+<td>EVEX-encoded instructions, see Table 2-57, “Type E9NF Class Exception Conditions.”</td></tr></table>
+<p>Additionally:</p>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>IF VEX.L = 0.</td></tr>
+<tr>
+<td>#UD</td>
+<td>If VEX.vvvv != 1111B or EVEX.vvvv != 1111B.</td></tr></table></div></body></html>

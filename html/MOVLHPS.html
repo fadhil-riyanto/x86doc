@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>MOVLHPS - Move Packed Single Precision Floating-Point Values Low to High </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › MOVLHPS - Move Packed Single Precision Floating-Point Values Low to High </div>
+<div id="body">
+<h1>MOVLHPS—Move Packed Single Precision Floating-Point Values Low to High</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>NP 0F 16 /r MOVLHPS xmm1, xmm2</td>
+<td>RM</td>
+<td>V/V</td>
+<td>SSE</td>
+<td>Move two packed single precision floating-point values from low quadword of xmm2 to high quadword of xmm1.</td></tr>
+<tr>
+<td>VEX.128.0F.WIG 16 /r VMOVLHPS xmm1, xmm2, xmm3</td>
+<td>RVM</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Merge two packed single precision floating-point values from low quadword of xmm3 and low quadword of xmm2.</td></tr>
+<tr>
+<td>EVEX.128.0F.W0 16 /r VMOVLHPS xmm1, xmm2, xmm3</td>
+<td>RVM</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Merge two packed single precision floating-point values from low quadword of xmm3 and low quadword of xmm2.</td></tr></table>
+<h3>Instruction Operand Encoding<sup>1</sup></h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>RM</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>RVM</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r) /EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>This instruction cannot be used for memory to register moves.</p>
+<p>128-bit two-argument form:</p>
+<p>Moves two packed single precision floating-point values from the low quadword of the second XMM argument (second operand) to the high quadword of the first XMM register (first argument). The low quadword of the desti-nation operand is left unchanged. Bits (MAXVL-1:128) of the corresponding destination register are unmodified.</p>
+<p>128-bit three-argument forms:</p>
+<p>Moves two packed single precision floating-point values from the low quadword of the third XMM argument (third operand) to the high quadword of the destination (first operand). Copies the low quadword from the second XMM argument (second operand) to the low quadword of the destination (first operand). Bits (MAXVL-1:128) of the corresponding destination register are zeroed.</p>
+<p>If VMOVLHPS is encoded with VEX.L or EVEX.L’L= 1, an attempt to execute the instruction encoded with VEX.L or EVEX.L’L= 1 will cause an #UD exception.</p>
+<h2>Operation</h2>
+<p><strong>MOVLHPS (128-bit Two-Argument Form)</strong></p>
+<pre>DEST[63:0] (Unmodified)
+DEST[127:64] := SRC[63:0]
+DEST[MAXVL-1:128] (Unmodified)</pre>
+<p><strong>VMOVLHPS (128-bit Three-Argument Form - VEX &amp; EVEX)</strong></p>
+<pre>DEST[63:0] := SRC1[63:0]
+DEST[127:64] := SRC2[63:0]
+DEST[MAXVL-1:128] := 0</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>MOVLHPS __m128 _mm_movelh_ps(__m128 a, __m128 b)</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<p>1.</p>
+<p>ModRM.MOD = 011B required</p>
+<h2>Other Exceptions</h2>
+<p>Non-EVEX-encoded instruction, see Table 2-24, “Type 7 Class Exception Conditions,” additionally:</p>
+<table class="exception-table">
+<tr>
+<td>
+<p>#UD</p>
+<p>EVEX-encoded instruction, see Exceptions Type E7NM.128 in Table 2-55, “Type E7NM Class Exception Conditions.”</p></td>
+<td>If VEX.L = 1.</td></tr></table></div></body></html>

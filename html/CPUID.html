@@ -1,0 +1,3055 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>CPUID - CPU Identification </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › CPUID - CPU Identification </div>
+<div id="body">
+<h1>CPUID—CPU Identification</h1>
+<table>
+<tr>
+<th>Opcode</th>
+<th>Instruction</th>
+<th>Op/En</th>
+<th>64-Bit Mode</th>
+<th>Compat/Leg Mode</th>
+<th>Description</th></tr>
+<tr>
+<td>0F A2</td>
+<td>CPUID</td>
+<td>ZO</td>
+<td>Valid</td>
+<td>Valid</td>
+<td>Returns processor identification and feature information to the EAX, EBX, ECX, and EDX registers, as determined by input entered in EAX (in some cases, ECX as well).</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>ZO</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>The ID flag (bit 21) in the EFLAGS register indicates support for the CPUID instruction. If a software procedure can set and clear this flag, the processor executing the procedure supports the CPUID instruction. This instruction operates the same in non-64-bit modes and 64-bit mode.</p>
+<p>CPUID returns processor identification and feature information in the EAX, EBX, ECX, and EDX registers.<sup>1</sup> The instruction’s output is dependent on the contents of the EAX register upon execution (in some cases, ECX as well). For example, the following pseudocode loads EAX with 00H and causes CPUID to return a Maximum Return Value and the Vendor Identification String in the appropriate registers:</p>
+<p>MOV EAX, 00H</p>
+<p>CPUID</p>
+<p>Table 3-8 shows information returned, depending on the initial value loaded into the EAX register.</p>
+<p>Two types of information are returned: basic and extended function information. If a value entered for CPUID.EAX is higher than the maximum input value for basic or extended function for that processor then the data for the highest basic information leaf is returned. For example, using some Intel processors, the following is true:</p>
+<p>CPUID.EAX = 05H (* Returns MONITOR/MWAIT leaf. *)</p>
+<p>CPUID.EAX = 0AH (* Returns Architectural Performance Monitoring leaf. *)</p>
+<p>CPUID.EAX = 0BH (* Returns Extended Topology Enumeration leaf. *)<sup>2</sup></p>
+<p>CPUID.EAX =1FH (* Returns V2 Extended Topology Enumeration leaf. *)<sup>2</sup></p>
+<p>CPUID.EAX = 80000008H (* Returns linear/physical address size data. *)</p>
+<p>CPUID.EAX = 8000000AH (* INVALID: Returns same information as CPUID.EAX = 0BH. *)</p>
+<p>If a value entered for CPUID.EAX is less than or equal to the maximum input value and the leaf is not supported on that processor then 0 is returned in all the registers.</p>
+<p>When CPUID returns the highest basic leaf information as a result of an invalid input EAX value, any dependence on input ECX value in the basic leaf is honored.</p>
+<p>CPUID can be executed at any privilege level to serialize instruction execution. Serializing instruction execution guarantees that any modifications to flags, registers, and memory for previous instructions are completed before the next instruction is fetched and executed.</p>
+<p><strong>See also:</strong></p>
+<p>“Serializing Instructions” in Chapter 9, “Multiple-Processor Management,” in the Intel<em><sup>® </sup></em>64 and IA-32 Architectures Software Developer’s Manual, Volume 3A.</p>
+<p>“Caching Translation Information” in Chapter 4, “Paging,” in the Intel<em><sup>® </sup></em>64 and IA-32 Architectures Software Devel-oper’s Manual, Volume 3A.</p>
+<p>1.</p>
+<p>On Intel 64 processors, CPUID clears the high 32 bits of the RAX/RBX/RCX/RDX registers in all modes.</p>
+<p>2.</p>
+<p>CPUID leaf 1FH is a preferred superset to leaf 0BH. Intel recommends first checking for the existence of CPUID leaf 1FH before using leaf 0BH.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td><em>Basic CPUID Information</em></td></tr>
+<tr>
+<td>0H</td>
+<td>
+<p>EAX</p>
+<p>Maximum Input Value for Basic CPUID Information.</p>
+<p>EBX</p>
+<p>“Genu”</p>
+<p>ECX</p>
+<p>“ntel”</p>
+<p>EDX</p>
+<p>“ineI”</p></td></tr>
+<tr>
+<td>01H</td>
+<td>
+<p>EAX</p>
+<p>Version Information: Type, Family, Model, and Stepping ID (see Figure 3-6).</p>
+<p>EBX</p>
+<p>Bits 07-00: Brand Index. Bits 15-08: CLFLUSH line size (Value ∗ 8 = cache line size in bytes; used also by CLFLUSHOPT). Bits 23-16: Maximum number of addressable IDs for logical processors in this physical package*. Bits 31-24: Initial APIC ID**.</p>
+<p>ECX</p>
+<p>Feature Information (see Figure 3-7 and Table 3-10).</p>
+<p>EDX</p>
+<p>Feature Information (see Figure 3-8 and Table 3-11).</p></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>*</p>
+<p>The nearest power-of-2 integer that is not smaller than EBX[23:16] is the number of unique initial APIC IDs reserved for addressing different logical processors in a physical package. This field is only valid if CPUID.1.EDX.HTT[bit 28]= 1.</p>
+<p>** <em>The 8-bit initial APIC ID in EBX[31:24] is replaced by the 32-bit x2APIC ID, available in Leaf 0BH and</em></p>
+<p><em>Leaf 1FH.</em></p>
+<p>02H</p>
+<p>EAX</p>
+<p>Cache and TLB Information (see Table 3-12).</p>
+<p>EBX</p>
+<p>Cache and TLB Information.</p>
+<p>ECX</p>
+<p>Cache and TLB Information.</p>
+<p>EDX</p>
+<p>Cache and TLB Information.</p>
+<p>03H</p>
+<p>EAX</p>
+<p>Reserved.</p>
+<p>EBX</p>
+<p>Reserved.</p>
+<p>ECX</p>
+<p>Bits 00-31 of 96-bit processor serial number. (Available in Pentium III processor only; otherwise, the value in this register is reserved.)</p>
+<p>EDX</p>
+<p>Bits 32-63 of 96-bit processor serial number. (Available in Pentium III processor only; otherwise, the value in this register is reserved.)</p>
+<p><strong>NOTES:</strong></p>
+<p>Processor serial number (PSN) is not supported in the Pentium 4 processor or later. On all models, use the PSN flag (returned using CPUID) to check for PSN support before accessing the feature.</p>
+<p>CPUID leaves above 2 and below 80000000H are visible only when IA32_MISC_ENABLE[bit 22] has its default value of 0.</p>
+<p><em>Deterministic Cache Parameters Leaf</em></p>
+<p><strong>NOTES:</strong></p>
+<p>04H</p>
+<p>Leaf 04H output depends on the initial value in ECX.*</p>
+<p>See also: “INPUT EAX = 04H: Returns Deterministic Cache Parameters for Each Level” on page 250.</p>
+<p>EAX</p>
+<p>Bits 04-00: Cache Type Field.</p>
+<p>0 = Null - No more caches. 1 = Data Cache. 2 = Instruction Cache. 3 = Unified Cache. 4-31 = Reserved.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>Bits 07-05: Cache Level (starts at 1). Bit 08: Self Initializing cache level (does not need SW initialization). Bit 09: Fully Associative cache.</p>
+<p>Bits 13-10: Reserved. Bits 25-14: Maximum number of addressable IDs for logical processors sharing this cache**,</p>
+<p>***.</p>
+<p>Bits 31-26: Maximum number of addressable IDs for processor cores in the physical package**,</p>
+<p>****,</p>
+<p>*****.</p>
+<p>EBX</p>
+<p>Bits 11-00: L = System Coherency Line Size**. Bits 21-12: P = Physical Line partitions**. Bits 31-22: W = Ways of associativity**.</p>
+<p>ECX</p>
+<p>Bits 31-00: S = Number of Sets**.</p>
+<p>EDX</p>
+<p>Bit 00: Write-Back Invalidate/Invalidate.</p>
+<p>0 = WBINVD/INVD from threads sharing this cache acts upon lower level caches for threads sharing this cache. 1 = WBINVD/INVD is not guaranteed to act upon lower level caches of non-originating threads sharing this cache.</p>
+<p>Bit 01: Cache Inclusiveness.</p>
+<p>0 = Cache is not inclusive of lower cache levels. 1 = Cache is inclusive of lower cache levels.</p>
+<p>Bit 02: Complex Cache Indexing.</p>
+<p>0 = Direct mapped cache. 1 = A complex function is used to index the cache, potentially using all address bits.</p>
+<p>Bits 31-03: Reserved = 0.</p></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>* If ECX contains an invalid sub leaf index, EAX/EBX/ECX/EDX return 0. Sub-leaf index n+1 is invalid if sub-</p>
+<p>leaf n returns EAX[4:0] as 0.</p>
+<p>** Add one to the return value to get the result.</p>
+<p>***The nearest power-of-2 integer that is not smaller than (1 + EAX[25:14]) is the number of unique ini-</p>
+<p>tial APIC IDs reserved for addressing different logical processors sharing this cache.</p>
+<p>**** The nearest power-of-2 integer that is not smaller than (1 + EAX[31:26]) is the number of unique</p>
+<p>Core_IDs reserved for addressing different processor cores in a physical package. Core ID is a subset of bits of the initial APIC ID.</p>
+<p>***** The returned value is constant for valid initial values in ECX. Valid ECX values start from 0.</p>
+<p><em>MONITOR/MWAIT Leaf</em></p>
+<p>05H</p>
+<p>EAX</p>
+<p>Bits 15-00: Smallest monitor-line size in bytes (default is processor's monitor granularity). Bits 31-16: Reserved = 0.</p>
+<p>EBX</p>
+<p>Bits 15-00: Largest monitor-line size in bytes (default is processor's monitor granularity). Bits 31-16: Reserved = 0.</p>
+<p>ECX</p>
+<p>Bit 00: Enumeration of Monitor-Mwait extensions (beyond EAX and EBX registers) supported.</p>
+<p>Bit 01: Supports treating interrupts as break-event for MWAIT, even when interrupts disabled.</p>
+<p>Bits 31-02: Reserved.</p>
+<p>EDX</p>
+<p>Bits 03-00: Number of C0* sub C-states supported using MWAIT. Bits 07-04: Number of C1* sub C-states supported using MWAIT. Bits 11-08: Number of C2* sub C-states supported using MWAIT. Bits 15-12: Number of C3* sub C-states supported using MWAIT. Bits 19-16: Number of C4* sub C-states supported using MWAIT. Bits 23-20: Number of C5* sub C-states supported using MWAIT. Bits 27-24: Number of C6* sub C-states supported using MWAIT. Bits 31-28: Number of C7* sub C-states supported using MWAIT.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p><strong>NOTE:</strong></p>
+<p>*  The definition of C0 through C7 states for MWAIT extension are processor-specific C-states, not ACPI C-</p>
+<p>states.</p></td></tr>
+<tr>
+<td></td>
+<td><em>Thermal and Power Management Leaf</em></td></tr>
+<tr>
+<td>06H</td>
+<td>
+<p>EAX</p>
+<p>Bit 00: Digital temperature sensor is supported if set. Bit 01: Intel Turbo Boost Technology available (see description of IA32_MISC_ENABLE[38]). Bit 02: ARAT. APIC-Timer-always-running feature is supported if set. Bit 03: Reserved. Bit 04: PLN. Power limit notification controls are supported if set. Bit 05: ECMD. Clock modulation duty cycle extension is supported if set. Bit 06: PTM. Package thermal management is supported if set. Bit 07: HWP. HWP base registers (IA32_PM_ENABLE[bit 0], IA32_HWP_CAPABILITIES, IA32_HWP_REQUEST, IA32_HWP_STATUS) are supported if set. Bit 08: HWP_Notification. IA32_HWP_INTERRUPT MSR is supported if set. Bit 09: HWP_Activity_Window. IA32_HWP_REQUEST[bits 41:32] is supported if set. Bit 10: HWP_Energy_Performance_Preference. IA32_HWP_REQUEST[bits 31:24] is supported if set. Bit 11: HWP_Package_Level_Request. IA32_HWP_REQUEST_PKG MSR is supported if set. Bit 12: Reserved. Bit 13: HDC. HDC base registers IA32_PKG_HDC_CTL, IA32_PM_CTL1, IA32_THREAD_STALL MSRs are supported if set. Bit 14: Intel® Turbo Boost Max Technology 3.0 available. Bit 15: HWP Capabilities. Highest Performance change is supported if set. Bit 16: HWP PECI override is supported if set. Bit 17: Flexible HWP is supported if set. Bit 18: Fast access mode for the IA32_HWP_REQUEST MSR is supported if set. Bit 19: HW_FEEDBACK. IA32_HW_FEEDBACK_PTR MSR, IA32_HW_FEEDBACK_CONFIG MSR, IA32_PACKAGE_THERM_STATUS MSR bit 26, and IA32_PACKAGE_THERM_INTERRUPT MSR bit 25 are supported if set. Bit 20: Ignoring Idle Logical Processor HWP request is supported if set. Bits 22-21: Reserved. Bit 23: Intel® Thread Director supported if set. IA32_HW_FEEDBACK_CHAR and IA32_HW_FEEDBACK_THREAD_CONFIG MSRs are supported if set. Bit 24: IA32_THERM_INTERRUPT MSR bit 25 is supported if set. Bits 31-25: Reserved.</p>
+<p>EBX</p>
+<p>Bits 03-00: Number of Interrupt Thresholds in Digital Thermal Sensor. Bits 31-04: Reserved.</p>
+<p>ECX</p>
+<p>Bit 00: Hardware Coordination Feedback Capability (Presence of IA32_MPERF and IA32_APERF). The capability to provide a measure of delivered processor performance (since last reset of the counters), as a percentage of the expected processor performance when running at the TSC frequency. Bits 02-01: Reserved = 0. Bit 03: The processor supports performance-energy bias preference if CPUID.06H:ECX.SETBH[bit 3] is set and it also implies the presence of a new architectural MSR called IA32_ENERGY_PERF_BIAS (1B0H). Bits 07-04: Reserved = 0. Bits 15-08: Number of Intel® Thread Director classes supported by the processor. Information for that many classes is written into the Intel Thread Director Table by the hardware. Bits 31-16: Reserved = 0.</p></td></tr></table>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>EDX</p>
+<p>Bits 07-00: Bitmap of supported hardware feedback interface capabilities.</p>
+<p>0 = When set to 1, indicates support for performance capability reporting. 1 = When set to 1, indicates support for energy efficiency capability reporting. 2-7 = Reserved</p>
+<p>Bits 11-08: Enumerates the size of the hardware feedback interface structure in number of 4 KB pages; add one to the return value to get the result. Bits 31-16: Index (starting at 0) of this logical processor's row in the hardware feedback interface struc-ture. Note that on some parts the index may be same for multiple logical processors. On some parts the indices may not be contiguous, i.e., there may be unused rows in the hardware feedback interface struc-ture.</p>
+<p><strong>NOTE: Bits 0 and 1 will always be set together.</strong></p></td></tr>
+<tr>
+<td></td>
+<td><em>Structured Extended Feature Flags Enumeration Leaf (Output depends on ECX input value)</em></td></tr>
+<tr>
+<td>07H</td>
+<td>
+<p>Sub-leaf 0 (Input ECX = 0). *</p>
+<p>EAX</p>
+<p>Bits 31-00: Reports the maximum input value for supported leaf 7 sub-leaves.</p>
+<p>EBX</p>
+<p>Bit 00: FSGSBASE. Supports RDFSBASE/RDGSBASE/WRFSBASE/WRGSBASE if 1. Bit 01: IA32_TSC_ADJUST MSR is supported if 1. Bit 02: SGX. Supports Intel® Software Guard Extensions (Intel® SGX Extensions) if 1. Bit 03: BMI1. Bit 04: HLE. Bit 05: AVX2. Supports Intel® Advanced Vector Extensions 2 (Intel® AVX2) if 1. Bit 06: FDP_EXCPTN_ONLY. x87 FPU Data Pointer updated only on x87 exceptions if 1. Bit 07: SMEP. Supports Supervisor-Mode Execution Prevention if 1. Bit 08: BMI2. Bit 09: Supports Enhanced REP MOVSB/STOSB if 1. Bit 10: INVPCID. If 1, supports INVPCID instruction for system software that manages process-context identifiers. Bit 11: RTM. Bit 12: RDT-M. Supports Intel® Resource Director Technology (Intel® RDT) Monitoring capability if 1. Bit 13: Deprecates FPU CS and FPU DS values if 1. Bit 14: MPX. Supports Intel® Memory Protection Extensions if 1. Bit 15: RDT-A. Supports Intel® Resource Director Technology (Intel® RDT) Allocation capability if 1. Bit 16: AVX512F. Bit 17: AVX512DQ. Bit 18: RDSEED. Bit 19: ADX. Bit 20: SMAP. Supports Supervisor-Mode Access Prevention (and the CLAC/STAC instructions) if 1. Bit 21: AVX512_IFMA. Bit 22: Reserved. Bit 23: CLFLUSHOPT. Bit 24: CLWB. Bit 25: Intel Processor Trace. Bit 26: AVX512PF. (Intel® Xeon Phi™ only.) Bit 27: AVX512ER. (Intel® Xeon Phi™ only.) Bit 28: AVX512CD. Bit 29: SHA. supports Intel® Secure Hash Algorithm Extensions (Intel® SHA Extensions) if 1. Bit 30: AVX512BW. Bit 31: AVX512VL.</p></td></tr></table>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>ECX</p>
+<p>Bit 00: PREFETCHWT1. (Intel® Xeon Phi™ only.) Bit 01: AVX512_VBMI. Bit 02: UMIP. Supports user-mode instruction prevention if 1. Bit 03: PKU. Supports protection keys for user-mode pages if 1. Bit 04: OSPKE. If 1, OS has set CR4.PKE to enable protection keys (and the RDPKRU/WRPKRU instruc-tions). Bit 05: WAITPKG. Bit 06: AVX512_VBMI2. Bit 07: CET_SS. Supports CET shadow stack features if 1. Processors that set this bit define bits 1:0 of the IA32_U_CET and IA32_S_CET MSRs. Enumerates support for the following MSRs: IA32_INTERRUPT_SPP_TABLE_ADDR, IA32_PL3_SSP, IA32_PL2_SSP, IA32_PL1_SSP, and IA32_PL0_SSP. Bit 08: GFNI. Bit 09: VAES. Bit 10: VPCLMULQDQ. Bit 11: AVX512_VNNI. Bit 12: AVX512_BITALG. Bits 13: TME_EN. If 1, the following MSRs are supported: IA32_TME_CAPABILITY, IA32_TME_ACTIVATE, IA32_TME_EXCLUDE_MASK, and IA32_TME_EXCLUDE_BASE. Bit 14: AVX512_VPOPCNTDQ. Bit 15: Reserved. Bit 16: LA57. Supports 57-bit linear addresses and five-level paging if 1. Bits 21-17: The value of MAWAU used by the BNDLDX and BNDSTX instructions in 64-bit mode. Bit 22: RDPID and IA32_TSC_AUX are available if 1. Bit 23: KL. Supports Key Locker if 1. Bit 24: BUS_LOCK_DETECT. If 1, indicates support for OS bus-lock detection. Bit 25: CLDEMOTE. Supports cache line demote if 1. Bit 26: Reserved. Bit 27: MOVDIRI. Supports MOVDIRI if 1. Bit 28: MOVDIR64B. Supports MOVDIR64B if 1. Bit 29: ENQCMD. Supports Enqueue Stores if 1. Bit 30: SGX_LC. Supports SGX Launch Configuration if 1. Bit 31: PKS. Supports protection keys for supervisor-mode pages if 1.</p>
+<p>EDX</p>
+<p>Bit 00: Reserved. Bit 01: SGX-KEYS. If 1, Attestation Services for Intel® SGX is supported. Bit 02: AVX512_4VNNIW. (Intel® Xeon Phi™ only.) Bit 03: AVX512_4FMAPS. (Intel® Xeon Phi™ only.) Bit 04: Fast Short REP MOV. Bit 05: UINTR. If 1, the processor supports user interrupts. Bits 07-06: Reserved. Bit 08: AVX512_VP2INTERSECT. Bit 09: SRBDS_CTRL. If 1, enumerates support for the IA32_MCU_OPT_CTRL MSR and indicates its bit 0 (RNGDS_MITG_DIS) is also supported. Bit 10: MD_CLEAR supported. Bit 11: RTM_ALWAYS_ABORT. If set, any execution of XBEGIN immediately aborts and transitions to the specified fallback address. Bit 12: Reserved. Bit 13: If 1, RTM_FORCE_ABORT supported. Processors that set this bit support the IA32_TSX_FORCE_ABORT MSR. They allow software to set IA32_TSX_FORCE_ABORT[0] (RTM_FORCE_ABORT). Bit 14: SERIALIZE. Bit 15: Hybrid. If 1, the processor is identified as a hybrid part. If CPUID.0.MAXLEAF <em>≥</em> 1AH and</p>
+<p>CPUID.1A.EAX ≠ 0, then the Native Model ID Enumeration Leaf 1AH exists.</p>
+<p>Bit 16: TSXLDTRK. If 1, the processor supports Intel TSX suspend/resume of load address tracking.</p></td></tr></table>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>Bit 17: Reserved. Bit 18: PCONFIG. Supports PCONFIG if 1. Bit 19: Architectural LBRs. If 1, indicates support for architectural LBRs. Bit 20: CET_IBT. Supports CET indirect branch tracking features if 1. Processors that set this bit define bits 5:2 and bits 63:10 of the IA32_U_CET and IA32_S_CET MSRs. Bit 21: Reserved. Bit 22: AMX-BF16. If 1, the processor supports tile computational operations on bfloat16 numbers. Bit 23: AVX512_FP16. Bit 24: AMX-TILE. If 1, the processor supports tile architecture. Bits 25: AMX-INT8. If 1, the processor supports tile computational operations on 8-bit integers. Bit 26: Enumerates support for indirect branch restricted speculation (IBRS) and the indirect branch pre-dictor barrier (IBPB). Processors that set this bit support the IA32_SPEC_CTRL MSR and the IA32_PRED_CMD MSR. They allow software to set IA32_SPEC_CTRL[0] (IBRS) and IA32_PRED_CMD[0] (IBPB). Bit 27: Enumerates support for single thread indirect branch predictors (STIBP). Processors that set this bit support the IA32_SPEC_CTRL MSR. They allow software to set IA32_SPEC_CTRL[1] (STIBP). Bit 28: Enumerates support for L1D_FLUSH. Processors that set this bit support the IA32_FLUSH_CMD MSR. They allow software to set IA32_FLUSH_CMD[0] (L1D_FLUSH). Bit 29: Enumerates support for the IA32_ARCH_CAPABILITIES MSR. Bit 30: Enumerates support for the IA32_CORE_CAPABILITIES MSR.</p>
+<p>IA32_CORE_CAPABILITIES is an architectural MSR that enumerates model-specific features. A bit being set in this MSR indicates that a model specific feature is supported; software must still consult CPUID family/model/stepping to determine the behavior of the enumerated feature as features enumerated in IA32_CORE_CAPABILITIES may have different behavior on different processor models. Some of these features may have behavior that is consistent across processor models (and for which consultation of CPUID family/model/stepping is not necessary); such features are identified explicitly where they are documented in this manual.</p>
+<p>Bit 31: Enumerates support for Speculative Store Bypass Disable (SSBD). Processors that set this bit sup-port the IA32_SPEC_CTRL MSR. They allow software to set IA32_SPEC_CTRL[2] (SSBD).</p>
+<p><strong>NOTE:</strong></p>
+<p>* If ECX contains an invalid sub-leaf index, EAX/EBX/ECX/EDX return 0. Sub-leaf index n is invalid if n</p>
+<p>exceeds the value that sub-leaf 0 returns in EAX.</p></td></tr>
+<tr>
+<td></td>
+<td><em>Structured Extended Feature Enumeration Sub-leaf (EAX = 07H, ECX = 1)</em></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>07H</p>
+<p>Leaf 07H output depends on the initial value in ECX. If ECX contains an invalid sub leaf index, EAX/EBX/ECX/EDX return 0.</p>
+<p>EAX</p>
+<p>This field reports 0 if the sub-leaf index, <em>1</em>, is invalid.</p>
+<p>Bits 03-00: Reserved.</p>
+<p>Bit 04: AVX-VNNI. AVX (VEX-encoded) versions of the Vector Neural Network Instructions.</p>
+<p>Bit 05: AVX512_BF16. Vector Neural Network Instructions supporting BFLOAT16 inputs and conversion</p>
+<p>instructions from IEEE single precision.</p>
+<p>Bits 09-06: Reserved.</p>
+<p>Bit 10: If 1, supports fast zero-length REP MOVSB.</p>
+<p>Bit 11: If 1, supports fast short REP STOSB.</p>
+<p>Bit 12: If 1, supports fast short REP CMPSB, REP SCASB.</p>
+<p>Bits 21-13: Reserved.</p>
+<p>Bit 22: HRESET. If 1, supports history reset via the HRESET instruction and the IA32_HRESET_ENABLE</p>
+<p>MSR. When set, indicates that the Processor History Reset Leaf (EAX = 20H) is valid.</p>
+<p>Bits 31-23: Reserved.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>EBX</p>
+<p>This field reports 0 if the sub-leaf index, <em>1</em>, is invalid.</p>
+<p>Bit 00: Enumerates the presence of the IA32_PPIN and IA32_PPIN_CTL MSRs. If 1, these MSRs are sup-</p>
+<p>ported.</p>
+<p>Bits 31-01: Reserved.</p>
+<p>ECX</p>
+<p>This field reports 0 if the sub-leaf index, <em>1</em>, is invalid; otherwise it is reserved.</p>
+<p>EDX</p>
+<p>This field reports 0 if the sub-leaf index, <em>1</em>, is invalid. Bits 17-00: Reserved. Bit 18: CET_SSS. If 1, indicates that an operating system can enable supervisor shadow stacks as long as it ensures that certain supervisor shadow-stack pushes will not cause page faults (see Section 17.2.3 of</p>
+<p>the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 1). When emulating the CPUID instruction, a virtual-machine monitor should return this bit as 0 if those pushes can cause VM exits.</p>
+<p>Bits 31-19: Reserved.</p></td></tr>
+<tr>
+<td></td>
+<td><em>Structured Extended Feature Enumeration Sub-leaf (EAX = 07H, ECX = 2)</em></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>07H</p>
+<p>Leaf 07H output depends on the initial value in ECX. If ECX contains an invalid sub leaf index, EAX/EBX/ECX/EDX return 0.</p>
+<p>EAX</p>
+<p>This field reports 0 if the sub-leaf index, <em>2</em>, is invalid; otherwise it is reserved.</p>
+<p>EBX</p>
+<p>This field reports 0 if the sub-leaf index, <em>2</em>, is invalid; otherwise it is reserved.</p>
+<p>ECX</p>
+<p>This field reports 0 if the sub-leaf index, 2, is invalid; otherwise it is reserved.</p>
+<p>EDX</p>
+<p>This field reports 0 if the sub-leaf index, <em>2</em>, is invalid. Bit 00: PSFD. If 1, indicates bit 7 of the IA32_SPEC_CTRL MSR is supported. Bit 7 of this MSR disables Fast Store Forwarding Predictor without disabling Speculative Store Bypass. Bit 01: IPRED_CTRL. If 1, indicates bits 3 and 4 of the IA32_SPEC_CTRL MSR are supported. Bit 3 of this MSR enables IPRED_DIS control for CPL3. Bit 4 of this MSR enables IPRED_DIS control for CPL0/1/2. Bit 02: RRSBA_CTRL. If 1, indicates bits 5 and 6 of the IA32_SPEC_CTRL MSR are supported. Bit 5 of this MSR disables RRSBA behavior for CPL3. Bit 6 of this MSR disables RRSBA behavior for CPL0/1/2. Bit 03: DDPD_U. If 1, indicates bit 8 of the IA32_SPEC_CTRL MSR is supported. Bit 8 of this MSR disables Data Dependent Prefetcher. Bit 04: BHI_CTRL. If 1, indicates bit 10 of the IA32_SPEC_CTRL MSR is supported. Bit 10 of this MSR enables BHI_DIS_S behavior. Bit 05: MCDT_NO. Processors that enumerate this bit as 1 do not exhibit MXCSR Configuration Depen-dent Timing (MCDT) behavior and do not need to be mitigated to avoid data-dependent behavior for cer-tain instructions.</p>
+<p>Bits 31-06: Reserved.</p>
+<p><em>Direct Cache Access Information Leaf</em></p>
+<p>09H</p>
+<p>EAX</p>
+<p>Value of bits [31:0] of IA32_PLATFORM_DCA_CAP MSR (address 1F8H).</p>
+<p>EBX</p>
+<p>Reserved.</p>
+<p>ECX</p>
+<p>Reserved.</p>
+<p>EDX</p>
+<p>Reserved.</p>
+<p><em>Architectural Performance Monitoring Leaf</em></p>
+<p>0AH</p>
+<p>EAX</p>
+<p>Bits 07-00: Version ID of architectural performance monitoring. Bits 15-08: Number of general-purpose performance monitoring counter per logical processor. Bits 23-16: Bit width of general-purpose, performance monitoring counter. Bits 31-24: Length of EBX bit vector to enumerate architectural performance monitoring events. Archi-tectural event x is supported if EBX[x]=0 &amp;&amp; EAX[31:24]&gt;x.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>EBX</p>
+<p>Bit 00: Core cycle event not available if 1 or if EAX[31:24]&lt;1. Bit 01: Instruction retired event not available if 1 or if EAX[31:24]&lt;2. Bit 02: Reference cycles event not available if 1 or if EAX[31:24]&lt;3. Bit 03: Last-level cache reference event not available if 1 or if EAX[31:24]&lt;4. Bit 04: Last-level cache misses event not available if 1 or if EAX[31:24]&lt;5. Bit 05: Branch instruction retired event not available if 1 or if EAX[31:24]&lt;6. Bit 06: Branch mispredict retired event not available if 1 or if EAX[31:24]&lt;7. Bit 07: Top-down slots event not available if 1 or if EAX[31:24]&lt;8. Bits 31-08: Reserved = 0.</p>
+<p>ECX</p>
+<p>Bits 31-00: Supported fixed counters bit mask. Fixed-function performance counter 'i' is supported if bit ‘i’ is 1 (first counter index starts at zero). It is recommended to use the following logic to determine if a Fixed Counter is supported: FxCtr[i]_is_supported := ECX[i] || (EDX[4:0] &gt; i);</p>
+<p>EDX</p>
+<p>Bits 04-00: Number of contiguous fixed-function performance counters starting from 0 (if Version ID &gt; 1). Bits 12-05: Bit width of fixed-function performance counters (if Version ID &gt; 1). Bits 14-13: Reserved = 0. Bit 15: AnyThread deprecation. Bits 31-16: Reserved = 0.</p></td></tr>
+<tr>
+<td></td>
+<td><em>Extended Topology Enumeration Leaf</em></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>0BH</p>
+<p><em>CPUID leaf 1FH is a preferred superset to leaf 0BH. Intel recommends first checking for the existence of Leaf 1FH before using leaf 0BH.</em></p>
+<p>The sub-leaves of CPUID leaf 0BH describe an ordered hierarchy of logical processors starting from the smallest-scoped domain of a Logical Processor (sub-leaf index 0) to the Core domain (sub-leaf index 1) to the largest-scoped domain (the last valid sub-leaf index) that is implicitly subordinate to the unenumerated highest-scoped domain of the processor package (socket).</p>
+<p>The details of each valid domain is enumerated by a corresponding sub-leaf. Details for a domain include its type and how all instances of that domain determine the number of logical processors and x2 APIC ID partitioning at the next higher-scoped domain. The ordering of domains within the hierarchy is fixed architecturally as shown below. For a given processor, not all domains may be relevant or enumerated; however, the logical processor and core domains are always enumerated.</p>
+<p>For two valid sub-leaves N and N+1, sub-leaf N+1 represents the next immediate higher-scoped domain with respect to the domain of sub-leaf N for the given processor.</p>
+<p>If sub-leaf index “N” returns an invalid domain type in ECX[15:08] (00H), then all sub-leaves with an index greater than “N” shall also return an invalid domain type. A sub-leaf returning an invalid domain always returns 0 in EAX and EBX.</p>
+<p>EAX</p>
+<p>Bits 04-00: The number of bits that the x2APIC ID must be shifted to the right to address instances of the next higher-scoped domain. When logical processor is not supported by the processor, the value of this field at the Logical Processor domain sub-leaf may be returned as either 0 (no allocated bits in the x2APIC ID) or 1 (one allocated bit in the x2APIC ID); software should plan accordingly. Bits 31-05: Reserved.</p>
+<p>EBX</p>
+<p>Bits 15-00: The number of logical processors across all instances of this domain within the next higher-scoped domain. (For example, in a processor socket/package comprising “M” dies of “N” cores each, where each core has “L” logical processors, the “die” domain sub-leaf value of this field would be M*N*L.) This number reflects configuration as shipped by Intel. Note, software must not use this field to enumerate processor topology*. Bits 31-16: Reserved.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>ECX</p>
+<p>Bits 07-00: The input ECX sub-leaf index. Bits 15-08: Domain Type. This field provides an identification value which indicates the domain as shown below. Although domains are ordered, their assigned identification values are not and software should not depend on it.</p>
+<p>Domain</p>
+<p>Domain Type Identification Value</p>
+<p>Hierarchy Lowest</p>
+<p>Logical Processor</p>
+<p>1</p>
+<p>Highest</p>
+<p>Core</p>
+<p>2</p>
+<p>(Note that enumeration values of 0 and 3-255 are reserved.)</p>
+<p>Bits 31-16: Reserved.</p>
+<p>EDX</p>
+<p>Bits 31-00: x2APIC ID of the current logical processor.</p></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES: * Software must not use the value of EBX[15:0] to enumerate processor topology of the system. The value is only intended for display and diagnostic purposes. The actual number of logical processors avail-able to BIOS/OS/Applications may be different from the value of EBX[15:0], depending on software and platform hardware configurations.</strong></p>
+<p><em>Processor Extended State Enumeration Main Leaf (EAX = 0DH, ECX = 0)</em></p>
+<p><strong>NOTES:</strong></p>
+<p>0DH</p>
+<p>Leaf 0DH main leaf (ECX = 0).</p>
+<p>EAX</p>
+<p>Bits 31-00: Reports the supported bits of the lower 32 bits of XCR0. XCR0[n] can be set to 1 only if EAX[n] is 1. Bit 00: x87 state. Bit 01: SSE state. Bit 02: AVX state. Bits 04-03: MPX state. Bits 07-05: AVX-512 state. Bit 08: Used for IA32_XSS. Bit 09: PKRU state. Bits 16-10: Used for IA32_XSS. Bit 17: TILECFG state. Bit 18: TILEDATA state. Bits 31-19: Reserved.</p>
+<p>EBX</p>
+<p>Bits 31-00: Maximum size (bytes, from the beginning of the XSAVE/XRSTOR save area) required by enabled features in XCR0. May be different than ECX if some features at the end of the XSAVE save area are not enabled.</p>
+<p>ECX</p>
+<p>Bit 31-00: Maximum size (bytes, from the beginning of the XSAVE/XRSTOR save area) of the XSAVE/XRSTOR save area required by all supported features in the processor, i.e., all the valid bit fields in XCR0.</p>
+<p>EDX</p>
+<p>Bit 31-00: Reports the supported bits of the upper 32 bits of XCR0. XCR0[n+32] can be set to 1 only if EDX[n] is 1. Bits 31-00: Reserved.</p>
+<p><em>Processor Extended State Enumeration Sub-leaf (EAX = 0DH, ECX = 1)</em></p>
+<p>0DH</p>
+<p>EAX</p>
+<p>Bit 00: XSAVEOPT is available. Bit 01: Supports XSAVEC and the compacted form of XRSTOR if set. Bit 02: Supports XGETBV with ECX = 1 if set. Bit 03: Supports XSAVES/XRSTORS and IA32_XSS if set. Bit 04: Supports extended feature disable (XFD) if set. Bits 31-05: Reserved.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>EBX</p>
+<p>Bits 31-00: The size in bytes of the XSAVE area containing all states enabled by XCRO | IA32_XSS.</p></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES: If EAX[3] is enumerated as 0 and EAX[1] is enumerated as 1, EBX enumerates the size of the XSAVE area containing all states enabled by XCRO. If EAX[1] and EAX[3] are both enumerated as 0, EBX enumerates zero.</strong></p>
+<p>ECX</p>
+<p>Bits 31-00: Reports the supported bits of the lower 32 bits of the IA32_XSS MSR. IA32_XSS[n] can be set to 1 only if ECX[n] is 1. Bits 07-00: Used for XCR0. Bit 08: PT state. Bit 09: Used for XCR0. Bit 10: PASID state. Bit 11: CET user state. Bit 12: CET supervisor state. Bit 13: HDC state. Bit 14: UINTR state. Bit 15: LBR state (only for the architectural LBR feature). Bit 16: HWP state. Bits 18-17: Used for XCR0. Bits 31-19: Reserved.</p>
+<p>EDX</p>
+<p>Bits 31-00: Reports the supported bits of the upper 32 bits of the IA32_XSS MSR. IA32_XSS[n+32] can be set to 1 only if EDX[n] is 1. Bits 31-00: Reserved.</p>
+<p><em>Processor Extended State Enumeration Sub-leaves (EAX = 0DH, ECX = n, n &gt; 1)</em></p>
+<p><strong>NOTES:</strong></p>
+<p>0DH</p>
+<p>Leaf 0DH output depends on the initial value in ECX.</p>
+<p>Each sub-leaf index (starting at position 2) is supported if it corresponds to a supported bit in either the XCR0 register or the IA32_XSS MSR.</p>
+<p>* If ECX contains an invalid sub-leaf index, EAX/EBX/ECX/EDX return 0. Sub-leaf n (0 ≤ n ≤ 31) is invalid</p>
+<p>if sub-leaf 0 returns 0 in EAX[n] and sub-leaf 1 returns 0 in ECX[n]. Sub-leaf n (32 ≤ n ≤ 63) is invalid if sub-leaf 0 returns 0 in EDX[n-32] and sub-leaf 1 returns 0 in EDX[n-32].</p>
+<p>EAX</p>
+<p>Bits 31-00: The size in bytes (from the offset specified in EBX) of the save area for an extended state feature associated with a valid sub-leaf index, <em>n</em>.</p>
+<p>EBX</p>
+<p>Bits 31-00: The offset in bytes of this extended state component’s save area from the beginning of the XSAVE/XRSTOR area. This field reports 0 if the sub-leaf index, n, does not map to a valid bit in the XCR0 register*.</p>
+<p>ECX</p>
+<p>Bit 00 is set if the bit n (corresponding to the sub-leaf index) is supported in the IA32_XSS MSR; it is clear if bit n is instead supported in XCR0. Bit 01 is set if, when the compacted format of an XSAVE area is used, this extended state component located on the next 64-byte boundary following the preceding state component (otherwise, it is located immediately following the preceding state component). Bits 31-02 are reserved. This field reports 0 if the sub-leaf index, n, is invalid*.</p>
+<p>EDX</p>
+<p>This field reports 0 if the sub-leaf index, <em>n</em>, is invalid*; otherwise it is reserved.</p>
+<p><em>Intel Resource Director Technology (Intel RDT) Monitoring Enumeration Sub-leaf (EAX = 0FH, ECX = 0)</em></p>
+<p><strong>NOTES:</strong></p>
+<p>0FH</p>
+<p>Leaf 0FH output depends on the initial value in ECX.</p>
+<p>Sub-leaf index 0 reports valid resource type starting at bit position 1 of EDX.</p>
+<p>EAX</p>
+<p>Reserved.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>EBX</p>
+<p>Bits 31-00: Maximum range (zero-based) of RMID within this physical processor of all types.</p>
+<p>ECX</p>
+<p>Reserved.</p>
+<p>EDX</p>
+<p>Bit 00: Reserved. Bit 01: Supports L3 Cache Intel RDT Monitoring if 1. Bits 31-02: Reserved.</p></td></tr>
+<tr>
+<td></td>
+<td><em>L3 Cache Intel RDT Monitoring Capability Enumeration Sub-leaf (EAX = 0FH, ECX = 1)</em></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>0FH</p>
+<p>Leaf 0FH output depends on the initial value in ECX.</p>
+<p>EAX</p>
+<p>Reserved.</p>
+<p>EBX</p>
+<p>Bits 31-00: Conversion factor from reported IA32_QM_CTR value to occupancy metric (bytes) and Mem-ory Bandwidth Monitoring (MBM) metrics.</p>
+<p>ECX</p>
+<p>Maximum range (zero-based) of RMID of this resource type.</p>
+<p>EDX</p>
+<p>Bit 00: Supports L3 occupancy monitoring if 1. Bit 01: Supports L3 Total Bandwidth monitoring if 1. Bit 02: Supports L3 Local Bandwidth monitoring if 1. Bits 31-03: Reserved.</p>
+<p><em>Intel Resource Director Technology (Intel RDT) Allocation Enumeration Sub-leaf (EAX = 10H, ECX = 0)</em></p>
+<p><strong>NOTES:</strong></p>
+<p>10H</p>
+<p>Leaf 10H output depends on the initial value in ECX.</p>
+<p>Sub-leaf index 0 reports valid resource identification (ResID) starting at bit position 1 of EBX.</p>
+<p>EAX</p>
+<p>Reserved.</p>
+<p>EBX</p>
+<p>Bit 00: Reserved. Bit 01: Supports L3 Cache Allocation Technology if 1. Bit 02: Supports L2 Cache Allocation Technology if 1. Bit 03: Supports Memory Bandwidth Allocation if 1. Bits 31-04: Reserved.</p>
+<p>ECX</p>
+<p>Reserved.</p>
+<p>EDX</p>
+<p>Reserved.</p>
+<p><em>L3 Cache Allocation Technology Enumeration Sub-leaf (EAX = 10H, ECX = ResID =1)</em></p>
+<p><strong>NOTES:</strong></p>
+<p>10H</p>
+<p>Leaf 10H output depends on the initial value in ECX.</p>
+<p>EAX</p>
+<p>Bits 04-00: Length of the capacity bit mask for the corresponding ResID. Add one to the return value to get the result. Bits 31-05: Reserved.</p>
+<p>EBX</p>
+<p>Bits 31-00: Bit-granular map of isolation/contention of allocation units.</p>
+<p>ECX</p>
+<p>Bits 01-00: Reserved. Bit 02: Code and Data Prioritization Technology supported if 1. Bits 31-03: Reserved.</p>
+<p>EDX</p>
+<p>Bits 15-00: Highest COS number supported for this ResID. Bits 31-16: Reserved.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td><em>L2 Cache Allocation Technology Enumeration Sub-leaf (EAX = 10H, ECX = ResID =2)</em></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>10H</p>
+<p>Leaf 10H output depends on the initial value in ECX.</p>
+<p>EAX</p>
+<p>Bits 04-00: Length of the capacity bit mask for the corresponding ResID. Add one to the return value to get the result. Bits 31-05: Reserved.</p>
+<p>EBX</p>
+<p>Bits 31-00: Bit-granular map of isolation/contention of allocation units.</p>
+<p>ECX</p>
+<p>Bits 31-00: Reserved.</p>
+<p>EDX</p>
+<p>Bits 15-00: Highest COS number supported for this ResID. Bits 31-16: Reserved.</p>
+<p><em>Memory Bandwidth Allocation Enumeration Sub-leaf (EAX = 10H, ECX = ResID =3)</em></p>
+<p><strong>NOTES:</strong></p>
+<p>10H</p>
+<p>Leaf 10H output depends on the initial value in ECX.</p>
+<p>EAX</p>
+<p>Bits 11-00: Reports the maximum MBA throttling value supported for the corresponding ResID. Add one to the return value to get the result. Bits 31-12: Reserved.</p>
+<p>EBX</p>
+<p>Bits 31-00: Reserved.</p>
+<p>ECX</p>
+<p>Bits 01-00: Reserved. Bit 02: Reports whether the response of the delay values is linear. Bits 31-03: Reserved.</p>
+<p>EDX</p>
+<p>Bits 15-00: Highest COS number supported for this ResID. Bits 31-16: Reserved.</p>
+<p><em>Intel SGX Capability Enumeration Leaf, sub-leaf 0 (EAX = 12H, ECX = 0)</em></p>
+<p><strong>NOTES:</strong></p>
+<p>12H</p>
+<p>Leaf 12H sub-leaf 0 (ECX = 0) is supported if CPUID.(EAX=07H, ECX=0H):EBX[SGX] = 1.</p>
+<p>EAX</p>
+<p>Bit 00: SGX1. If 1, Indicates Intel SGX supports the collection of SGX1 leaf functions. Bit 01: SGX2. If 1, Indicates Intel SGX supports the collection of SGX2 leaf functions. Bits 04-02: Reserved. Bit 05: If 1, indicates Intel SGX supports ENCLV instruction leaves EINCVIRTCHILD, EDECVIRTCHILD, and ESETCONTEXT. Bit 06: If 1, indicates Intel SGX supports ENCLS instruction leaves ETRACKC, ERDINFO, ELDBC, and ELDUC. Bit 07: If 1, indicates Intel SGX supports ENCLU instruction leaf EVERIFYREPORT2. Bits 09-08: Reserved. Bit 10: If 1, indicates Intel SGX supports ENCLS instruction leaf EUPDATESVN. Bit 11: If 1, indicates Intel SGX supports ENCLU instruction leaf EDECCSSA. Bits 31-12: Reserved.</p>
+<p>EBX</p>
+<p>Bits 31-00: MISCSELECT. Bit vector of supported extended SGX features.</p>
+<p>ECX</p>
+<p>Bits 31-00: Reserved.</p>
+<p>EDX</p>
+<p>Bits 07-00: MaxEnclaveSize_Not64. The maximum supported enclave size in non-64-bit mode is 2^(EDX[7:0]). Bits 15-08: MaxEnclaveSize_64. The maximum supported enclave size in 64-bit mode is 2^(EDX[15:8]). Bits 31-16: Reserved.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td><em>Intel SGX Attributes Enumeration Leaf, sub-leaf 1 (EAX = 12H, ECX = 1)</em></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>12H</p>
+<p>Leaf 12H sub-leaf 1 (ECX = 1) is supported if CPUID.(EAX=07H, ECX=0H):EBX[SGX] = 1.</p>
+<p>EAX</p>
+<p>Bit 31-00: Reports the valid bits of SECS.ATTRIBUTES[31:0] that software can set with ECREATE.</p>
+<p>EBX</p>
+<p>Bit 31-00: Reports the valid bits of SECS.ATTRIBUTES[63:32] that software can set with ECREATE.</p>
+<p>ECX</p>
+<p>Bit 31-00: Reports the valid bits of SECS.ATTRIBUTES[95:64] that software can set with ECREATE.</p>
+<p>EDX</p>
+<p>Bit 31-00: Reports the valid bits of SECS.ATTRIBUTES[127:96] that software can set with ECREATE.</p>
+<p><em>Intel SGX EPC Enumeration Leaf, sub-leaves (EAX = 12H, ECX = 2 or higher)</em></p>
+<p><strong>NOTES:</strong></p>
+<p>12H</p>
+<p>Leaf 12H sub-leaf 2 or higher (ECX &gt;= 2) is supported if CPUID.(EAX=07H, ECX=0H):EBX[SGX] = 1.</p>
+<p>For sub-leaves (ECX = 2 or higher), definition of EDX,ECX,EBX,EAX[31:4] depends on the sub-leaf type listed below.</p>
+<p>EAX</p>
+<p>Bit 03-00: Sub-leaf Type</p>
+<p>0000b: Indicates this sub-leaf is invalid. 0001b: This sub-leaf enumerates an EPC section. EBX:EAX and EDX:ECX provide information on the Enclave Page Cache (EPC) section. All other type encodings are reserved.</p>
+<p>Type</p>
+<p>0000b. This sub-leaf is invalid.</p>
+<p>EDX:ECX:EBX:EAX return 0.</p>
+<p>Type</p>
+<p>0001b. This sub-leaf enumerates an EPC sections with EDX:ECX, EBX:EAX defined as follows.</p>
+<p>EAX[11:04]: Reserved (enumerate 0). EAX[31:12]: Bits 31:12 of the physical address of the base of the EPC section.</p>
+<p>EBX[19:00]: Bits 51:32 of the physical address of the base of the EPC section. EBX[31:20]: Reserved.</p>
+<p>ECX[03:00]: EPC section property encoding defined as follows:</p>
+<p>If ECX[3:0] = 0000b, then all bits of the EDX:ECX pair are enumerated as 0. If ECX[3:0] = 0001b, then this section has confidentiality and integrity protection. If ECX[3:0] = 0010b, then this section has confidentiality protection only. All other encodings are reserved.</p>
+<p>ECX[11:04]: Reserved (enumerate 0). ECX[31:12]: Bits 31:12 of the size of the corresponding EPC section within the Processor Reserved Memory.</p>
+<p>EDX[19:00]: Bits 51:32 of the size of the corresponding EPC section within the Processor Reserved Memory. EDX[31:20]: Reserved.</p>
+<p><em>Intel Processor Trace Enumeration Main Leaf (EAX = 14H, ECX = 0)</em></p>
+<p><strong>NOTES:</strong></p>
+<p>14H</p>
+<p>Leaf 14H main leaf (ECX = 0).</p>
+<p>EAX</p>
+<p>Bits 31-00: Reports the maximum sub-leaf supported in leaf 14H.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>EBX</p>
+<p>Bit 00: If 1, indicates that IA32_RTIT_CTL.CR3Filter can be set to 1, and that IA32_RTIT_CR3_MATCH MSR can be accessed. Bit 01: If 1, indicates support of Configurable PSB and Cycle-Accurate Mode. Bit 02: If 1, indicates support of IP Filtering, TraceStop filtering, and preservation of Intel PT MSRs across warm reset. Bit 03: If 1, indicates support of MTC timing packet and suppression of COFI-based packets. Bit 04: If 1, indicates support of PTWRITE. Writes can set IA32_RTIT_CTL[12] (PTWEn) and IA32_RTIT_CTL[5] (FUPonPTW), and PTWRITE can generate packets. Bit 05: If 1, indicates support of Power Event Trace. Writes can set IA32_RTIT_CTL[4] (PwrEvtEn), enabling Power Event Trace packet generation. Bit 06: If 1, indicates support for PSB and PMI preservation. Writes can set IA32_RTIT_CTL[56] (InjectPsb-PmiOnEnable), enabling the processor to set IA32_RTIT_STATUS[7] (PendTopaPMI) and/or IA32_R-TIT_STATUS[6] (PendPSB) in order to preserve ToPA PMIs and/or PSBs otherwise lost due to Intel PT disable. Writes can also set PendToPAPMI and PendPSB.</p>
+<p>Bit 07: If 1, writes can set IA32_RTIT_CTL[31] (EventEn), enabling Event Trace packet generation. Bit 08: If 1, writes can set IA32_RTIT_CTL[55] (DisTNT), disabling TNT packet generation. Bit 31-09: Reserved.</p>
+<p>ECX</p>
+<p>Bit 00: If 1, Tracing can be enabled with IA32_RTIT_CTL.ToPA = 1, hence utilizing the ToPA output scheme; IA32_RTIT_OUTPUT_BASE and IA32_RTIT_OUTPUT_MASK_PTRS MSRs can be accessed. Bit 01: If 1, ToPA tables can hold any number of output entries, up to the maximum allowed by the MaskOrTableOffset field of IA32_RTIT_OUTPUT_MASK_PTRS. Bit 02: If 1, indicates support of Single-Range Output scheme. Bit 03: If 1, indicates support of output to Trace Transport subsystem. Bit 30-04: Reserved. Bit 31: If 1, generated packets which contain IP payloads have LIP values, which include the CS base com-ponent.</p>
+<p>EDX</p>
+<p>Bits 31-00: Reserved.</p></td></tr>
+<tr>
+<td></td>
+<td><em>Intel Processor Trace Enumeration Sub-leaf (EAX = 14H, ECX = 1)</em></td></tr>
+<tr>
+<td>14H</td>
+<td>
+<p>EAX</p>
+<p>Bits 02-00: Number of configurable Address Ranges for filtering. Bits 15-03: Reserved. Bits 31-16: Bitmap of supported MTC period encodings.</p>
+<p>EBX</p>
+<p>Bits 15-00: Bitmap of supported Cycle Threshold value encodings. Bit 31-16: Bitmap of supported Configurable PSB frequency encodings.</p>
+<p>ECX</p>
+<p>Bits 31-00: Reserved.</p>
+<p>EDX</p>
+<p>Bits 31-00: Reserved.</p></td></tr>
+<tr>
+<td></td>
+<td><em>Time Stamp Counter and Nominal Core Crystal Clock Information Leaf</em></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>15H</p>
+<p>If EBX[31:0] is 0, the TSC/”core crystal clock” ratio is not enumerated.</p>
+<p>EBX[31:0]/EAX[31:0] indicates the ratio of the TSC frequency and the core crystal clock frequency.</p>
+<p>If ECX is 0, the nominal core crystal clock frequency is not enumerated.</p>
+<p>“TSC frequency” = “core crystal clock frequency” * EBX/EAX.</p>
+<p>The core crystal clock may differ from the reference clock, bus clock, or core clock frequencies.</p>
+<p>EAX</p>
+<p>Bits 31-00: An unsigned integer which is the denominator of the TSC/”core crystal clock” ratio.</p>
+<p>EBX</p>
+<p>Bits 31-00: An unsigned integer which is the numerator of the TSC/”core crystal clock” ratio.</p>
+<p>ECX</p>
+<p>Bits 31-00: An unsigned integer which is the nominal frequency of the core crystal clock in Hz.</p>
+<p>EDX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td><em>Processor Frequency Information Leaf</em></td></tr>
+<tr>
+<td>16H</td>
+<td>
+<p>EAX</p>
+<p>Bits 15-00: Processor Base Frequency (in MHz). Bits 31-16: Reserved =0.</p>
+<p>EBX</p>
+<p>Bits 15-00: Maximum Frequency (in MHz). Bits 31-16: Reserved = 0.</p>
+<p>ECX</p>
+<p>Bits 15-00: Bus (Reference) Frequency (in MHz). Bits 31-16: Reserved = 0.</p>
+<p>EDX</p>
+<p>Reserved.</p></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES: * Data is returned from this interface in accordance with the processor's specification and does not reflect actual values. Suitable use of this data includes the display of processor information in like manner to the processor brand string and for determining the appropriate range to use when displaying processor information e.g. frequency history graphs. The returned information should not be used for any other purpose as the returned information does not accurately correlate to information / counters returned by other processor interfaces.</strong></p>
+<p>While a processor may support the Processor Frequency Information leaf, fields that return a value of zero are not supported.</p>
+<p><em>System-On-Chip Vendor Attribute Enumeration Main Leaf (EAX = 17H, ECX = 0)</em></p>
+<p><strong>NOTES:</strong></p>
+<p>17H</p>
+<p>Leaf 17H main leaf (ECX = 0).</p>
+<p>Leaf 17H output depends on the initial value in ECX.</p>
+<p>Leaf 17H sub-leaves 1 through 3 reports SOC Vendor Brand String.</p>
+<p>Leaf 17H is valid if MaxSOCID_Index &gt;= 3.</p>
+<p>Leaf 17H sub-leaves 4 and above are reserved.</p>
+<p>EAX</p>
+<p>Bits 31-00: MaxSOCID_Index. Reports the maximum input value of supported sub-leaf in leaf 17H.</p>
+<p>EBX</p>
+<p>Bits 15-00: SOC Vendor ID. Bit 16: IsVendorScheme. If 1, the SOC Vendor ID field is assigned via an industry standard enumeration scheme. Otherwise, the SOC Vendor ID field is assigned by Intel. Bits 31-17: Reserved = 0.</p>
+<p>ECX</p>
+<p>Bits 31-00: Project ID. A unique number an SOC vendor assigns to its SOC projects.</p>
+<p>EDX</p>
+<p>Bits 31-00: Stepping ID. A unique number within an SOC project that an SOC vendor assigns.</p>
+<p><em>System-On-Chip Vendor Attribute Enumeration Sub-leaf (EAX = 17H, ECX = 1..3)</em></p>
+<p>17H</p>
+<p>EAX</p>
+<p>Bit 31-00: SOC Vendor Brand String. UTF-8 encoded string.</p>
+<p>EBX</p>
+<p>Bit 31-00: SOC Vendor Brand String. UTF-8 encoded string.</p>
+<p>ECX</p>
+<p>Bit 31-00: SOC Vendor Brand String. UTF-8 encoded string.</p>
+<p>EDX</p>
+<p>Bit 31-00: SOC Vendor Brand String. UTF-8 encoded string.</p>
+<p><strong>NOTES:</strong></p>
+<p>Leaf 17H output depends on the initial value in ECX.</p>
+<p>SOC Vendor Brand String is a UTF-8 encoded string padded with trailing bytes of 00H.</p>
+<p>The complete SOC Vendor Brand String is constructed by concatenating in ascending order of</p>
+<p>EAX:EBX:ECX:EDX and from the sub-leaf 1 fragment towards sub-leaf 3.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td><em>System-On-Chip Vendor Attribute Enumeration Sub-leaves (EAX = 17H, ECX &gt; MaxSOCID_Index)</em></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>17H</p>
+<p>Leaf 17H output depends on the initial value in ECX.</p>
+<p>EAX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<p>EBX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<p>ECX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<p>EDX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<p><em>Deterministic Address Translation Parameters Main Leaf (EAX = 18H, ECX = 0)</em></p>
+<p><strong>NOTES:</strong></p>
+<p>18H</p>
+<p>Each sub-leaf enumerates a different address translation structure.</p>
+<p>If ECX contains an invalid sub-leaf index, EAX/EBX/ECX/EDX return 0. Sub-leaf index n is invalid if n exceeds the value that sub-leaf 0 returns in EAX. A sub-leaf index is also invalid if EDX[4:0] returns 0. Valid sub-leaves do not need to be contiguous or in any particular order. A valid sub-leaf may be in a higher input ECX value than an invalid sub-leaf or than a valid sub-leaf of a higher or lower-level struc-ture.</p>
+<p>* Some unified TLBs will allow a single TLB entry to satisfy data read/write and instruction fetches. Others will require separate entries (e.g., one loaded on data read/write and another loaded on an instruction fetch). Please see the Intel® 64 and IA-32 Architectures Optimization Reference Manual for details of a particular product.</p>
+<p>** Add one to the return value to get the result.</p>
+<p>EAX</p>
+<p>Bits 31-00: Reports the maximum input value of supported sub-leaf in leaf 18H.</p>
+<p>EBX</p>
+<p>Bit 00: 4K page size entries supported by this structure. Bit 01: 2MB page size entries supported by this structure. Bit 02: 4MB page size entries supported by this structure. Bit 03: 1 GB page size entries supported by this structure. Bits 07-04: Reserved. Bits 10-08: Partitioning (0: Soft partitioning between the logical processors sharing this structure). Bits 15-11: Reserved. Bits 31-16: W = Ways of associativity.</p>
+<p>ECX</p>
+<p>Bits 31-00: S = Number of Sets.</p>
+<p>EDX</p>
+<p>Bits 04-00: Translation cache type field.</p>
+<p>00000b: Null (indicates this sub-leaf is not valid). 00001b: Data TLB. 00010b: Instruction TLB. 00011b: Unified TLB*. 00100b: Load Only TLB. Hit on loads; fills on both loads and stores. 00101b: Store Only TLB. Hit on stores; fill on stores. All other encodings are reserved.</p>
+<p>Bits 07-05: Translation cache level (starts at 1). Bit 08: Fully associative structure. Bits 13-09: Reserved. Bits 25-14: Maximum number of addressable IDs for logical processors sharing this translation cache.** Bits 31-26: Reserved.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td><em>Deterministic Address Translation Parameters Sub-leaf (EAX = 18H, ECX ≥ 1)</em></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>18H</p>
+<p>Each sub-leaf enumerates a different address translation structure.</p>
+<p>If ECX contains an invalid sub-leaf index, EAX/EBX/ECX/EDX return 0. Sub-leaf index n is invalid if n exceeds the value that sub-leaf 0 returns in EAX. A sub-leaf index is also invalid if EDX[4:0] returns 0. Valid sub-leaves do not need to be contiguous or in any particular order. A valid sub-leaf may be in a higher input ECX value than an invalid sub-leaf or than a valid sub-leaf of a higher or lower-level struc-ture.</p>
+<p>* Some unified TLBs will allow a single TLB entry to satisfy data read/write and instruction fetches. Others will require separate entries (e.g., one loaded on data read/write and another loaded on an instruction fetch. See the Intel® 64 and IA-32 Architectures Optimization Reference Manual for details of a particular product.</p>
+<p>** Add one to the return value to get the result.</p>
+<p>EAX</p>
+<p>Bits 31-00: Reserved.</p>
+<p>EBX</p>
+<p>Bit 00: 4K page size entries supported by this structure. Bit 01: 2MB page size entries supported by this structure. Bit 02: 4MB page size entries supported by this structure. Bit 03: 1 GB page size entries supported by this structure. Bits 07-04: Reserved. Bits 10-08: Partitioning (0: Soft partitioning between the logical processors sharing this structure). Bits 15-11: Reserved. Bits 31-16: W = Ways of associativity.</p>
+<p>ECX</p>
+<p>Bits 31-00: S = Number of Sets.</p>
+<p>EDX</p>
+<p>Bits 04-00: Translation cache type field.</p>
+<p>0000b: Null (indicates this sub-leaf is not valid). 0001b: Data TLB. 0010b: Instruction TLB. 0011b: Unified TLB*. All other encodings are reserved.</p>
+<p>Bits 07-05: Translation cache level (starts at 1). Bit 08: Fully associative structure. Bits 13-09: Reserved. Bits 25-14: Maximum number of addressable IDs for logical processors sharing this translation cache** Bits 31-26: Reserved.</p>
+<p><em>Key Locker Leaf (EAX = 19H)</em></p>
+<p>19H</p>
+<p>EAX</p>
+<p>Bit 00: Key Locker restriction of CPL0-only supported. Bit 01: Key Locker restriction of no-encrypt supported. Bit 02: Key Locker restriction of no-decrypt supported. Bits 31-03: Reserved.</p>
+<p>EBX</p>
+<p>Bit 00: AESKLE. If 1, the AES Key Locker instructions are fully enabled. Bit 01: Reserved. Bit 02: If 1, the AES wide Key Locker instructions are supported. Bit 03: Reserved. Bit 04: If 1, the platform supports the Key Locker MSRs (IA32_COPY_LOCAL_TO_PLATFORM, IA23_COPY_PLATFORM_TO_LOCAL, IA32_COPY_STATUS, and IA32_IWKEYBACKUP_STATUS) and backing up the internal wrapping key. Bits 31-05: Reserved.</p>
+<p>ECX</p>
+<p>Bit 00: If 1, the NoBackup parameter to LOADIWKEY is supported. Bit 01: If 1, KeySource encoding of 1 (randomization of the internal wrapping key) is supported. Bits 31-02: Reserved.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>EDX</p>
+<p>Reserved.</p></td></tr>
+<tr>
+<td></td>
+<td><em>Native Model ID Enumeration Leaf (EAX = 1AH, ECX = 0)</em></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1AH</p>
+<p>This leaf exists on all hybrid parts, however this leaf is not only available on hybrid parts. The following algorithm is used for detection of this leaf:</p>
+<p>If CPUID.0.MAXLEAF <em>≥</em> 1AH and CPUID.1A.EAX ≠ 0, then the leaf exists.</p>
+<p>EAX</p>
+<p>Enumerates the native model ID and core type. Bits 31-24: Core type*</p>
+<p>10H: Reserved 20H: Intel Atom® 30H: Reserved 40H: Intel® Core™</p>
+<p>Bits 23-00: Native model ID of the core. The core-type and native model ID can be used to uniquely identify the microarchitecture of the core. This native model ID is not unique across core types, and not related to the model ID reported in CPUID leaf 01H, and does not identify the SOC.</p>
+<p>* The core type may only be used as an identification of the microarchitecture for this logical processor and its numeric value has no significance, neither large nor small. This field neither implies nor expresses any other attribute to this logical processor and software should not assume any.</p>
+<p>EBX</p>
+<p>Reserved.</p>
+<p>ECX</p>
+<p>Reserved.</p>
+<p>EDX</p>
+<p>Reserved.</p>
+<p><em>PCONFIG Information Sub-leaf (EAX = 1BH, ECX ≥ 0)</em></p>
+<p>1BH</p>
+<p>For details on this sub-leaf, see “INPUT EAX = 1BH: Returns PCONFIG Information” on page 3-252.</p>
+<p><strong>NOTE:</strong></p>
+<p>Leaf 1BH is supported if CPUID.(EAX=07H, ECX=0H):EDX[18] = 1.</p>
+<p><em>Last Branch Records Information Leaf (EAX = 1CH)</em></p>
+<p><strong>NOTE:</strong></p>
+<p>1CH</p>
+<p>This leaf pertains to the architectural feature.</p>
+<p>EAX</p>
+<p>Bits 07-00: Supported LBR Depth Values. For each bit n set in this field, the IA32_LBR_DEPTH.DEPTH value 8*(n+1) is supported. Bits 29-08: Reserved. Bit 30: Deep C-state Reset. If set, indicates that LBRs may be cleared on an MWAIT that requests a C-state numerically greater than C1. Bit 31: IP Values Contain LIP. If set, LBR IP values contain LIP. If clear, IP values contain Effective IP.</p>
+<p>EBX</p>
+<p>Bit 00: CPL Filtering Supported. If set, the processor supports setting IA32_LBR_CTL[2:1] to non-zero value. Bit 01: Branch Filtering Supported. If set, the processor supports setting IA32_LBR_CTL[22:16] to non-zero value. Bit 02: Call-stack Mode Supported. If set, the processor supports setting IA32_LBR_CTL[3] to 1. Bits 31-03: Reserved.</p>
+<p>ECX</p>
+<p>Bit 00: Mispredict Bit Supported. IA32_LBR_x_INFO[63] holds indication of branch misprediction (MISPRED). Bit 01: Timed LBRs Supported. IA32_LBR_x_INFO[15:0] holds CPU cycles since last LBR entry (CYC_CNT), and IA32_LBR_x_INFO[60] holds an indication of whether the value held there is valid (CYC_CNT_VALID). Bit 02: Branch Type Field Supported. IA32_LBR_INFO_x[59:56] holds indication of the recorded operation's branch type (BR_TYPE). Bits 31-03: Reserved.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>EDX</p>
+<p>Bits 31-00: Reserved.</p></td></tr>
+<tr>
+<td></td>
+<td><em>Tile Information Main Leaf (EAX = 1DH, ECX = 0)</em></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1DH</p>
+<p>For sub-leaves of 1DH, they are indexed by the palette id.</p>
+<p>Leaf 1DH sub-leaves 2 and above are reserved.</p>
+<p>EAX</p>
+<p>Bits 31-00: max_palette. Highest numbered palette sub-leaf. Value = 1.</p>
+<p>EBX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<p>ECX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<p>EDX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<p><em>Tile Palette 1 Sub-leaf (EAX = 1DH, ECX = 1)</em></p>
+<p>1DH</p>
+<p>EAX</p>
+<p>Bits 15-00: Palette 1 total_tile_bytes. Value = 8192. Bits 31-16: Palette 1 bytes_per_tile. Value = 1024.</p>
+<p>EBX</p>
+<p>Bits 15-00: Palette 1 bytes_per_row. Value = 64. Bits 31-16: Palette 1 max_names (number of tile registers). Value = 8.</p>
+<p>ECX</p>
+<p>Bits 15-00: Palette 1 max_rows. Value = 16. Bits 31-16: Reserved = 0.</p>
+<p>EDX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<p><em>TMUL Information Main Leaf (EAX = 1EH, ECX = 0)</em></p>
+<p><strong>NOTE:</strong></p>
+<p>1EH</p>
+<p>Leaf 1EH sub-leaves 1 and above are reserved.</p>
+<p>EAX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<p>EBX</p>
+<p>Bits 07-00: tmul_maxk (rows or columns). Value = 16. Bits 23-08: tmul_maxn (column bytes). Value = 64. Bits 31-24: Reserved = 0.</p>
+<p>ECX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<p>EDX</p>
+<p>Bits 31-00: Reserved = 0.</p>
+<p><em>V2 Extended Topology Enumeration Leaf</em></p>
+<p><strong>NOTES:</strong></p>
+<p>1FH</p>
+<p><em>CPUID leaf 1FH is a preferred superset to leaf 0BH. Intel recommends using leaf 1FH when available rather than leaf 0BH and ensuring that any leaf 0BH algorithms are updated to support leaf 1FH.</em></p>
+<p>The sub-leaves of CPUID leaf 1FH describe an ordered hierarchy of logical processors starting from the smallest-scoped domain of a Logical Processor (sub-leaf index 0) to the Core domain (sub-leaf index 1) to the largest-scoped domain (the last valid sub-leaf index) that is implicitly subordinate to the unenumerated highest-scoped domain of the processor package (socket).</p>
+<p>The details of each valid domain is enumerated by a corresponding sub-leaf. Details for a domain include its type and how all instances of that domain determine the number of logical processors and x2 APIC ID partitioning at the next higher-scoped domain. The ordering of domains within the hierarchy is fixed architecturally as shown below. For a given processor, not all domains may be relevant or enumerated; however, the logical processor and core domains are always enumerated. As an example, a processor may report an ordered hierarchy consisting only of “Logical Processor,” “Core,” and “Die.”</p>
+<p>For two valid sub-leaves N and N+1, sub-leaf N+1 represents the next immediate higher-scoped domain with respect to the domain of sub-leaf N for the given processor.</p>
+<p>If sub-leaf index “N” returns an invalid domain type in ECX[15:08] (00H), then all sub-leaves with an index greater than “N” shall also return an invalid domain type. A sub-leaf returning an invalid domain always returns 0 in EAX and EBX.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td></td>
+<td>
+<p>EAX</p>
+<p>Bits 04-00: The number of bits that the x2APIC ID must be shifted to the right to address instances of the next higher-scoped domain. When logical processor is not supported by the processor, the value of this field at the Logical Processor domain sub-leaf may be returned as either 0 (no allocated bits in the x2APIC ID) or 1 (one allocated bit in the x2APIC ID); software should plan accordingly. Bits 31-05: Reserved.</p>
+<p>EBX</p>
+<p>Bits 15-00: The number of logical processors across all instances of this domain within the next higher-scoped domain. (For example, in a processor socket/package comprising “M” dies of “N” cores each, where each core has “L” logical processors, the “die” domain sub-leaf value of this field would be M*N*L.) This number reflects configuration as shipped by Intel. Note, software must not use this field to enumerate processor topology*. Bits 31-16: Reserved.</p>
+<p>ECX</p>
+<p>Bits 07-00: The input ECX sub-leaf index. Bits 15-08: Domain Type. This field provides an identification value which indicates the domain as shown below. Although domains are ordered, as also shown below, their assigned identification values are not and software should not depend on it. (For example, if a new domain between core and module is speci-fied, it will have an identification value higher than 5.)</p>
+<p>Domain</p>
+<p>Domain Type Identification Value</p>
+<p>Hierarchy Lowest</p>
+<p>Logical Processor</p>
+<p>1</p>
+<p>...</p>
+<p>Core</p>
+<p>2</p>
+<p>...</p>
+<p>Module</p>
+<p>3</p>
+<p>...</p>
+<p>Tile</p>
+<p>4</p>
+<p>...</p>
+<p>Die</p>
+<p>5</p>
+<p>...</p>
+<p>DieGrp</p>
+<p>6</p>
+<p>Highest</p>
+<p>Package/Socket</p>
+<p>(implied)</p>
+<p>(Note that enumeration values of 0 and 7-255 are reserved.)</p>
+<p>Bits 31-16: Reserved.</p>
+<p>EDX</p>
+<p>Bits 31-00: x2APIC ID of the current logical processor. It is always valid and does not vary with the sub-leaf index in ECX.</p></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES: * Software must not use the value of EBX[15:0] to enumerate processor topology of the system. The value is only intended for display and diagnostic purposes. The actual number of logical processors avail-able to BIOS/OS/Applications may be different from the value of EBX[15:0], depending on software and platform hardware configurations.</strong></p>
+<p><em>Processor History Reset Sub-leaf (EAX = 20H, ECX = 0)</em></p>
+<p>20H</p>
+<p>EAX</p>
+<p>Reports the maximum number of sub-leaves that are supported in leaf 20H.</p>
+<p>EBX</p>
+<p>Indicates which bits may be set in the IA32_HRESET_ENABLE MSR to enable reset of different compo-nents of hardware-maintained history. Bit 00: Indicates support for both HRESET’s EAX[0] parameter, and IA32_HRESET_ENABLE[0] set by the OS to enable reset of Intel® Thread Director history. Bits 31-01: Reserved = 0.</p>
+<p>ECX</p>
+<p>Reserved.</p>
+<p>EDX</p>
+<p>Reserved.</p>
+<p><em>Unimplemented CPUID Leaf Functions</em></p>
+<p>21H</p>
+<p>Invalid. No existing or future CPU will return processor identification or feature information if the initial EAX value is 21H. If the value returned by CPUID.0:EAX (the maximum input value for basic CPUID information) is at least 21H, 0 is returned in the registers EAX, EBX, ECX, and EDX. Otherwise, the data for the highest basic information leaf is returned.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td>
+<p>40000000H</p>
+<p>-</p>
+<p>4FFFFFFFH</p></td>
+<td>Invalid. No existing or future CPU will return processor identification or feature information if the initial EAX value is in the range 40000000H to 4FFFFFFFH.</td></tr>
+<tr>
+<td></td>
+<td><em>Extended Function CPUID Information</em></td></tr>
+<tr>
+<td>80000000H</td>
+<td>
+<p>EAX</p>
+<p>Maximum Input Value for Extended Function CPUID Information.</p>
+<p>EBX</p>
+<p>Reserved.</p>
+<p>ECX</p>
+<p>Reserved.</p>
+<p>EDX</p>
+<p>Reserved.</p></td></tr>
+<tr>
+<td>80000001H</td>
+<td>
+<p>EAX</p>
+<p>Extended Processor Signature and Feature Bits.</p>
+<p>EBX</p>
+<p>Reserved.</p>
+<p>ECX</p>
+<p>Bit 00: LAHF/SAHF available in 64-bit mode.* Bits 04-01: Reserved. Bit 05: LZCNT. Bits 07-06: Reserved. Bit 08: PREFETCHW. Bits 31-09: Reserved.</p>
+<p>EDX</p>
+<p>Bits 10-00: Reserved. Bit 11: SYSCALL/SYSRET.** Bits 19-12: Reserved = 0. Bit 20: Execute Disable Bit available. Bits 25-21: Reserved = 0. Bit 26: 1-GByte pages are available if 1. Bit 27: RDTSCP and IA32_TSC_AUX are available if 1. Bit 28: Reserved = 0.</p>
+<p>Bit 29: Intel<em><sup>®</sup></em> 64 Architecture available if 1. Bits 31-30: Reserved = 0.</p></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>*  LAHF and SAHF are always available in other modes, regardless of the enumeration of this feature flag.</p>
+<p>** Intel processors support SYSCALL and SYSRET only in 64-bit mode. This feature flag is always enumer-</p>
+<p>ated as 0 outside 64-bit mode.</p>
+<p>80000002H</p>
+<p>EAX</p>
+<p>Processor Brand String.</p>
+<p>EBX</p>
+<p>Processor Brand String Continued.</p>
+<p>ECX</p>
+<p>Processor Brand String Continued.</p>
+<p>EDX</p>
+<p>Processor Brand String Continued.</p>
+<p>80000003H</p>
+<p>EAX</p>
+<p>Processor Brand String Continued.</p>
+<p>EBX</p>
+<p>Processor Brand String Continued.</p>
+<p>ECX</p>
+<p>Processor Brand String Continued.</p>
+<p>EDX</p>
+<p>Processor Brand String Continued.</p>
+<p>80000004H</p>
+<p>EAX</p>
+<p>Processor Brand String Continued.</p>
+<p>EBX</p>
+<p>Processor Brand String Continued.</p>
+<p>ECX</p>
+<p>Processor Brand String Continued.</p>
+<p>EDX</p>
+<p>Processor Brand String Continued.</p>
+<p>80000005H</p>
+<p>EAX</p>
+<p>Reserved = 0.</p>
+<p>EBX</p>
+<p>Reserved = 0.</p>
+<p>ECX</p>
+<p>Reserved = 0.</p>
+<p>EDX</p>
+<p>Reserved = 0.</p>
+<h3>Table 3-8.  Information Returned by CPUID Instruction (Contd.)</h3>
+<table>
+<tr>
+<td>
+<p><strong>Initial EAX</strong></p>
+<p><strong>Value</strong></p></td>
+<td>Information Provided about the Processor</td></tr>
+<tr>
+<td>
+<p>80000006H</p>
+<p>EAX</p>
+<p>Reserved = 0.</p>
+<p>EBX</p>
+<p>Reserved = 0.</p>
+<p>ECX</p>
+<p>Bits 07-00: Cache Line size in bytes. Bits 11-08: Reserved. Bits 15-12: L2 Associativity field *. Bits 31-16: Cache size in 1K units.</p>
+<p>EDX</p>
+<p>Reserved = 0.</p></td>
+<td>
+<p>80000006H</p>
+<p>EAX</p>
+<p>Reserved = 0.</p>
+<p>EBX</p>
+<p>Reserved = 0.</p>
+<p>ECX</p>
+<p>Bits 07-00: Cache Line size in bytes. Bits 11-08: Reserved. Bits 15-12: L2 Associativity field *. Bits 31-16: Cache size in 1K units. Bits 11-08: Reserved. Bits 15-12: L2 Associativity field *. Bits 31-16: Cache size in 1K units.</p>
+<p>EDX</p>
+<p>Reserved = 0.</p></td></tr>
+<tr>
+<td>
+<p>80000006H</p>
+<p>EAX</p>
+<p>Reserved = 0.</p>
+<p>EBX</p>
+<p>Reserved = 0.</p>
+<p>ECX</p>
+<p>Bits 07-00: Cache Line size in bytes. Bits 11-08: Reserved. Bits 15-12: L2 Associativity field *. Bits 31-16: Cache size in 1K units. Bits 11-08: Reserved. Bits 15-12: L2 Associativity field *. Bits 31-16: Cache size in 1K units. Bits 11-08: Reserved. Bits 15-12: L2 Associativity field *. Bits 31-16: Cache size in 1K units.</p>
+<p>EDX</p>
+<p>Reserved = 0.</p></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td></td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>* L2 associativity field encodings:</p>
+<p>00H - Disabled</p>
+<p>08H - 16 ways</p>
+<p>01H - 1 way (direct mapped)</p>
+<p> 09H - Reserved</p>
+<p>02H - 2 ways</p>
+<p>  0AH - 32 ways</p>
+<p>03H - Reserved</p>
+<p>0BH - 48 ways</p>
+<p>04H - 4 ways</p>
+<p>0CH - 64 ways</p>
+<p>05H - Reserved</p>
+<p>0DH - 96 ways</p>
+<p>06H - 8 ways</p>
+<p>0EH - 128 ways</p>
+<p>07H - See CPUID leaf 04H, sub-leaf 2**</p>
+<p>0FH - Fully associative</p>
+<p>** CPUID leaf 04H provides details of deterministic cache parameters, including the L2 cache in sub-leaf 2</p>
+<p>80000007H</p>
+<p>EAX</p>
+<p>Reserved = 0.</p>
+<p>EBX</p>
+<p>Reserved = 0.</p>
+<p>ECX</p>
+<p>Reserved = 0.</p>
+<p>EDX</p>
+<p>Bits 07-00: Reserved = 0. Bit 08: Invariant TSC available if 1. Bits 31-09: Reserved = 0.</p>
+<p>80000008H</p>
+<p>EAX</p>
+<p>Linear/Physical Address size. Bits 07-00: #Physical Address Bits*. Bits 15-08: #Linear Address Bits. Bits 31-16: Reserved = 0.</p>
+<p>EBX</p>
+<p>Bits 08-00: Reserved = 0. Bit 09: WBNOINVD is available if 1. Bits 31-10: Reserved = 0.</p>
+<p>ECX</p>
+<p>Reserved = 0.</p>
+<p>EDX</p>
+<p>Reserved = 0.</p>
+<p><strong>NOTES:</strong></p>
+<p>*</p>
+<p>If CPUID.80000008H:EAX[7:0] is supported, the maximum physical address number supported should come from this field.</p>
+<h2>INPUT EAX = 0: Returns CPUID’s Highest Value for Basic Processor Information and the Vendor Identification String</h2>
+<p>When CPUID executes with EAX set to 0, the processor returns the highest value the CPUID recognizes for returning basic processor information. The value is returned in the EAX register and is processor specific.</p>
+<p>A vendor identification string is also returned in EBX, EDX, and ECX. For Intel processors, the string is “Genu-ineIntel” and is expressed:</p>
+<p>EBX := 756e6547h (* “Genu”, with G in the low eight bits of BL *)</p>
+<p>EDX := 49656e69h (* “ineI”, with i in the low eight bits of DL *)</p>
+<p>ECX := 6c65746eh (* “ntel”, with n in the low eight bits of CL *)</p>
+<h2>INPUT EAX = 80000000H: Returns CPUID’s Highest Value for Extended Processor Information</h2>
+<p>When CPUID executes with EAX set to 80000000H, the processor returns the highest value the processor recog-nizes for returning extended processor information. The value is returned in the EAX register and is processor specific.</p>
+<h2>IA32_BIOS_SIGN_ID Returns Microcode Update Signature</h2>
+<p>For processors that support the microcode update facility, the IA32_BIOS_SIGN_ID MSR is loaded with the update signature whenever CPUID executes. The signature is returned in the upper DWORD. For details, see Chapter 10 in the Intel<em><sup>® </sup></em>64 and IA-32 Architectures Software Developer’s Manual, Volume 3A.</p>
+<h2>INPUT EAX = 01H: Returns Model, Family, Stepping Information</h2>
+<p>When CPUID executes with EAX set to 01H, version information is returned in EAX (see Figure 3-6). For example: model, family, and processor type for the Intel Xeon processor 5100 series is as follows:</p>
+<p>See Table 3-9 for available processor type values. Stepping IDs are provided as needed.</p>
+<svg width="568.7999849999999" height="286.4700000000157" viewBox="111.840000 175340.039995 379.199990 190.980000">
+<text x="151.79856516000018" y="175365.0003096" style="font-size:6.769200pt" textLength="7.482673680000005" lengthAdjust="spacingAndGlyphs">31</text>
+<text x="182.27824200000018" y="175365.0003096" style="font-size:6.769200pt" textLength="7.482673680000005" lengthAdjust="spacingAndGlyphs">28</text>
+<text x="192.41850360000018" y="175365.0003096" style="font-size:6.769200pt" textLength="7.482673680000005" lengthAdjust="spacingAndGlyphs">27</text>
+<text x="263.45854992000017" y="175365.0003096" style="font-size:6.769200pt" textLength="7.482673680000005" lengthAdjust="spacingAndGlyphs">20</text>
+<text x="273.59881152000014" y="175365.0003096" style="font-size:6.769200pt" textLength="7.482673680000005" lengthAdjust="spacingAndGlyphs">19</text>
+<text x="304.07848836000016" y="175365.0003096" style="font-size:6.769200pt" textLength="7.482673680000005" lengthAdjust="spacingAndGlyphs">16</text>
+<text x="314.21874996000014" y="175365.0003096" style="font-size:6.769200pt" textLength="7.482673680000005" lengthAdjust="spacingAndGlyphs">15</text>
+<text x="324.3590115600001" y="175365.0003096" style="font-size:6.769200pt" textLength="7.482673680000005" lengthAdjust="spacingAndGlyphs">14</text>
+<text x="334.4992731600001" y="175365.0003096" style="font-size:6.769200pt" textLength="7.482673680000005" lengthAdjust="spacingAndGlyphs">13</text>
+<text x="344.63953476000006" y="175365.0003096" style="font-size:6.769200pt" textLength="7.482673680000005" lengthAdjust="spacingAndGlyphs">12</text>
+<text x="354.77979636000003" y="175365.0003096" style="font-size:6.769200pt" textLength="7.482673680000005" lengthAdjust="spacingAndGlyphs">11</text>
+<text x="387.11964936000004" y="175365.0003096" style="font-size:6.769200pt" textLength="3.763675200000023" lengthAdjust="spacingAndGlyphs">8</text>
+<text x="397.25991096" y="175365.0003096" style="font-size:6.769200pt" textLength="3.763675200000023" lengthAdjust="spacingAndGlyphs">7</text>
+<text x="426.59965452" y="175365.0003096" style="font-size:6.769200pt" textLength="3.763675200000023" lengthAdjust="spacingAndGlyphs">4</text>
+<text x="437.8798494" y="175365.0003096" style="font-size:6.769200pt" textLength="3.763675200000023" lengthAdjust="spacingAndGlyphs">3</text>
+<text x="472.44" y="175365.0003096" style="font-size:6.769200pt" textLength="3.763675200000023" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="212.7" y="175387.11865820002" style="font-size:9.053900pt" textLength="38.04358241" lengthAdjust="spacingAndGlyphs">Extended</text>
+<text x="273.54039722" y="175387.11865820002" style="font-size:9.053900pt" textLength="37.974772770000015" lengthAdjust="spacingAndGlyphs">Extended</text>
+<text x="360.66064457999994" y="175387.11865820002" style="font-size:9.053900pt" textLength="26.607601320000015" lengthAdjust="spacingAndGlyphs">Family</text>
+<text x="438.18104177" y="175387.11956359" style="font-size:9.053900pt" textLength="35.57096231999998" lengthAdjust="spacingAndGlyphs">Stepping</text>
+<text x="125.1" y="175392.51865820002" style="font-size:9.053900pt" textLength="18.038990360000014" lengthAdjust="spacingAndGlyphs">EAX</text>
+<text x="402.00075197999996" y="175392.51930955" style="font-size:9.053900pt" textLength="24.508907299999976" lengthAdjust="spacingAndGlyphs">Model</text>
+<text x="212.82041687" y="175397.91905551002" style="font-size:9.053900pt" textLength="38.156756159999986" lengthAdjust="spacingAndGlyphs">Family ID</text>
+<text x="274.44035488" y="175397.91905551002" style="font-size:9.053900pt" textLength="36.17485744999999" lengthAdjust="spacingAndGlyphs">Model ID</text>
+<text x="369.42029282999994" y="175397.91905551002" style="font-size:9.053900pt" textLength="9.11818268999997" lengthAdjust="spacingAndGlyphs">ID</text>
+<text x="451.50113945" y="175397.9199609" style="font-size:9.053900pt" textLength="9.058426949999955" lengthAdjust="spacingAndGlyphs">ID</text>
+<text x="122.94054078999994" y="175429.24011717" style="font-size:9.053900pt" textLength="92.28097035999997" lengthAdjust="spacingAndGlyphs">Extended Family ID (0)</text>
+<text x="122.28051147999994" y="175443.75985660002" style="font-size:9.053900pt" textLength="90.28186924000002" lengthAdjust="spacingAndGlyphs">Extended Model ID (0)</text>
+<text x="122.28" y="175455.2186582" style="font-size:9.053900pt" textLength="63.03868413999999" lengthAdjust="spacingAndGlyphs">Processor Type</text>
+<text x="122.93973946" y="175467.21876554002" style="font-size:9.053900pt" textLength="195.4863764600001" lengthAdjust="spacingAndGlyphs">Family (0FH for the Pentium 4 Processor Family)</text>
+<text x="122.93973946" y="175481.25864827" style="font-size:9.053900pt" textLength="24.50619113000002" lengthAdjust="spacingAndGlyphs">Model</text>
+<text x="145.14" y="175504.0586582" style="font-size:9.053900pt" textLength="38.50170975" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="450.9" y="175519.2603096" style="font-size:6.769200pt" textLength="29.561096399999997" lengthAdjust="spacingAndGlyphs">OM16525</text>
+<rect x="122.88" y="175496.16" width="15.240000000000009" height="15.179999999993015" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="150.48" y="175369.74" width="324.78" height="40.61999999999534" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M191.040000,175369.740000 L191.040000,175410.360000 " style="stroke:black"></path>
+<path d="M272.220000,175369.740000 L272.220000,175410.360000 " style="stroke:black"></path>
+<path d="M312.840000,175369.740000 L312.840000,175410.360000 " style="stroke:black"></path>
+<path d="M333.120000,175369.740000 L333.120000,175410.360000 " style="stroke:black"></path>
+<path d="M353.460000,175369.740000 L353.460000,175410.360000 " style="stroke:black"></path>
+<path d="M394.020000,175369.740000 L394.020000,175410.360000 " style="stroke:black"></path>
+<path d="M434.640000,175369.740000 L434.640000,175410.360000 " style="stroke:black"></path>
+<path d="M346.200000,175410.360000 L346.200000,175453.680000 L196.440000,175453.680000 " style="stroke:black"></path>
+<path d="M374.100000,175410.360000 L374.100000,175466.340000 L328.440000,175466.340000 " style="stroke:black"></path>
+<path d="M412.140000,175410.480000 L412.140000,175480.320000 L173.640000,175480.320000 " style="stroke:black"></path>
+<path d="M297.960000,175410.480000 L297.960000,175442.820000 L222.420000,175442.820000 " style="stroke:black"></path>
+<path d="M249.780000,175410.480000 L249.780000,175429.380000 L224.400000,175429.380000 " style="stroke:black"></path>
+<rect x="122.88" y="175496.16" width="15.240000000000009" height="15.179999999993015" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="312.84" y="175369.74" width="20.28000000000003" height="40.61999999999534" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="150.48" y="175369.74" width="40.56" height="40.61999999999534" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<h3>Figure 3-6.  Version Information Returned by CPUID in EAX</h3>
+<h3>Table 3-9.  Processor Type Field</h3>
+<table>
+<tr>
+<th>Type</th>
+<th>Encoding</th></tr>
+<tr>
+<td>Original OEM Processor</td>
+<td>00B</td></tr>
+<tr>
+<td>Intel OverDrive<sup>®</sup> Processor</td>
+<td>01B</td></tr>
+<tr>
+<td>Dual processor (not applicable to Intel486 processors)</td>
+<td>10B</td></tr>
+<tr>
+<td>Intel reserved</td>
+<td>11B</td></tr></table>
+<h3>NOTE</h3>
+<p>See Chapter 20 in the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 1, for information on identifying earlier IA-32 processors.</p>
+<p>The Extended Family ID needs to be examined only when the Family ID is 0FH. Integrate the fields into a display using the following rule:</p>
+<p>IF Family_ID ≠ 0FH</p>
+<p>THEN DisplayFamily = Family_ID;</p>
+<p>ELSE DisplayFamily = Extended_Family_ID + Family_ID;</p>
+<p>FI;</p>
+<p>(* Show DisplayFamily as HEX field. *)</p>
+<p>The Extended Model ID needs to be examined only when the Family ID is 06H or 0FH. Integrate the field into a display using the following rule:</p>
+<p>IF (Family_ID = 06H or Family_ID = 0FH)</p>
+<p>THEN DisplayModel = (Extended_Model_ID « 4) + Model_ID;</p>
+<p>(* Right justify and zero-extend 4-bit field; display Model_ID as HEX field.*)</p>
+<p>ELSE DisplayModel = Model_ID;</p>
+<p>FI;</p>
+<p>(* Show DisplayModel as HEX field. *)</p>
+<h2>INPUT EAX = 01H: Returns Additional Information in EBX</h2>
+<p>When CPUID executes with EAX set to 01H, additional information is returned to the EBX register:</p>
+<h2>INPUT EAX = 01H: Returns Feature Information in ECX and EDX</h2>
+<p>When CPUID executes with EAX set to 01H, feature information is returned in ECX and EDX.</p>
+<p>For all feature flags, a 1 indicates that the feature is supported. Use Intel to properly interpret feature flags.</p>
+<h3>NOTE</h3>
+<p>Software must confirm that a processor feature is present using feature flags returned by CPUID prior to using the feature. Software should not depend on future offerings retaining all features.</p>
+<svg width="569.6999775" height="542.5199774999928" viewBox="111.540005 176698.020010 379.799985 361.679985">
+<text x="190.85453849999988" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">31</text>
+<text x="199.49481299999988" y="176720.76939" style="font-size:5.655000pt" textLength="6.383364" lengthAdjust="spacingAndGlyphs">30</text>
+<text x="208.1950304999999" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">29</text>
+<text x="216.8952479999999" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">28</text>
+<text x="225.5954654999999" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">27</text>
+<text x="234.2956829999999" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">26</text>
+<text x="242.93595749999992" y="176720.76939" style="font-size:5.655000pt" textLength="6.383364" lengthAdjust="spacingAndGlyphs">25</text>
+<text x="251.63617499999992" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">24</text>
+<text x="260.33639249999993" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">23</text>
+<text x="269.0965529999999" y="176720.76939" style="font-size:5.655000pt" textLength="6.383364000000029" lengthAdjust="spacingAndGlyphs">22</text>
+<text x="277.7967704999999" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">21</text>
+<text x="286.49698799999993" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">20</text>
+<text x="295.19720549999994" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">19</text>
+<text x="303.89742299999995" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">18</text>
+<text x="312.5376974999999" y="176720.76939" style="font-size:5.655000pt" textLength="6.383364000000029" lengthAdjust="spacingAndGlyphs">17</text>
+<text x="321.23791499999993" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">16</text>
+<text x="329.93813249999994" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">15</text>
+<text x="338.63834999999995" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">14</text>
+<text x="347.33856749999995" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">13</text>
+<text x="355.97884199999993" y="176720.76939" style="font-size:5.655000pt" textLength="6.383364000000029" lengthAdjust="spacingAndGlyphs">12</text>
+<text x="364.67905949999994" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">11</text>
+<text x="373.37927699999995" y="176720.76939" style="font-size:5.655000pt" textLength="6.323420999999996" lengthAdjust="spacingAndGlyphs">10</text>
+<text x="383.69908649999996" y="176720.76939" style="font-size:5.655000pt" textLength="3.1441800000000057" lengthAdjust="spacingAndGlyphs">9</text>
+<text x="392.399304" y="176720.76939" style="font-size:5.655000pt" textLength="3.1441800000000057" lengthAdjust="spacingAndGlyphs">8</text>
+<text x="401.0995215" y="176720.76939" style="font-size:5.655000pt" textLength="3.1441800000000057" lengthAdjust="spacingAndGlyphs">7</text>
+<text x="409.799739" y="176720.76939" style="font-size:5.655000pt" textLength="3.1441800000000057" lengthAdjust="spacingAndGlyphs">6</text>
+<text x="418.43944799999997" y="176720.76939" style="font-size:5.655000pt" textLength="3.1441800000000057" lengthAdjust="spacingAndGlyphs">5</text>
+<text x="426.1794465" y="176720.76939" style="font-size:5.655000pt" textLength="3.1441800000000057" lengthAdjust="spacingAndGlyphs">4</text>
+<text x="435.8393175" y="176720.76939" style="font-size:5.655000pt" textLength="3.1441800000000057" lengthAdjust="spacingAndGlyphs">3</text>
+<text x="444.539535" y="176720.76939" style="font-size:5.655000pt" textLength="3.1441800000000057" lengthAdjust="spacingAndGlyphs">2</text>
+<text x="453.2397525" y="176720.76939" style="font-size:5.655000pt" textLength="3.1441800000000057" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="465.48" y="176720.76939" style="font-size:5.655000pt" textLength="3.1441800000000057" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="168.66" y="176743.81253239998" style="font-size:7.539800pt" textLength="15.707665339999977" lengthAdjust="spacingAndGlyphs">ECX</text>
+<text x="192.36" y="176749.08948999998" style="font-size:5.655000pt" textLength="3.1441800000000057" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="128.28" y="176769.73320801998" style="font-size:7.539800pt" textLength="32.979085199999986" lengthAdjust="spacingAndGlyphs">RDRAND</text>
+<text x="128.58008404" y="176778.19286362" style="font-size:7.539800pt" textLength="18.762038319999988" lengthAdjust="spacingAndGlyphs">F16C</text>
+<text x="128.76" y="176786.71253239998" style="font-size:7.539800pt" textLength="15.289206439999987" lengthAdjust="spacingAndGlyphs">AVX</text>
+<text x="128.58" y="176795.17294162" style="font-size:7.539800pt" textLength="36.589895419999976" lengthAdjust="spacingAndGlyphs">OSXSAVE</text>
+<text x="128.76020122" y="176803.69292879998" style="font-size:7.539800pt" textLength="25.489047879999987" lengthAdjust="spacingAndGlyphs">XSAVE</text>
+<text x="128.76" y="176812.51222004" style="font-size:7.539800pt" textLength="15.289206439999987" lengthAdjust="spacingAndGlyphs">AES</text>
+<text x="128.28" y="176820.6125324" style="font-size:7.539800pt" textLength="48.703338100000025" lengthAdjust="spacingAndGlyphs">TSC-Deadline</text>
+<text x="128.58" y="176829.1925324" style="font-size:7.539800pt" textLength="32.025300499999986" lengthAdjust="spacingAndGlyphs">POPCNT</text>
+<text x="128.58" y="176837.71253239998" style="font-size:7.539800pt" textLength="27.710272959999998" lengthAdjust="spacingAndGlyphs">MOVBE</text>
+<text x="128.76" y="176846.1725324" style="font-size:7.539800pt" textLength="26.024373679999997" lengthAdjust="spacingAndGlyphs">x2APIC</text>
+<text x="128.6403184" y="176854.6325584" style="font-size:7.539800pt" textLength="68.63102950000001" lengthAdjust="spacingAndGlyphs">SSE4_2 —  SSE4.2</text>
+<text x="128.58" y="176863.15253239998" style="font-size:7.539800pt" textLength="68.56844916" lengthAdjust="spacingAndGlyphs">SSE4_1 —  SSE4.1</text>
+<text x="128.28066994000002" y="176871.612188" style="font-size:7.539800pt" textLength="102.34976908000004" lengthAdjust="spacingAndGlyphs">DCA —  Direct Cache Access</text>
+<text x="128.28" y="176880.1325324" style="font-size:7.539800pt" textLength="123.82613540000008" lengthAdjust="spacingAndGlyphs">PCID —  Process-context Identifiers</text>
+<text x="128.28" y="176888.59253239998" style="font-size:7.539800pt" textLength="131.67582118000004" lengthAdjust="spacingAndGlyphs">PDCM —  Perf/Debug Capability MSR</text>
+<text x="128.28" y="176897.0525324" style="font-size:7.539800pt" textLength="73.67213977999995" lengthAdjust="spacingAndGlyphs">xTPR Update Control</text>
+<text x="128.28" y="176905.5725324" style="font-size:7.539800pt" textLength="53.20309073999999" lengthAdjust="spacingAndGlyphs">CMPXCHG16B</text>
+<text x="128.28" y="176914.0325324" style="font-size:7.539800pt" textLength="96.35110420000001" lengthAdjust="spacingAndGlyphs">FMA —  Fused Multiply Add</text>
+<text x="128.28" y="176924.7725324" style="font-size:7.539800pt" textLength="21.704822259999986" lengthAdjust="spacingAndGlyphs">SDBG</text>
+<text x="128.28" y="176934.31253239998" style="font-size:7.539800pt" textLength="90.58541913999997" lengthAdjust="spacingAndGlyphs">CNXT-ID — L1 Context ID</text>
+<text x="128.28" y="176943.2526569" style="font-size:7.539800pt" textLength="104.07939920000004" lengthAdjust="spacingAndGlyphs">SSSE3 —  SSSE3 Extensions</text>
+<text x="128.27984712" y="176952.37169417998" style="font-size:7.539800pt" textLength="90.11342766000004" lengthAdjust="spacingAndGlyphs">TM2 — Thermal Monitor 2</text>
+<text x="128.27984712" y="176961.43151785998" style="font-size:7.539800pt" textLength="178.1126953999999" lengthAdjust="spacingAndGlyphs">EIST —  Enhanced  Intel  SpeedStep®  Technology</text>
+<text x="128.28" y="176969.65253862" style="font-size:7.539800pt" textLength="108.88526771999997" lengthAdjust="spacingAndGlyphs">SMX — Safer Mode Extensions</text>
+<text x="128.76" y="176978.7725324" style="font-size:7.539800pt" textLength="122.31515948000009" lengthAdjust="spacingAndGlyphs">VMX — Virtual Machine Extensions</text>
+<text x="128.27984712" y="176988.67130729998" style="font-size:7.539800pt" textLength="133.83974378" lengthAdjust="spacingAndGlyphs">DS-CPL — CPL Qualified Debug Store</text>
+<text x="128.27984712" y="176997.85101379998" style="font-size:7.539800pt" textLength="112.85497241999997" lengthAdjust="spacingAndGlyphs">MONITOR — MONITOR/MWAIT</text>
+<text x="128.28" y="177006.8525324" style="font-size:7.539800pt" textLength="96.17014899999998" lengthAdjust="spacingAndGlyphs">DTES64  —  64-bit DS Area</text>
+<text x="128.27984712" y="177016.03097956" style="font-size:7.539800pt" textLength="145.00618757999996" lengthAdjust="spacingAndGlyphs">PCLMULQDQ  —  Carryless Multiplication</text>
+<text x="128.28" y="177025.03196003998" style="font-size:7.539800pt" textLength="95.86780302000003" lengthAdjust="spacingAndGlyphs">SSE3  —  SSE3 Extensions</text>
+<text x="446.76" y="177040.08938999998" style="font-size:5.655000pt" textLength="28.640878499999985" lengthAdjust="spacingAndGlyphs">OM16524b</text>
+<text x="138.1200401" y="177044.77043521998" style="font-size:7.539800pt" textLength="33.168334180000016" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="121.26" y="177036.54" width="13.019999999999996" height="12.720000000001164" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="320.28" y="176724.78" width="8.699999999999989" height="34.01999999998952" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="189.6631491" y="176724.77710224" width="278.22438700000004" height="33.900335040001664" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M198.475897,176724.777102 L198.475897,176758.677437 " style="stroke:black"></path>
+<path d="M207.115746,176724.777102 L207.115746,176758.677437 " style="stroke:black"></path>
+<path d="M215.816262,176724.777102 L215.816262,176758.677437 " style="stroke:black"></path>
+<path d="M224.516777,176724.777102 L224.516777,176758.677437 " style="stroke:black"></path>
+<path d="M233.217293,176724.777102 L233.217293,176758.677437 " style="stroke:black"></path>
+<path d="M241.917808,176724.777102 L241.917808,176758.677437 " style="stroke:black"></path>
+<path d="M250.557658,176724.777102 L250.557658,176758.677437 " style="stroke:black"></path>
+<path d="M259.258173,176724.777102 L259.258173,176758.677437 " style="stroke:black"></path>
+<path d="M267.958689,176724.777102 L267.958689,176758.677437 " style="stroke:black"></path>
+<path d="M276.659204,176724.777102 L276.659204,176758.677437 " style="stroke:black"></path>
+<path d="M285.359720,176724.777102 L285.359720,176758.677437 " style="stroke:black"></path>
+<path d="M293.999569,176724.777102 L293.999569,176758.677437 " style="stroke:black"></path>
+<path d="M302.700085,176724.777102 L302.700085,176758.677437 " style="stroke:black"></path>
+<path d="M311.400600,176724.777102 L311.400600,176758.677437 " style="stroke:black"></path>
+<path d="M320.101116,176724.777102 L320.101116,176758.677437 " style="stroke:black"></path>
+<path d="M328.801631,176724.777102 L328.801631,176758.677437 " style="stroke:black"></path>
+<path d="M337.441481,176724.777102 L337.441481,176758.677437 " style="stroke:black"></path>
+<path d="M346.141996,176724.777102 L346.141996,176758.677437 " style="stroke:black"></path>
+<path d="M354.842512,176724.777102 L354.842512,176758.677437 " style="stroke:black"></path>
+<path d="M363.543027,176724.777102 L363.543027,176758.677437 " style="stroke:black"></path>
+<path d="M372.243543,176724.777102 L372.243543,176758.677437 " style="stroke:black"></path>
+<path d="M380.944058,176724.777102 L380.944058,176758.677437 " style="stroke:black"></path>
+<path d="M389.704229,176724.777102 L389.704229,176758.677437 " style="stroke:black"></path>
+<path d="M398.404744,176724.777102 L398.404744,176758.677437 " style="stroke:black"></path>
+<path d="M407.105260,176724.777102 L407.105260,176758.677437 " style="stroke:black"></path>
+<path d="M415.745109,176724.777102 L415.745109,176758.677437 " style="stroke:black"></path>
+<path d="M424.445625,176724.777102 L424.445625,176758.677437 " style="stroke:black"></path>
+<path d="M433.146140,176724.777102 L433.146140,176758.677437 " style="stroke:black"></path>
+<path d="M441.846656,176724.777102 L441.846656,176758.677437 " style="stroke:black"></path>
+<path d="M450.547171,176724.777102 L450.547171,176758.677437 " style="stroke:black"></path>
+<path d="M459.187021,176724.777102 L459.187021,176758.677437 " style="stroke:black"></path>
+<path d="M246.363615,176758.677437 L246.363615,176810.517969 L148.381958,176810.517969 " style="stroke:black"></path>
+<path d="M220.083104,176758.677437 L220.083104,176785.077882 L148.381958,176785.077882 " style="stroke:black"></path>
+<path d="M211.383599,176758.677437 L211.383599,176776.617634 L152.702389,176776.617634 " style="stroke:black"></path>
+<path d="M369.425607,176758.677437 L369.425607,176922.957970 L154.922764,176922.957970 " style="stroke:black"></path>
+<path d="M281.104000,176758.677437 L281.104000,176844.477646 L159.242183,176844.477646 " style="stroke:black"></path>
+<path d="M237.664110,176758.677437 L237.664110,176802.057721 L159.243194,176802.057721 " style="stroke:black"></path>
+<path d="M272.223509,176758.677437 L272.223509,176836.017398 L161.401893,176836.017398 " style="stroke:black"></path>
+<path d="M263.703980,176758.677437 L263.703980,176827.497808 L163.622269,176827.497808 " style="stroke:black"></path>
+<path d="M202.683084,176758.677437 L202.683084,176768.157386 L165.722323,176768.157386 " style="stroke:black"></path>
+<path d="M228.783619,176758.677437 L228.783619,176793.597473 L170.102408,176793.597473 " style="stroke:black"></path>
+<path d="M254.823489,176758.677437 L254.823489,176819.037559 L180.962634,176819.037559 " style="stroke:black"></path>
+<path d="M350.705091,176758.677437 L350.705091,176903.937742 L187.442774,176903.937742 " style="stroke:black"></path>
+<path d="M298.504020,176758.677437 L298.504020,176861.457485 L200.462708,176861.457485 " style="stroke:black"></path>
+<path d="M289.804515,176758.677437 L289.804515,176852.937894 L200.462708,176852.937894 " style="stroke:black"></path>
+<path d="M342.004575,176758.677437 L342.004575,176895.477494 L207.062158,176895.477494 " style="stroke:black"></path>
+<path d="M394.145991,176758.677437 L394.145991,176950.618452 L222.183158,176950.618452 " style="stroke:black"></path>
+<path d="M376.565995,176758.677437 L376.565995,176932.377587 L224.403534,176932.377587 " style="stroke:black"></path>
+<path d="M446.106420,176758.677437 L446.106420,177005.098731 L228.783619,177005.098731 " style="stroke:black"></path>
+<path d="M463.626761,176758.677437 L463.626761,177023.278276 L228.783619,177023.278276 " style="stroke:black"></path>
+<path d="M359.405606,176758.677437 L359.405606,176912.397990 L228.783619,176912.397990 " style="stroke:black"></path>
+<path d="M306.964905,176758.677437 L306.964905,176869.917733 L235.263759,176869.917733 " style="stroke:black"></path>
+<path d="M385.445475,176758.677437 L385.445475,176941.438183 L237.483124,176941.438183 " style="stroke:black"></path>
+<path d="M411.546011,176758.677437 L411.546011,176968.678322 L241.803554,176968.678322 " style="stroke:black"></path>
+<path d="M437.586891,176758.677437 L437.586891,176996.038136 L244.023930,176996.038136 " style="stroke:black"></path>
+<path d="M420.185860,176758.677437 L420.185860,176977.858592 L254.823489,176977.858592 " style="stroke:black"></path>
+<path d="M315.665420,176758.677437 L315.665420,176878.497655 L257.044875,176878.497655 " style="stroke:black"></path>
+<path d="M333.305071,176758.677437 L333.305071,176886.957903 L263.524004,176886.957903 " style="stroke:black"></path>
+<path d="M429.186673,176758.677437 L429.186673,176986.857867 L265.744380,176986.857867 " style="stroke:black"></path>
+<path d="M454.986911,176758.677437 L454.986911,177014.218669 L276.543939,177014.218669 " style="stroke:black"></path>
+<path d="M402.846506,176758.677437 L402.846506,176959.617727 L309.185280,176959.617727 " style="stroke:black"></path>
+<path d="M121.262234,177049.258378 L121.262234,177049.258378 L134.282169,177049.258378 L134.282169,177036.538335 L121.262234,177036.538335 " style="stroke:black"></path></svg>
+<h3>Figure 3-7.  Feature Information Returned in the ECX Register</h3>
+<h3>Table 3-10.  Feature Information Returned in the ECX Register</h3>
+<p><strong>Bit #</strong></p>
+<p><strong>Mnemonic</strong></p>
+<p><strong>Description</strong></p>
+<table>
+<tr>
+<td></td>
+<td></td>
+<td></td></tr>
+<tr>
+<td>0</td>
+<td>SSE3</td>
+<td>Streaming SIMD Extensions 3 (SSE3). A value of 1 indicates the processor supports this technology.</td></tr>
+<tr>
+<td>1</td>
+<td>PCLMULQDQ</td>
+<td>PCLMULQDQ. A value of 1 indicates the processor supports the PCLMULQDQ instruction.</td></tr>
+<tr>
+<td>2</td>
+<td>DTES64</td>
+<td>64-bit DS Area. A value of 1 indicates the processor supports DS area using 64-bit layout.</td></tr>
+<tr>
+<td>3</td>
+<td>MONITOR</td>
+<td>MONITOR/MWAIT. A value of 1 indicates the processor supports this feature.</td></tr>
+<tr>
+<td>4</td>
+<td>DS-CPL</td>
+<td>CPL Qualified Debug Store. A value of 1 indicates the processor supports the extensions to the Debug Store feature to allow for branch message storage qualified by CPL.</td></tr>
+<tr>
+<td>5</td>
+<td>VMX</td>
+<td>Virtual Machine Extensions. A value of 1 indicates that the processor supports this technology.</td></tr>
+<tr>
+<td>6</td>
+<td>SMX</td>
+<td>Safer Mode Extensions. A value of 1 indicates that the processor supports this technology. See Chapter 7, “Safer Mode Extensions Reference”.</td></tr>
+<tr>
+<td>7</td>
+<td>EIST</td>
+<td>Enhanced Intel SpeedStep® technology. A value of 1 indicates that the processor supports this technology.</td></tr>
+<tr>
+<td>8</td>
+<td>TM2</td>
+<td>Thermal Monitor 2. A value of 1 indicates whether the processor supports this technology.</td></tr>
+<tr>
+<td>9</td>
+<td>SSSE3</td>
+<td>A value of 1 indicates the presence of the Supplemental Streaming SIMD Extensions 3 (SSSE3). A value of 0 indicates the instruction extensions are not present in the processor.</td></tr></table>
+<h3>Table 3-10.  Feature Information Returned in the ECX Register  (Contd.)</h3>
+<p><strong>Bit #</strong></p>
+<p><strong>Mnemonic</strong></p>
+<p><strong>Description</strong></p>
+<table>
+<tr>
+<td></td>
+<td></td>
+<td></td></tr>
+<tr>
+<td>10</td>
+<td>CNXT-ID</td>
+<td>L1 Context ID. A value of 1 indicates the L1 data cache mode can be set to either adaptive mode or shared mode. A value of 0 indicates this feature is not supported. See definition of the IA32_MISC_ENABLE MSR Bit 24 (L1 Data Cache Context Mode) for details.</td></tr>
+<tr>
+<td>11</td>
+<td>SDBG</td>
+<td>A value of 1 indicates the processor supports IA32_DEBUG_INTERFACE MSR for silicon debug.</td></tr>
+<tr>
+<td>12</td>
+<td>FMA</td>
+<td>A value of 1 indicates the processor supports FMA extensions using YMM state.</td></tr>
+<tr>
+<td>13</td>
+<td>CMPXCHG16B</td>
+<td>CMPXCHG16B Available. A value of 1 indicates that the feature is available. See the “CMPXCHG8B/CMPXCHG16B—Compare and Exchange Bytes” section in this chapter for a description.</td></tr>
+<tr>
+<td>14</td>
+<td>xTPR Update Control</td>
+<td>xTPR Update Control. A value of 1 indicates that the processor supports changing IA32_MISC_ENABLE[bit 23].</td></tr>
+<tr>
+<td>15</td>
+<td>PDCM</td>
+<td>Perfmon and Debug Capability: A value of 1 indicates the processor supports the performance and debug feature indication MSR IA32_PERF_CAPABILITIES.</td></tr>
+<tr>
+<td>16</td>
+<td>Reserved</td>
+<td>Reserved</td></tr>
+<tr>
+<td>17</td>
+<td>PCID</td>
+<td>Process-context identifiers. A value of 1 indicates that the processor supports PCIDs and that software may set CR4.PCIDE to 1.</td></tr>
+<tr>
+<td>18</td>
+<td>DCA</td>
+<td> A value of 1 indicates the processor supports the ability to prefetch data from a memory mapped device.</td></tr>
+<tr>
+<td>19</td>
+<td>SSE4_1</td>
+<td>A value of 1 indicates that the processor supports SSE4.1.</td></tr>
+<tr>
+<td>20</td>
+<td>SSE4_2</td>
+<td>A value of 1 indicates that the processor supports SSE4.2.</td></tr>
+<tr>
+<td>21</td>
+<td>x2APIC</td>
+<td>A value of 1 indicates that the processor supports x2APIC feature.</td></tr>
+<tr>
+<td>22</td>
+<td>MOVBE</td>
+<td>A value of 1 indicates that the processor supports MOVBE instruction.</td></tr>
+<tr>
+<td>23</td>
+<td>POPCNT</td>
+<td>A value of 1 indicates that the processor supports the POPCNT instruction.</td></tr>
+<tr>
+<td>24</td>
+<td>TSC-Deadline</td>
+<td>A value of 1 indicates that the processor’s local APIC timer supports one-shot operation using a TSC deadline value.</td></tr>
+<tr>
+<td>25</td>
+<td>AESNI</td>
+<td>A value of 1 indicates that the processor supports the AESNI instruction extensions.</td></tr>
+<tr>
+<td>26</td>
+<td>XSAVE</td>
+<td>A value of 1 indicates that the processor supports the XSAVE/XRSTOR processor extended states feature, the XSETBV/XGETBV instructions, and XCR0.</td></tr>
+<tr>
+<td>27</td>
+<td>OSXSAVE</td>
+<td>A value of 1 indicates that the OS has set CR4.OSXSAVE[bit 18] to enable XSETBV/XGETBV instructions to access XCR0 and to support processor extended state management using XSAVE/XRSTOR.</td></tr>
+<tr>
+<td>28</td>
+<td>AVX</td>
+<td>A value of 1 indicates the processor supports the AVX instruction extensions.</td></tr>
+<tr>
+<td>29</td>
+<td>F16C</td>
+<td>A value of 1 indicates that processor supports 16-bit floating-point conversion instructions.</td></tr>
+<tr>
+<td>30</td>
+<td>RDRAND</td>
+<td>A value of 1 indicates that processor supports RDRAND instruction.</td></tr>
+<tr>
+<td>31</td>
+<td>Not Used</td>
+<td>Always returns 0.</td></tr></table>
+<svg width="568.7999849999999" height="589.0499774999771" viewBox="111.840000 178282.020010 379.199990 392.699985">
+<text x="192.11484092999967" y="178316.3864898" style="font-size:6.992100pt" textLength="7.726270499999998" lengthAdjust="spacingAndGlyphs">31</text>
+<text x="201.05493998999967" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">30</text>
+<text x="210.05517110999966" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">29</text>
+<text x="219.05540222999966" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">28</text>
+<text x="228.05563334999965" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">27</text>
+<text x="237.05586446999965" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">26</text>
+<text x="246.05609558999964" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">25</text>
+<text x="255.05632670999964" y="178316.3864898" style="font-size:6.992100pt" textLength="7.7864025600000275" lengthAdjust="spacingAndGlyphs">24</text>
+<text x="264.05655782999963" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">23</text>
+<text x="273.05678894999966" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">22</text>
+<text x="282.0570200699997" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">21</text>
+<text x="290.9971191299997" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">20</text>
+<text x="299.9973502499997" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">19</text>
+<text x="308.99758136999975" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">18</text>
+<text x="317.9978124899998" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">17</text>
+<text x="326.9980436099998" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">16</text>
+<text x="335.9982747299998" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">15</text>
+<text x="344.99850584999984" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">14</text>
+<text x="353.99873696999987" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">13</text>
+<text x="363.05840093999984" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">12</text>
+<text x="372.05863205999987" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">11</text>
+<text x="381.0588631799999" y="178316.3864898" style="font-size:6.992100pt" textLength="7.786402559999999" lengthAdjust="spacingAndGlyphs">10</text>
+<text x="391.97912495999987" y="178316.3864898" style="font-size:6.992100pt" textLength="3.887607600000024" lengthAdjust="spacingAndGlyphs">9</text>
+<text x="400.9793560799999" y="178316.3864898" style="font-size:6.992100pt" textLength="3.887607600000024" lengthAdjust="spacingAndGlyphs">8</text>
+<text x="409.9795871999999" y="178316.3864898" style="font-size:6.992100pt" textLength="3.887607600000024" lengthAdjust="spacingAndGlyphs">7</text>
+<text x="418.91968625999993" y="178316.3864898" style="font-size:6.992100pt" textLength="3.887607600000024" lengthAdjust="spacingAndGlyphs">6</text>
+<text x="427.91991737999996" y="178316.3864898" style="font-size:6.992100pt" textLength="3.887607600000024" lengthAdjust="spacingAndGlyphs">5</text>
+<text x="436.01956601999996" y="178316.3864898" style="font-size:6.992100pt" textLength="3.887607600000024" lengthAdjust="spacingAndGlyphs">4</text>
+<text x="445.91968040999996" y="178316.3864898" style="font-size:6.992100pt" textLength="3.887607600000024" lengthAdjust="spacingAndGlyphs">3</text>
+<text x="454.91991153" y="178316.3864898" style="font-size:6.992100pt" textLength="3.887607600000024" lengthAdjust="spacingAndGlyphs">2</text>
+<text x="463.92014265" y="178316.3864898" style="font-size:6.992100pt" textLength="3.887607600000024" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="476.88" y="178316.3864898" style="font-size:6.992100pt" textLength="3.887607600000024" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="165.54" y="178340.9207068" style="font-size:9.988600pt" textLength="20.520579839999982" lengthAdjust="spacingAndGlyphs">EDX</text>
+<text x="118.92" y="178375.244558" style="font-size:7.991000pt" textLength="73.3853485" lengthAdjust="spacingAndGlyphs">PBE–Pend. Brk. EN.</text>
+<text x="118.92" y="178384.244558" style="font-size:7.991000pt" textLength="70.45984340000003" lengthAdjust="spacingAndGlyphs">TM–Therm. Monitor</text>
+<text x="118.92" y="178393.1848888" style="font-size:7.991000pt" textLength="73.18637259999998" lengthAdjust="spacingAndGlyphs">HTT–Multi-threading</text>
+<text x="118.92" y="178402.1851521" style="font-size:7.991000pt" textLength="54.426700999999994" lengthAdjust="spacingAndGlyphs">SS–Self Snoop</text>
+<text x="118.92" y="178411.1854154" style="font-size:7.991000pt" textLength="86.8549781" lengthAdjust="spacingAndGlyphs">SSE2–SSE2 Extensions</text>
+<text x="118.92" y="178420.18567869999" style="font-size:7.991000pt" textLength="77.8587103" lengthAdjust="spacingAndGlyphs">SSE–SSE Extensions</text>
+<text x="118.92" y="178429.18594199998" style="font-size:7.991000pt" textLength="97.7363228" lengthAdjust="spacingAndGlyphs">FXSR–FXSAVE/FXRSTOR</text>
+<text x="118.92" y="178438.1862053" style="font-size:7.991000pt" textLength="85.6587254" lengthAdjust="spacingAndGlyphs">MMX–MMX Technology</text>
+<text x="118.92" y="178447.1265361" style="font-size:7.991000pt" textLength="134.46136060000003" lengthAdjust="spacingAndGlyphs">ACPI–Thermal Monitor and Clock Ctrl</text>
+<text x="118.92" y="178456.1267994" style="font-size:7.991000pt" textLength="60.718015299999976" lengthAdjust="spacingAndGlyphs">DS–Debug Store</text>
+<text x="118.92" y="178465.1270627" style="font-size:7.991000pt" textLength="106.10769440000009" lengthAdjust="spacingAndGlyphs">CLFSH–CLFLUSH instruction</text>
+<text x="118.92" y="178474.127326" style="font-size:7.991000pt" textLength="110.72489420000007" lengthAdjust="spacingAndGlyphs">PSN–Processor Serial Number</text>
+<text x="118.92" y="178483.1875218" style="font-size:7.991000pt" textLength="110.53151199999998" lengthAdjust="spacingAndGlyphs">PSE-36 – Page Size Extension</text>
+<text x="118.92" y="178492.1278526" style="font-size:7.991000pt" textLength="93.19024289999994" lengthAdjust="spacingAndGlyphs">PAT–Page Attribute Table</text>
+<text x="118.92" y="178501.18804839998" style="font-size:7.991000pt" textLength="164.87910209999995" lengthAdjust="spacingAndGlyphs">CMOV–Conditional Move/Compare Instruction</text>
+<text x="118.92" y="178510.18831169998" style="font-size:7.991000pt" textLength="122.74655459999995" lengthAdjust="spacingAndGlyphs">MCA–Machine Check Architecture</text>
+<text x="118.92" y="178519.188575" style="font-size:7.991000pt" textLength="73.92234370000001" lengthAdjust="spacingAndGlyphs">PGE–PTE Global Bit</text>
+<text x="118.92" y="178528.1888383" style="font-size:7.991000pt" textLength="138.9267314" lengthAdjust="spacingAndGlyphs">MTRR–Memory Type Range Registers</text>
+<text x="118.92" y="178537.1291691" style="font-size:7.991000pt" textLength="114.90578539999997" lengthAdjust="spacingAndGlyphs">SEP–SYSENTER and SYSEXIT</text>
+<text x="118.92" y="178546.1294324" style="font-size:7.991000pt" textLength="71.68885919999998" lengthAdjust="spacingAndGlyphs">APIC–APIC on Chip</text>
+<text x="118.92" y="178555.1296957" style="font-size:7.991000pt" textLength="88.07999839999998" lengthAdjust="spacingAndGlyphs">CX8–CMPXCHG8B Inst.</text>
+<text x="118.92" y="178564.12995899998" style="font-size:7.991000pt" textLength="115.20305060000005" lengthAdjust="spacingAndGlyphs">MCE–Machine Check Exception</text>
+<text x="118.92" y="178573.1302223" style="font-size:7.991000pt" textLength="123.49451219999993" lengthAdjust="spacingAndGlyphs">PAE–Physical Address Extensions</text>
+<text x="118.92" y="178582.1304856" style="font-size:7.991000pt" textLength="131.1682695" lengthAdjust="spacingAndGlyphs">MSR–RDMSR and WRMSR Support</text>
+<text x="118.92" y="178591.0708164" style="font-size:7.991000pt" textLength="94.62542650000002" lengthAdjust="spacingAndGlyphs">TSC–Time Stamp Counter</text>
+<text x="118.92" y="178600.1909447" style="font-size:7.991000pt" textLength="98.56019490000001" lengthAdjust="spacingAndGlyphs">PSE–Page Size Extensions</text>
+<text x="118.92" y="178609.0705439" style="font-size:7.991000pt" textLength="96.14931019999999" lengthAdjust="spacingAndGlyphs">DE–Debugging Extensions</text>
+<text x="118.92" y="178618.07080719998" style="font-size:7.991000pt" textLength="139.24317499999995" lengthAdjust="spacingAndGlyphs">VME–Virtual-8086 Mode Enhancement</text>
+<text x="118.92" y="178627.131003" style="font-size:7.991000pt" textLength="81.46265129999996" lengthAdjust="spacingAndGlyphs">FPU–x87 FPU on Chip</text>
+<text x="139.1995598" y="178646.75050619998" style="font-size:7.991000pt" textLength="34.441209999999984" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="457.5" y="178661.0284216" style="font-size:5.993200pt" textLength="26.250215999999966" lengthAdjust="spacingAndGlyphs">OM16523</text>
+<rect x="121.74" y="178637.52" width="13.500000000000014" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="191.52" y="178320.3" width="287.88" height="35.94000000000233" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M200.460000,178320.300000 L200.460000,178356.240000 " style="stroke:black"></path>
+<path d="M209.460000,178320.300000 L209.460000,178356.240000 " style="stroke:black"></path>
+<path d="M218.460000,178320.300000 L218.460000,178356.240000 " style="stroke:black"></path>
+<path d="M227.460000,178320.300000 L227.460000,178356.240000 " style="stroke:black"></path>
+<path d="M236.460000,178320.300000 L236.460000,178356.240000 " style="stroke:black"></path>
+<path d="M245.460000,178320.300000 L245.460000,178356.240000 " style="stroke:black"></path>
+<path d="M254.460000,178320.300000 L254.460000,178356.240000 " style="stroke:black"></path>
+<path d="M263.460000,178320.300000 L263.460000,178356.240000 " style="stroke:black"></path>
+<path d="M272.460000,178320.300000 L272.460000,178356.240000 " style="stroke:black"></path>
+<path d="M281.460000,178320.300000 L281.460000,178356.240000 " style="stroke:black"></path>
+<path d="M290.400000,178320.300000 L290.400000,178356.240000 " style="stroke:black"></path>
+<path d="M299.400000,178320.300000 L299.400000,178356.240000 " style="stroke:black"></path>
+<path d="M308.400000,178320.300000 L308.400000,178356.240000 " style="stroke:black"></path>
+<path d="M317.400000,178320.300000 L317.400000,178356.240000 " style="stroke:black"></path>
+<path d="M326.400000,178320.300000 L326.400000,178356.240000 " style="stroke:black"></path>
+<path d="M335.400000,178320.300000 L335.400000,178356.240000 " style="stroke:black"></path>
+<path d="M344.400000,178320.300000 L344.400000,178356.240000 " style="stroke:black"></path>
+<path d="M353.400000,178320.300000 L353.400000,178356.240000 " style="stroke:black"></path>
+<path d="M362.400000,178320.300000 L362.400000,178356.240000 " style="stroke:black"></path>
+<path d="M371.400000,178320.300000 L371.400000,178356.240000 " style="stroke:black"></path>
+<path d="M380.460000,178320.300000 L380.460000,178356.240000 " style="stroke:black"></path>
+<path d="M389.460000,178320.300000 L389.460000,178356.240000 " style="stroke:black"></path>
+<path d="M398.460000,178320.300000 L398.460000,178356.240000 " style="stroke:black"></path>
+<path d="M407.460000,178320.300000 L407.460000,178356.240000 " style="stroke:black"></path>
+<path d="M416.460000,178320.300000 L416.460000,178356.240000 " style="stroke:black"></path>
+<path d="M425.460000,178320.300000 L425.460000,178356.240000 " style="stroke:black"></path>
+<path d="M434.460000,178320.300000 L434.460000,178356.240000 " style="stroke:black"></path>
+<path d="M443.400000,178320.300000 L443.400000,178356.240000 " style="stroke:black"></path>
+<path d="M452.400000,178320.300000 L452.400000,178356.240000 " style="stroke:black"></path>
+<path d="M461.400000,178320.300000 L461.400000,178356.240000 " style="stroke:black"></path>
+<path d="M470.400000,178320.300000 L470.400000,178356.240000 " style="stroke:black"></path>
+<path d="M213.960000,178356.240000 L213.960000,178381.800000 L191.520000,178381.800000 " style="stroke:black"></path>
+<path d="M196.020000,178356.240000 L196.020000,178372.800000 L192.780000,178372.800000 " style="stroke:black"></path>
+<path d="M222.960000,178356.240000 L222.960000,178390.080000 " style="stroke:black"></path>
+<path d="M231.960000,178356.420000 L231.960000,178400.280000 L175.680000,178400.280000 " style="stroke:black"></path>
+<path d="M285.960000,178356.420000 L285.960000,178454.220000 L182.520000,178454.220000 " style="stroke:black"></path>
+<path d="M393.960000,178356.420000 L393.960000,178544.220000 L193.680000,178544.220000 " style="stroke:black"></path>
+<path d="M357.900000,178356.420000 L357.900000,178517.280000 L194.820000,178517.280000 " style="stroke:black"></path>
+<path d="M249.960000,178356.420000 L249.960000,178418.460000 L199.560000,178418.460000 " style="stroke:black"></path>
+<path d="M474.900000,178356.420000 L474.900000,178625.160000 L202.680000,178625.160000 " style="stroke:black"></path>
+<path d="M267.960000,178356.420000 L267.960000,178436.280000 L205.680000,178436.280000 " style="stroke:black"></path>
+<path d="M402.960000,178356.420000 L402.960000,178553.220000 L207.180000,178553.220000 " style="stroke:black"></path>
+<path d="M240.960000,178356.420000 L240.960000,178409.280000 L208.560000,178409.280000 " style="stroke:black"></path>
+<path d="M330.900000,178356.420000 L330.900000,178490.220000 L213.960000,178490.220000 " style="stroke:black"></path>
+<path d="M438.960000,178356.420000 L438.960000,178589.160000 L216.180000,178589.160000 " style="stroke:black"></path>
+<path d="M258.960000,178356.420000 L258.960000,178426.860000 L218.460000,178426.860000 " style="stroke:black"></path>
+<path d="M456.900000,178356.420000 L456.900000,178607.160000 L218.460000,178607.160000 " style="stroke:black"></path>
+<path d="M447.900000,178356.420000 L447.900000,178597.080000 L219.360000,178597.080000 " style="stroke:black"></path>
+<path d="M303.900000,178356.420000 L303.900000,178462.140000 L227.460000,178462.140000 " style="stroke:black"></path>
+<path d="M312.900000,178356.420000 L312.900000,178472.220000 L231.960000,178472.220000 " style="stroke:black"></path>
+<path d="M321.900000,178356.420000 L321.900000,178480.080000 L236.460000,178480.080000 " style="stroke:black"></path>
+<path d="M375.960000,178356.420000 L375.960000,178534.620000 L236.460000,178534.620000 " style="stroke:black"></path>
+<path d="M411.960000,178356.420000 L411.960000,178562.220000 L236.460000,178562.220000 " style="stroke:black"></path>
+<path d="M348.900000,178356.420000 L348.900000,178508.280000 L243.180000,178508.280000 " style="stroke:black"></path>
+<path d="M420.960000,178356.420000 L420.960000,178571.220000 L245.460000,178571.220000 " style="stroke:black"></path>
+<path d="M429.960000,178356.420000 L429.960000,178580.220000 L252.180000,178580.220000 " style="stroke:black"></path>
+<path d="M276.960000,178356.420000 L276.960000,178444.860000 L255.540000,178444.860000 " style="stroke:black"></path>
+<path d="M366.900000,178356.420000 L366.900000,178526.280000 L258.960000,178526.280000 " style="stroke:black"></path>
+<path d="M465.900000,178356.420000 L465.900000,178616.160000 L260.040000,178616.160000 " style="stroke:black"></path>
+<path d="M339.900000,178356.420000 L339.900000,178499.280000 L285.960000,178499.280000 " style="stroke:black"></path>
+<path d="M222.960000,178390.080000 L200.460000,178390.080000 " style="stroke:black"></path>
+<path d="M121.740000,178651.020000 L121.740000,178651.020000 L135.240000,178651.020000 L135.240000,178637.520000 L121.740000,178637.520000 " style="stroke:black"></path>
+<rect x="200.46" y="178320.3" width="9.0" height="35.94000000000233" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="290.4" y="178320.3" width="9.0" height="35.94000000000233" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="380.46" y="178320.3" width="9.0" height="35.94000000000233" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<h3>Figure 3-8.  Feature Information Returned in the EDX Register</h3>
+<h3>Table 3-11.  More on Feature Information Returned in the EDX Register</h3>
+<table>
+<tr>
+<th>Bit #</th>
+<th>Mnemonic</th>
+<th>Description</th></tr>
+<tr>
+<td>0</td>
+<td>FPU</td>
+<td>Floating-Point Unit On-Chip. The processor contains an x87 FPU.</td></tr>
+<tr>
+<td>1</td>
+<td>VME</td>
+<td>Virtual 8086 Mode Enhancements. Virtual 8086 mode enhancements, including CR4.VME for controlling the feature, CR4.PVI for protected mode virtual interrupts, software interrupt indirection, expansion of the TSS with the software indirection bitmap, and EFLAGS.VIF and EFLAGS.VIP flags.</td></tr>
+<tr>
+<td>2</td>
+<td>DE</td>
+<td>Debugging Extensions. Support for I/O breakpoints, including CR4.DE for controlling the feature, and optional trapping of accesses to DR4 and DR5.</td></tr>
+<tr>
+<td>3</td>
+<td>PSE</td>
+<td>Page Size Extension. Large pages of size 4 MByte are supported, including CR4.PSE for controlling the feature, the defined dirty bit in PDE (Page Directory Entries), optional reserved bit trapping in CR3, PDEs, and PTEs.</td></tr>
+<tr>
+<td>4</td>
+<td>TSC</td>
+<td>Time Stamp Counter. The RDTSC instruction is supported, including CR4.TSD for controlling privilege.</td></tr>
+<tr>
+<td>5</td>
+<td>MSR</td>
+<td>Model Specific Registers RDMSR and WRMSR Instructions. The RDMSR and WRMSR instructions are supported. Some of the MSRs are implementation dependent.</td></tr>
+<tr>
+<td>6</td>
+<td>PAE</td>
+<td>Physical Address Extension. Physical addresses greater than 32 bits are supported: extended page table entry formats, an extra level in the page translation tables is defined, 2-MByte pages are supported instead of 4 Mbyte pages if PAE bit is 1.</td></tr>
+<tr>
+<td>7</td>
+<td>MCE</td>
+<td>Machine Check Exception. Exception 18 is defined for Machine Checks, including CR4.MCE for controlling the feature. This feature does not define the model-specific implementations of machine-check error logging, reporting, and processor shutdowns. Machine Check exception handlers may have to depend on processor version to do model specific processing of the exception, or test for the presence of the Machine Check feature.</td></tr>
+<tr>
+<td>8</td>
+<td>CX8</td>
+<td>CMPXCHG8B Instruction. The compare-and-exchange 8 bytes (64 bits) instruction is supported (implicitly locked and atomic).</td></tr>
+<tr>
+<td>9</td>
+<td>APIC</td>
+<td>APIC On-Chip. The processor contains an Advanced Programmable Interrupt Controller (APIC), responding to memory mapped commands in the physical address range FFFE0000H to FFFE0FFFH (by default - some processors permit the APIC to be relocated).</td></tr>
+<tr>
+<td>10</td>
+<td>Reserved</td>
+<td>Reserved</td></tr>
+<tr>
+<td>11</td>
+<td>SEP</td>
+<td>SYSENTER and SYSEXIT Instructions. The SYSENTER and SYSEXIT and associated MSRs are supported.</td></tr>
+<tr>
+<td>12</td>
+<td>MTRR</td>
+<td>Memory Type Range Registers. MTRRs are supported. The MTRRcap MSR contains feature bits that describe what memory types are supported, how many variable MTRRs are supported, and whether fixed MTRRs are supported.</td></tr>
+<tr>
+<td>13</td>
+<td>PGE</td>
+<td>Page Global Bit. The global bit is supported in paging-structure entries that map a page, indicating TLB entries that are common to different processes and need not be flushed. The CR4.PGE bit controls this feature.</td></tr>
+<tr>
+<td>14</td>
+<td>MCA</td>
+<td>Machine Check Architecture. A value of 1 indicates the Machine Check Architecture of reporting machine errors is supported. The MCG_CAP MSR contains feature bits describing how many banks of error reporting MSRs are supported.</td></tr>
+<tr>
+<td>15</td>
+<td>CMOV</td>
+<td>Conditional Move Instructions. The conditional move instruction CMOV is supported. In addition, if x87 FPU is present as indicated by the CPUID.FPU feature bit, then the FCOMI and FCMOV instructions are supported</td></tr>
+<tr>
+<td>16</td>
+<td>PAT</td>
+<td>Page Attribute Table. Page Attribute Table is supported. This feature augments the Memory Type Range Registers (MTRRs), allowing an operating system to specify attributes of memory accessed through a linear address on a 4KB granularity.</td></tr>
+<tr>
+<td>17</td>
+<td>PSE-36</td>
+<td>36-Bit Page Size Extension. 4-MByte pages addressing physical memory beyond 4 GBytes are supported with 32-bit paging. This feature indicates that upper bits of the physical address of a 4-MByte page are encoded in bits 20:13 of the page-directory entry. Such physical addresses are limited by MAXPHYADDR and may be up to 40 bits in size.</td></tr>
+<tr>
+<td>18</td>
+<td>PSN</td>
+<td>Processor Serial Number. The processor supports the 96-bit processor identification number feature and the feature is enabled.</td></tr>
+<tr>
+<td>19</td>
+<td>CLFSH</td>
+<td>CLFLUSH Instruction. CLFLUSH Instruction is supported.</td></tr>
+<tr>
+<td>20</td>
+<td>Reserved</td>
+<td>Reserved</td></tr></table>
+<h3>Table 3-11.  More on Feature Information Returned in the EDX Register (Contd.)</h3>
+<table>
+<tr>
+<th>Bit #</th>
+<th>Mnemonic</th>
+<th>Description</th></tr>
+<tr>
+<td>21</td>
+<td>DS</td>
+<td>Debug Store. The processor supports the ability to write debug information into a memory resident buffer. This feature is used by the branch trace store (BTS) and processor event-based sampling (PEBS) facilities (see Chapter 24, “Introduction to Virtual-Machine Extensions,” in the <em>Intel<sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 3C).</td></tr>
+<tr>
+<td>22</td>
+<td>ACPI</td>
+<td>Thermal Monitor and Software Controlled Clock Facilities. The processor implements internal MSRs that allow processor temperature to be monitored and processor performance to be modulated in predefined duty cycles under software control.</td></tr>
+<tr>
+<td>23</td>
+<td>MMX</td>
+<td>Intel MMX Technology. The processor supports the Intel MMX technology.</td></tr>
+<tr>
+<td>24</td>
+<td>FXSR</td>
+<td>FXSAVE and FXRSTOR Instructions. The FXSAVE and FXRSTOR instructions are supported for fast save and restore of the floating-point context. Presence of this bit also indicates that CR4.OSFXSR is available for an operating system to indicate that it supports the FXSAVE and FXRSTOR instructions.</td></tr>
+<tr>
+<td>25</td>
+<td>SSE</td>
+<td>SSE. The processor supports the SSE extensions.</td></tr>
+<tr>
+<td>26</td>
+<td>SSE2</td>
+<td>SSE2. The processor supports the SSE2 extensions.</td></tr>
+<tr>
+<td>27</td>
+<td>SS</td>
+<td>Self Snoop. The processor supports the management of conflicting memory types by performing a snoop of its own cache structure for transactions issued to the bus.</td></tr>
+<tr>
+<td>28</td>
+<td>HTT</td>
+<td>Max APIC IDs reserved field is Valid. A value of 0 for HTT indicates there is only a single logical processor in the package and software should assume only a single APIC ID is reserved. A value of 1 for HTT indicates the value in CPUID.1.EBX[23:16] (the Maximum number of addressable IDs for logical processors in this package) is valid for the package.</td></tr>
+<tr>
+<td>29</td>
+<td>TM</td>
+<td>Thermal Monitor. The processor implements the thermal monitor automatic thermal control circuitry (TCC).</td></tr>
+<tr>
+<td>30</td>
+<td>Reserved</td>
+<td>Reserved</td></tr>
+<tr>
+<td>31</td>
+<td>PBE</td>
+<td>Pending Break Enable. The processor supports the use of the FERR#/PBE# pin when the processor is in the stop-clock state (STPCLK# is asserted) to signal the processor that an interrupt is pending and that the processor should return to normal operation to handle the interrupt.</td></tr></table>
+<h2>INPUT EAX = 02H: TLB/Cache/Prefetch Information Returned in EAX, EBX, ECX, EDX</h2>
+<p>When CPUID executes with EAX set to 02H, the processor returns information about the processor’s internal TLBs, cache, and prefetch hardware in the EAX, EBX, ECX, and EDX registers. The information is reported in encoded form and fall into the following categories:</p>
+<h3>Table 3-12.  Encoding of CPUID Leaf 2 Descriptors</h3>
+<p><strong> Value</strong></p>
+<p><strong>Type</strong></p>
+<p><strong>Description</strong></p>
+<table>
+<tr>
+<td></td>
+<td></td>
+<td></td></tr>
+<tr>
+<td>00H</td>
+<td>General</td>
+<td>Null descriptor, this byte contains no information</td></tr>
+<tr>
+<td>01H</td>
+<td>TLB</td>
+<td>Instruction TLB: 4 KByte pages, 4-way set associative, 32 entries</td></tr>
+<tr>
+<td>02H</td>
+<td>TLB</td>
+<td>Instruction TLB: 4 MByte pages, fully associative, 2 entries</td></tr>
+<tr>
+<td>03H</td>
+<td>TLB</td>
+<td>Data TLB: 4 KByte pages, 4-way set associative, 64 entries</td></tr>
+<tr>
+<td>04H</td>
+<td>TLB</td>
+<td>Data TLB: 4 MByte pages, 4-way set associative, 8 entries</td></tr>
+<tr>
+<td>05H</td>
+<td>TLB</td>
+<td>Data TLB1: 4 MByte pages, 4-way set associative, 32 entries</td></tr>
+<tr>
+<td>06H</td>
+<td>Cache</td>
+<td>1st-level instruction cache: 8 KBytes, 4-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>08H</td>
+<td>Cache</td>
+<td>1st-level instruction cache: 16 KBytes, 4-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>09H</td>
+<td>Cache</td>
+<td>1st-level instruction cache: 32KBytes, 4-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>0AH</td>
+<td>Cache</td>
+<td>1st-level data cache: 8 KBytes, 2-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>0BH</td>
+<td>TLB</td>
+<td>Instruction TLB: 4 MByte pages, 4-way set associative, 4 entries</td></tr>
+<tr>
+<td>0CH</td>
+<td>Cache</td>
+<td>1st-level data cache: 16 KBytes, 4-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>0DH</td>
+<td>Cache</td>
+<td>1st-level data cache: 16 KBytes, 4-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>0EH</td>
+<td>Cache</td>
+<td>1st-level data cache: 24 KBytes, 6-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>1DH</td>
+<td>Cache</td>
+<td>2nd-level cache: 128 KBytes, 2-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>21H</td>
+<td>Cache</td>
+<td>2nd-level cache: 256 KBytes, 8-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>22H</td>
+<td>Cache</td>
+<td>3rd-level cache: 512 KBytes, 4-way set associative, 64 byte line size, 2 lines per sector</td></tr>
+<tr>
+<td>23H</td>
+<td>Cache</td>
+<td>3rd-level cache: 1 MBytes, 8-way set associative, 64 byte line size, 2 lines per sector</td></tr>
+<tr>
+<td>24H</td>
+<td>Cache</td>
+<td>2nd-level cache: 1 MBytes, 16-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>25H</td>
+<td>Cache</td>
+<td>3rd-level cache: 2 MBytes, 8-way set associative, 64 byte line size, 2 lines per sector</td></tr>
+<tr>
+<td>29H</td>
+<td>Cache</td>
+<td>3rd-level cache: 4 MBytes, 8-way set associative, 64 byte line size, 2 lines per sector</td></tr>
+<tr>
+<td>2CH</td>
+<td>Cache</td>
+<td>1st-level data cache: 32 KBytes, 8-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>30H</td>
+<td>Cache</td>
+<td>1st-level instruction cache: 32 KBytes, 8-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>40H</td>
+<td>Cache</td>
+<td>No 2nd-level cache or, if processor contains a valid 2nd-level cache, no 3rd-level cache</td></tr>
+<tr>
+<td>41H</td>
+<td>Cache</td>
+<td>2nd-level cache: 128 KBytes, 4-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>42H</td>
+<td>Cache</td>
+<td>2nd-level cache: 256 KBytes, 4-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>43H</td>
+<td>Cache</td>
+<td>2nd-level cache: 512 KBytes, 4-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>44H</td>
+<td>Cache</td>
+<td>2nd-level cache: 1 MByte, 4-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>45H</td>
+<td>Cache</td>
+<td>2nd-level cache: 2 MByte, 4-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>46H</td>
+<td>Cache</td>
+<td>3rd-level cache: 4 MByte, 4-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>47H</td>
+<td>Cache</td>
+<td>3rd-level cache: 8 MByte, 8-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>48H</td>
+<td>Cache</td>
+<td>2nd-level cache: 3MByte, 12-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>49H</td>
+<td>Cache</td>
+<td>
+<p>3rd-level cache: 4MB, 16-way set associative, 64-byte line size (Intel Xeon processor MP, Family 0FH, Model 06H);</p>
+<p>2nd-level cache: 4 MByte, 16-way set associative, 64 byte line size</p></td></tr>
+<tr>
+<td>4AH</td>
+<td>Cache</td>
+<td>3rd-level cache: 6MByte, 12-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>4BH</td>
+<td>Cache</td>
+<td>3rd-level cache: 8MByte, 16-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>4CH</td>
+<td>Cache</td>
+<td>3rd-level cache: 12MByte, 12-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>4DH</td>
+<td>Cache</td>
+<td>3rd-level cache: 16MByte, 16-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>4EH</td>
+<td>Cache</td>
+<td>2nd-level cache: 6MByte, 24-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>4FH</td>
+<td>TLB</td>
+<td>Instruction TLB: 4 KByte pages, 32 entries</td></tr></table>
+<h3>Table 3-12.  Encoding of CPUID Leaf 2 Descriptors  (Contd.)</h3>
+<p><strong> Value</strong></p>
+<p><strong>Type</strong></p>
+<p><strong>Description</strong></p>
+<table>
+<tr>
+<td></td>
+<td></td>
+<td></td></tr>
+<tr>
+<td>50H</td>
+<td>TLB</td>
+<td>Instruction TLB: 4 KByte and 2-MByte or 4-MByte pages, 64 entries</td></tr>
+<tr>
+<td>51H</td>
+<td>TLB</td>
+<td>Instruction TLB: 4 KByte and 2-MByte or 4-MByte pages, 128 entries</td></tr>
+<tr>
+<td>52H</td>
+<td>TLB</td>
+<td>Instruction TLB: 4 KByte and 2-MByte or 4-MByte pages, 256 entries</td></tr>
+<tr>
+<td>55H</td>
+<td>TLB</td>
+<td>Instruction TLB: 2-MByte or 4-MByte pages, fully associative, 7 entries</td></tr>
+<tr>
+<td>56H</td>
+<td>TLB</td>
+<td>Data TLB0: 4 MByte pages, 4-way set associative, 16 entries</td></tr>
+<tr>
+<td>57H</td>
+<td>TLB</td>
+<td>Data TLB0: 4 KByte pages, 4-way associative, 16 entries</td></tr>
+<tr>
+<td>59H</td>
+<td>TLB</td>
+<td>Data TLB0: 4 KByte pages, fully associative, 16 entries</td></tr>
+<tr>
+<td>5AH</td>
+<td>TLB</td>
+<td>Data TLB0: 2 MByte or 4 MByte pages, 4-way set associative, 32 entries</td></tr>
+<tr>
+<td>5BH</td>
+<td>TLB</td>
+<td>Data TLB: 4 KByte and 4 MByte pages, 64 entries</td></tr>
+<tr>
+<td>5CH</td>
+<td>TLB</td>
+<td>Data TLB: 4 KByte and 4 MByte pages,128 entries</td></tr>
+<tr>
+<td>5DH</td>
+<td>TLB</td>
+<td>Data TLB: 4 KByte and 4 MByte pages,256 entries</td></tr>
+<tr>
+<td>60H</td>
+<td>Cache</td>
+<td>1st-level data cache: 16 KByte, 8-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>61H</td>
+<td>TLB</td>
+<td>Instruction TLB: 4 KByte pages, fully associative, 48 entries</td></tr>
+<tr>
+<td>63H</td>
+<td>TLB</td>
+<td>Data TLB: 2 MByte or 4 MByte pages, 4-way set associative, 32 entries and a separate array with 1 GByte pages, 4-way set associative, 4 entries</td></tr>
+<tr>
+<td>64H</td>
+<td>TLB</td>
+<td>Data TLB: 4 KByte pages, 4-way set associative, 512 entries</td></tr>
+<tr>
+<td>66H</td>
+<td>Cache</td>
+<td>1st-level data cache: 8 KByte, 4-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>67H</td>
+<td>Cache</td>
+<td>1st-level data cache: 16 KByte, 4-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>68H</td>
+<td>Cache</td>
+<td>1st-level data cache: 32 KByte, 4-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>6AH</td>
+<td>Cache</td>
+<td>uTLB: 4 KByte pages, 8-way set associative, 64 entries</td></tr>
+<tr>
+<td>6BH</td>
+<td>Cache</td>
+<td>DTLB: 4 KByte pages, 8-way set associative, 256 entries</td></tr>
+<tr>
+<td>6CH</td>
+<td>Cache</td>
+<td>DTLB: 2M/4M pages, 8-way set associative, 128 entries</td></tr>
+<tr>
+<td>6DH</td>
+<td>Cache</td>
+<td>DTLB: 1 GByte pages, fully associative, 16 entries</td></tr>
+<tr>
+<td>70H</td>
+<td>Cache</td>
+<td>Trace cache: 12 K-μop, 8-way set associative</td></tr>
+<tr>
+<td>71H</td>
+<td>Cache</td>
+<td>Trace cache: 16 K-μop, 8-way set associative</td></tr>
+<tr>
+<td>72H</td>
+<td>Cache</td>
+<td>Trace cache: 32 K-μop, 8-way set associative</td></tr>
+<tr>
+<td>76H</td>
+<td>TLB</td>
+<td>Instruction TLB: 2M/4M pages, fully associative, 8 entries</td></tr>
+<tr>
+<td>78H</td>
+<td>Cache</td>
+<td>2nd-level cache: 1 MByte, 4-way set associative, 64byte line size</td></tr>
+<tr>
+<td>79H</td>
+<td>Cache</td>
+<td>2nd-level cache: 128 KByte, 8-way set associative, 64 byte line size, 2 lines per sector</td></tr>
+<tr>
+<td>7AH</td>
+<td>Cache</td>
+<td>2nd-level cache: 256 KByte, 8-way set associative, 64 byte line size, 2 lines per sector</td></tr>
+<tr>
+<td>7BH</td>
+<td>Cache</td>
+<td>2nd-level cache: 512 KByte, 8-way set associative, 64 byte line size, 2 lines per sector</td></tr>
+<tr>
+<td>7CH</td>
+<td>Cache</td>
+<td>2nd-level cache: 1 MByte, 8-way set associative, 64 byte line size, 2 lines per sector</td></tr>
+<tr>
+<td>7DH</td>
+<td>Cache</td>
+<td>2nd-level cache: 2 MByte, 8-way set associative, 64byte line size</td></tr>
+<tr>
+<td>7FH</td>
+<td>Cache</td>
+<td>2nd-level cache: 512 KByte, 2-way set associative, 64-byte line size</td></tr>
+<tr>
+<td>80H</td>
+<td>Cache</td>
+<td>2nd-level cache: 512 KByte, 8-way set associative, 64-byte line size</td></tr>
+<tr>
+<td>82H</td>
+<td>Cache</td>
+<td>2nd-level cache: 256 KByte, 8-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>83H</td>
+<td>Cache</td>
+<td>2nd-level cache: 512 KByte, 8-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>84H</td>
+<td>Cache</td>
+<td>2nd-level cache: 1 MByte, 8-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>85H</td>
+<td>Cache</td>
+<td>2nd-level cache: 2 MByte, 8-way set associative, 32 byte line size</td></tr>
+<tr>
+<td>86H</td>
+<td>Cache</td>
+<td>2nd-level cache: 512 KByte, 4-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>87H</td>
+<td>Cache</td>
+<td>2nd-level cache: 1 MByte, 8-way set associative, 64 byte line size</td></tr></table>
+<h3>Table 3-12.  Encoding of CPUID Leaf 2 Descriptors  (Contd.)</h3>
+<p><strong> Value</strong></p>
+<p><strong>Type</strong></p>
+<p><strong>Description</strong></p>
+<table>
+<tr>
+<td></td>
+<td></td>
+<td></td></tr>
+<tr>
+<td>A0H</td>
+<td>DTLB</td>
+<td>DTLB: 4k pages, fully associative, 32 entries</td></tr>
+<tr>
+<td>B0H</td>
+<td>TLB</td>
+<td>Instruction TLB: 4 KByte pages, 4-way set associative, 128 entries</td></tr>
+<tr>
+<td>B1H</td>
+<td>TLB</td>
+<td>Instruction TLB: 2M pages, 4-way, 8 entries or 4M pages, 4-way, 4 entries</td></tr>
+<tr>
+<td>B2H</td>
+<td>TLB</td>
+<td>Instruction TLB: 4KByte pages, 4-way set associative, 64 entries</td></tr>
+<tr>
+<td>B3H</td>
+<td>TLB</td>
+<td>Data TLB: 4 KByte pages, 4-way set associative, 128 entries</td></tr>
+<tr>
+<td>B4H</td>
+<td>TLB</td>
+<td>Data TLB1: 4 KByte pages, 4-way associative, 256 entries</td></tr>
+<tr>
+<td>B5H</td>
+<td>TLB</td>
+<td>Instruction TLB: 4KByte pages, 8-way set associative, 64 entries</td></tr>
+<tr>
+<td>B6H</td>
+<td>TLB</td>
+<td>Instruction TLB: 4KByte pages, 8-way set associative, 128 entries</td></tr>
+<tr>
+<td>BAH</td>
+<td>TLB</td>
+<td>Data TLB1: 4 KByte pages, 4-way associative, 64 entries</td></tr>
+<tr>
+<td>C0H</td>
+<td>TLB</td>
+<td>Data TLB: 4 KByte and 4 MByte pages, 4-way associative, 8 entries</td></tr>
+<tr>
+<td>C1H</td>
+<td>STLB</td>
+<td>Shared 2nd-Level TLB: 4 KByte/2MByte pages, 8-way associative, 1024 entries</td></tr>
+<tr>
+<td>C2H</td>
+<td>DTLB</td>
+<td>DTLB: 4 KByte/2 MByte pages, 4-way associative, 16 entries</td></tr>
+<tr>
+<td>C3H</td>
+<td>STLB</td>
+<td>Shared 2nd-Level TLB: 4 KByte /2 MByte pages, 6-way associative, 1536 entries. Also 1GBbyte pages, 4-way, 16 entries.</td></tr>
+<tr>
+<td>C4H</td>
+<td>DTLB</td>
+<td>DTLB: 2M/4M Byte pages, 4-way associative, 32 entries</td></tr>
+<tr>
+<td>CAH</td>
+<td>STLB</td>
+<td>Shared 2nd-Level TLB: 4 KByte pages, 4-way associative, 512 entries</td></tr>
+<tr>
+<td>D0H</td>
+<td>Cache</td>
+<td>3rd-level cache: 512 KByte, 4-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>D1H</td>
+<td>Cache</td>
+<td>3rd-level cache: 1 MByte, 4-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>D2H</td>
+<td>Cache</td>
+<td>3rd-level cache: 2 MByte, 4-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>D6H</td>
+<td>Cache</td>
+<td>3rd-level cache: 1 MByte, 8-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>D7H</td>
+<td>Cache</td>
+<td>3rd-level cache: 2 MByte, 8-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>D8H</td>
+<td>Cache</td>
+<td>3rd-level cache: 4 MByte, 8-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>DCH</td>
+<td>Cache</td>
+<td>3rd-level cache: 1.5 MByte, 12-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>DDH</td>
+<td>Cache</td>
+<td>3rd-level cache: 3 MByte, 12-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>DEH</td>
+<td>Cache</td>
+<td>3rd-level cache: 6 MByte, 12-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>E2H</td>
+<td>Cache</td>
+<td>3rd-level cache: 2 MByte, 16-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>E3H</td>
+<td>Cache</td>
+<td>3rd-level cache: 4 MByte, 16-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>E4H</td>
+<td>Cache</td>
+<td>3rd-level cache: 8 MByte, 16-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>EAH</td>
+<td>Cache</td>
+<td>3rd-level cache: 12MByte, 24-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>EBH</td>
+<td>Cache</td>
+<td>3rd-level cache: 18MByte, 24-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>ECH</td>
+<td>Cache</td>
+<td>3rd-level cache: 24MByte, 24-way set associative, 64 byte line size</td></tr>
+<tr>
+<td>F0H</td>
+<td>Prefetch</td>
+<td>64-Byte prefetching</td></tr>
+<tr>
+<td>F1H</td>
+<td>Prefetch</td>
+<td>128-Byte prefetching</td></tr>
+<tr>
+<td>FEH</td>
+<td>General</td>
+<td>CPUID leaf 2 does not report TLB descriptor information; use CPUID leaf 18H to query TLB and other address translation parameters.</td></tr>
+<tr>
+<td>FFH</td>
+<td>General</td>
+<td>CPUID leaf 2 does not report cache descriptor information, use CPUID leaf 4 to query cache parameters</td></tr></table>
+<h2>Example 3-1.  Example of Cache and TLB Interpretation</h2>
+<p>The first member of the family of Pentium 4 processors returns the following information about caches and TLBs when the CPUID executes with an input value of 2:</p>
+<p>EAX</p>
+<p>66 5B 50 01H</p>
+<p>EBX</p>
+<p>0H</p>
+<p>ECX</p>
+<p>0H</p>
+<p>EDX</p>
+<p>00 7A 70 00H</p>
+<p>Which means:</p>
+<p>— 50H - a 64-entry instruction TLB, for mapping 4-KByte and 2-MByte or 4-MByte pages.</p>
+<p>— 5BH - a 64-entry data TLB, for mapping 4-KByte and 4-MByte pages.</p>
+<p>— 66H - an 8-KByte 1st level data cache, 4-way set associative, with a 64-Byte cache line size.</p>
+<p>— 00H - NULL descriptor.</p>
+<p>— 70H - Trace cache: 12 K-μop, 8-way set associative.</p>
+<p>— 7AH - a 256-KByte 2nd level cache, 8-way set associative, with a sectored, 64-byte cache line size.</p>
+<p>— 00H - NULL descriptor.</p>
+<h2>INPUT EAX = 04H: Returns Deterministic Cache Parameters for Each Level</h2>
+<p>When CPUID executes with EAX set to 04H and ECX contains an index value, the processor returns encoded data that describe a set of deterministic cache parameters (for the cache level associated with the input in ECX). Valid index values start from 0.</p>
+<p>Software can enumerate the deterministic cache parameters for each level of the cache hierarchy starting with an index value of 0, until the parameters report the value associated with the cache type field is 0. The architecturally defined fields reported by deterministic cache parameters are documented in Table 3-8.</p>
+<p>This Cache Size in Bytes</p>
+<p>= (Ways + 1) * (Partitions + 1) * (Line_Size + 1) * (Sets + 1)</p>
+<p>= (EBX[31:22] + 1) * (EBX[21:12] + 1) * (EBX[11:0] + 1) * (ECX + 1)</p>
+<p>The CPUID leaf 04H also reports data that can be used to derive the topology of processor cores in a physical package. This information is constant for all valid index values. Software can query the raw data reported by executing CPUID with EAX=04H and ECX=0 and use it as part of the topology enumeration algorithm described in Chapter 9, “Multiple-Processor Management,” in the Intel<em><sup>® </sup></em>64 and IA-32 Architectures Software Developer’s Manual, Volume 3A.</p>
+<h2>INPUT EAX = 05H: Returns MONITOR and MWAIT Features</h2>
+<p>When CPUID executes with EAX set to 05H, the processor returns information about features available to MONITOR/MWAIT instructions. The MONITOR instruction is used for address-range monitoring in conjunction with MWAIT instruction. The MWAIT instruction optionally provides additional extensions for advanced power manage-ment. See Table 3-8.</p>
+<h2>INPUT EAX = 06H: Returns Thermal and Power Management Features</h2>
+<p>When CPUID executes with EAX set to 06H, the processor returns information about thermal and power manage-ment features. See Table 3-8.</p>
+<h2>INPUT EAX = 07H: Returns Structured Extended Feature Enumeration Information</h2>
+<p>When CPUID executes with EAX set to 07H and ECX = 0, the processor returns information about the maximum input value for sub-leaves that contain extended feature flags. See Table 3-8.</p>
+<p>When CPUID executes with EAX set to 07H and the input value of ECX is invalid (see leaf 07H entry in Table 3-8), the processor returns 0 in EAX/EBX/ECX/EDX. In subleaf 0, EAX returns the maximum input value of the highest leaf 7 sub-leaf, and EBX, ECX &amp; EDX contain information of extended feature flags.</p>
+<h2>INPUT EAX = 09H: Returns Direct Cache Access Information</h2>
+<p>When CPUID executes with EAX set to 09H, the processor returns information about Direct Cache Access capabili-ties. See Table 3-8.</p>
+<h2>INPUT EAX = 0AH: Returns Architectural Performance Monitoring Features</h2>
+<p>When CPUID executes with EAX set to 0AH, the processor returns information about support for architectural performance monitoring capabilities. Architectural performance monitoring is supported if the version ID (see Table 3-8) is greater than Pn 0. See Table 3-8.</p>
+<p>For each version of architectural performance monitoring capability, software must enumerate this leaf to discover the programming facilities and the architectural performance events available in the processor. The details are described in Chapter 24, “Introduction to Virtual-Machine Extensions,” in the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 3C.</p>
+<h2>INPUT EAX = 0BH: Returns Extended Topology Information</h2>
+<p><em>CPUID leaf 1FH is a preferred superset to leaf 0BH. Intel recommends first checking for the existence of Leaf 1FH before using leaf 0BH.</em></p>
+<p>When CPUID executes with EAX set to 0BH, the processor returns information about extended topology enumera-tion data. Software must detect the presence of CPUID leaf 0BH by verifying (a) the highest leaf index supported by CPUID is &gt;= 0BH, and (b) CPUID.0BH:EBX[15:0] reports a non-zero value. See Table 3-8.</p>
+<h2>INPUT EAX = 0DH: Returns Processor Extended States Enumeration Information</h2>
+<p>When CPUID executes with EAX set to 0DH and ECX = 0, the processor returns information about the bit-vector representation of all processor state extensions that are supported in the processor and storage size requirements of the XSAVE/XRSTOR area. See Table 3-8.</p>
+<p>When CPUID executes with EAX set to 0DH and ECX = n (n &gt; 1, and is a valid sub-leaf index), the processor returns information about the size and offset of each processor extended state save area within the XSAVE/XRSTOR area. See Table 3-8. Software can use the forward-extendable technique depicted below to query the valid sub-leaves and obtain size and offset information for each processor extended state save area:</p>
+<p>For i = 2 to 62 // sub-leaf 1 is reserved</p>
+<p>IF (CPUID.(EAX=0DH, ECX=0):VECTOR[i] = 1 ) // VECTOR is the 64-bit value of EDX:EAX</p>
+<p>Execute CPUID.(EAX=0DH, ECX = i) to examine size and offset for sub-leaf i;</p>
+<p>FI;</p>
+<h2>INPUT EAX = 0FH: Returns Intel Resource Director Technology (Intel RDT) Monitoring Enumeration Information</h2>
+<p>When CPUID executes with EAX set to 0FH and ECX = 0, the processor returns information about the bit-vector representation of QoS monitoring resource types that are supported in the processor and maximum range of RMID values the processor can use to monitor of any supported resource types. Each bit, starting from bit 1, corresponds to a specific resource type if the bit is set. The bit position corresponds to the sub-leaf index (or ResID) that soft-ware must use to query QoS monitoring capability available for that type. See Table 3-8.</p>
+<p>When CPUID executes with EAX set to 0FH and ECX = n (n &gt;= 1, and is a valid ResID), the processor returns infor-mation software can use to program IA32_PQR_ASSOC, IA32_QM_EVTSEL MSRs before reading QoS data from the IA32_QM_CTR MSR.</p>
+<h2>INPUT EAX = 10H: Returns Intel Resource Director Technology (Intel RDT) Allocation Enumeration Information</h2>
+<p>When CPUID executes with EAX set to 10H and ECX = 0, the processor returns information about the bit-vector representation of QoS Enforcement resource types that are supported in the processor. Each bit, starting from bit 1, corresponds to a specific resource type if the bit is set. The bit position corresponds to the sub-leaf index (or ResID) that software must use to query QoS enforcement capability available for that type. See Table 3-8.</p>
+<p>When CPUID executes with EAX set to 10H and ECX = n (n &gt;= 1, and is a valid ResID), the processor returns infor-mation about available classes of service and range of QoS mask MSRs that software can use to configure each class of services using capability bit masks in the QoS Mask registers, IA32_resourceType_Mask_n.</p>
+<h2>INPUT EAX = 12H: Returns Intel SGX Enumeration Information</h2>
+<p>When CPUID executes with EAX set to 12H and ECX = 0H, the processor returns information about Intel SGX capa-bilities. See Table 3-8.</p>
+<p>When CPUID executes with EAX set to 12H and ECX = 1H, the processor returns information about Intel SGX attri-butes. See Table 3-8.</p>
+<p>When CPUID executes with EAX set to 12H and ECX = n (n &gt; 1), the processor returns information about Intel SGX Enclave Page Cache. See Table 3-8.</p>
+<h2>INPUT EAX = 14H: Returns Intel Processor Trace Enumeration Information</h2>
+<p>When CPUID executes with EAX set to 14H and ECX = 0H, the processor returns information about Intel Processor Trace extensions. See Table 3-8.</p>
+<p>When CPUID executes with EAX set to 14H and ECX = n (n &gt; 0 and less than the number of non-zero bits in CPUID.(EAX=14H, ECX= 0H).EAX), the processor returns information about packet generation in Intel Processor Trace. See Table 3-8.</p>
+<h2>INPUT EAX = 15H: Returns Time Stamp Counter and Nominal Core Crystal Clock Information</h2>
+<p>When CPUID executes with EAX set to 15H and ECX = 0H, the processor returns information about Time Stamp Counter and Core Crystal Clock. See Table 3-8.</p>
+<h2>INPUT EAX = 16H: Returns Processor Frequency Information</h2>
+<p>When CPUID executes with EAX set to 16H, the processor returns information about Processor Frequency Informa-tion. See Table 3-8.</p>
+<h2>INPUT EAX = 17H: Returns System-On-Chip Information</h2>
+<p>When CPUID executes with EAX set to 17H, the processor returns information about the System-On-Chip Vendor Attribute Enumeration. See Table 3-8.</p>
+<h2>INPUT EAX = 18H: Returns Deterministic Address Translation Parameters Information</h2>
+<p>When CPUID executes with EAX set to 18H, the processor returns information about the Deterministic Address Translation Parameters. See Table 3-8.</p>
+<h2>INPUT EAX = 19H: Returns Key Locker Information</h2>
+<p>When CPUID executes with EAX set to 19H, the processor returns information about Key Locker. See Table 3-8.</p>
+<h2>INPUT EAX = 1AH: Returns Native Model ID Information</h2>
+<p>When CPUID executes with EAX set to 1AH, the processor returns information about Native Model Identification. See Table 3-8.</p>
+<h2>INPUT EAX = 1BH: Returns PCONFIG Information</h2>
+<p>When CPUID executes with EAX set to 1BH, the processor returns information about PCONFIG capabilities. This information is enumerated in sub-leaves selected by the value of ECX (starting with 0).</p>
+<p>Each sub-leaf of CPUID function 1BH enumerates its <strong>sub-leaf type</strong> in EAX. If a sub-leaf type is 0, the sub-leaf is invalid and zero is returned in EBX, ECX, and EDX. In this case, all subsequent sub-leaves (selected by larger input values of ECX) are also invalid.</p>
+<p>The only valid sub-leaf type currently defined is 1, indicating that the sub-leaf enumerates target identifiers for the PCONFIG instruction. Any non-zero value returned in EBX, ECX, or EDX indicates a valid target identifier of the PCONFIG instruction (any value of zero should be ignored). The only target identifier currently defined is 1, indi-cating MKTME. See the “PCONFIG—Platform Configuration” instruction in Chapter 4 of the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 2B for more information.</p>
+<h2>INPUT EAX = 1CH: Returns Last Branch Record Information</h2>
+<p>When CPUID executes with EAX set to 1CH, the processor returns information about LBRs (the architectural feature). See Table 3-8.</p>
+<h2>INPUT EAX = 1DH: Returns Tile Information</h2>
+<p>When CPUID executes with EAX set to 1DH and ECX = 0H, the processor returns information about tile architecture. See Table 3-8.</p>
+<p>When CPUID executes with EAX set to 1DH and ECX = 1H, the processor returns information about tile palette 1. See Table 3-8.</p>
+<h2>INPUT EAX = 1EH: Returns TMUL Information</h2>
+<p>When CPUID executes with EAX set to 1EH and ECX = 0H, the processor returns information about TMUL capabilities. See Table 3-8.</p>
+<h2>INPUT EAX = 1FH: Returns V2 Extended Topology Information</h2>
+<p>When CPUID executes with EAX set to 1FH, the processor returns information about extended topology enumera-tion data. Software must detect the presence of CPUID leaf 1FH by verifying (a) the highest leaf index supported by CPUID is &gt;= 1FH, and (b) CPUID.1FH:EBX[15:0] reports a non-zero value. See Table 3-8.</p>
+<h2>INPUT EAX = 20H: Returns History Reset Information</h2>
+<p>When CPUID executes with EAX set to 20H, the processor returns information about History Reset. See Table 3-8.</p>
+<h2>METHODS FOR RETURNING BRANDING INFORMATION</h2>
+<p>Use the following techniques to access branding information:</p>
+<p>1.</p>
+<p>Processor brand string method.</p>
+<p>2.</p>
+<p>Processor brand index; this method uses a software supplied brand string table.</p>
+<p>These two methods are discussed in the following sections. For methods that are available in early processors, see Section: “Identification of Earlier IA-32 Processors” in Chapter 20 of the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Soft-ware Developer’s Manual, Volume 1.</p>
+<h2>The Processor Brand String Method</h2>
+<p>Figure 3-9 describes the algorithm used for detection of the brand string. Processor brand identification software should execute this algorithm on all Intel 64 and IA-32 processors.</p>
+<p>This method (introduced with Pentium 4 processors) returns an ASCII brand identification string and the Processor Base frequency of the processor to the EAX, EBX, ECX, and EDX registers.</p>
+<svg width="568.7999849999999" height="475.65000000000873" viewBox="111.840000 186202.020010 379.199990 317.100000">
+<text x="172.32" y="186232.2465198" style="font-size:8.927600pt" textLength="45.865545" lengthAdjust="spacingAndGlyphs">Input: EAX=</text>
+<text x="172.32" y="186242.80638639" style="font-size:8.927600pt" textLength="47.25289404" lengthAdjust="spacingAndGlyphs">0x80000000</text>
+<text x="161.16" y="186263.8665198" style="font-size:8.927600pt" textLength="27.204182720000006" lengthAdjust="spacingAndGlyphs">CPUID</text>
+<text x="359.76" y="186291.46651980001" style="font-size:8.927600pt" textLength="63.998393359999966" lengthAdjust="spacingAndGlyphs">Processor Brand</text>
+<text x="290.34" y="186293.0865198" style="font-size:8.927600pt" textLength="20.922723359999964" lengthAdjust="spacingAndGlyphs">False</text>
+<text x="150.78" y="186301.2465198" style="font-size:8.927600pt" textLength="89.90450304000001" lengthAdjust="spacingAndGlyphs">IF (EAX &amp; 0x80000000)</text>
+<text x="372.5398594" y="186302.02638639" style="font-size:8.927600pt" textLength="38.35743340000005" lengthAdjust="spacingAndGlyphs">String Not</text>
+<text x="371.69977224" y="186311.80602444" style="font-size:8.927600pt" textLength="40.058141199999966" lengthAdjust="spacingAndGlyphs">Supported</text>
+<text x="161.94" y="186340.18651980002" style="font-size:8.927600pt" textLength="27.20061167999998" lengthAdjust="spacingAndGlyphs">CPUID</text>
+<text x="202.62039492" y="186345.04643304" style="font-size:8.927600pt" textLength="24.82140628000002" lengthAdjust="spacingAndGlyphs">True ≥</text>
+<text x="156.36025" y="186350.74638639" style="font-size:8.927600pt" textLength="32.86160284000002" lengthAdjust="spacingAndGlyphs">Function</text>
+<text x="202.62039492000002" y="186355.60629963002" style="font-size:8.927600pt" textLength="36.099643360000016" lengthAdjust="spacingAndGlyphs">Extended</text>
+<text x="149.1601406" y="186361.30625298" style="font-size:8.927600pt" textLength="40.05903396000002" lengthAdjust="spacingAndGlyphs">Supported</text>
+<text x="157.14" y="186384.8265198" style="font-size:8.927600pt" textLength="77.02911832000004" lengthAdjust="spacingAndGlyphs">EAX Return Value =</text>
+<text x="152.40033716" y="186395.38638639" style="font-size:8.927600pt" textLength="86.18258659999995" lengthAdjust="spacingAndGlyphs">Max. Extended CPUID</text>
+<text x="167.52012051999998" y="186405.94625298" style="font-size:8.927600pt" textLength="56.29923111999997" lengthAdjust="spacingAndGlyphs">Function Index</text>
+<text x="291.96" y="186456.2265198" style="font-size:8.927600pt" textLength="18.52387723999999" lengthAdjust="spacingAndGlyphs">True</text>
+<text x="359.76" y="186459.46651980001" style="font-size:8.927600pt" textLength="63.998393359999966" lengthAdjust="spacingAndGlyphs">Processor Brand</text>
+<text x="154.8" y="186461.9265198" style="font-size:8.927600pt" textLength="82.30265164000005" lengthAdjust="spacingAndGlyphs">IF (EAX Return Value</text>
+<text x="359.76" y="186470.02638639" style="font-size:8.927600pt" textLength="64.77688007999996" lengthAdjust="spacingAndGlyphs">String Supported</text>
+<text x="165.12030560000002" y="186472.48638639" style="font-size:8.927600pt" textLength="58.82127811999996" lengthAdjust="spacingAndGlyphs">≥ 0x80000004)</text>
+<text x="421.2" y="186504.2574712" style="font-size:6.492700pt" textLength="26.706422909999958" lengthAdjust="spacingAndGlyphs">OM15194</text>
+<rect x="147.54" y="186220.62" width="95.76000000000002" height="29.220000000001164" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="343.8" y="186280.26" width="95.69999999999999" height="36.47999999998137" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="343.8" y="186443.34" width="95.69999999999999" height="36.54000000000815" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="147.54" y="186373.98" width="95.76000000000002" height="36.539999999979045" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M195.420000,186240.060000 L195.420000,186265.920000 " style="stroke:black"></path>
+<path d="M195.420000,186269.280000 L193.260000,186264.900000 L194.640000,186265.560000 L196.200000,186265.560000 L197.640000,186264.900000 L195.420000,186269.280000 " style="stroke:black"></path>
+<path d="M133.200000,186298.500000 L195.420000,186269.280000 L257.640000,186298.500000 L195.420000,186327.720000 L133.200000,186298.500000 " style="stroke:black"></path>
+<path d="M133.200000,186298.500000 L195.420000,186269.280000 L257.640000,186298.500000 L195.420000,186327.720000 L133.200000,186298.500000 " style="stroke:black"></path>
+<path d="M343.800000,186298.500000 L339.420000,186300.720000 L340.140000,186299.340000 L340.140000,186297.720000 L339.420000,186296.340000 L343.800000,186298.500000 " style="stroke:black"></path>
+<path d="M257.640000,186298.500000 L340.500000,186298.500000 " style="stroke:black"></path>
+<path d="M195.420000,186327.720000 L195.420000,186370.620000 " style="stroke:black"></path>
+<path d="M195.420000,186373.980000 L193.260000,186369.540000 L194.640000,186370.260000 L196.200000,186370.260000 L197.640000,186369.540000 L195.420000,186373.980000 " style="stroke:black"></path>
+<path d="M195.420000,186403.200000 L195.420000,186429.060000 " style="stroke:black"></path>
+<path d="M195.420000,186432.420000 L193.260000,186427.980000 L194.640000,186428.700000 L196.200000,186428.700000 L197.640000,186427.980000 L195.420000,186432.420000 " style="stroke:black"></path>
+<path d="M133.200000,186461.640000 L195.420000,186432.420000 L257.640000,186461.640000 L195.420000,186490.860000 L133.200000,186461.640000 " style="stroke:black"></path>
+<path d="M133.200000,186461.640000 L195.420000,186432.420000 L257.640000,186461.640000 L195.420000,186490.860000 L133.200000,186461.640000 " style="stroke:black"></path>
+<path d="M343.800000,186461.640000 L339.420000,186463.860000 L340.140000,186462.420000 L340.140000,186460.800000 L339.420000,186459.420000 L343.800000,186461.640000 " style="stroke:black"></path>
+<path d="M257.640000,186461.640000 L340.500000,186461.640000 " style="stroke:black"></path>
+<rect x="147.54" y="186220.62" width="95.76000000000002" height="29.220000000001164" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="343.8" y="186280.26" width="95.69999999999999" height="36.47999999998137" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="343.8" y="186443.34" width="95.69999999999999" height="36.54000000000815" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="147.54" y="186373.98" width="95.76000000000002" height="36.539999999979045" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<h3>Figure 3-9.  Determination of Support for the Processor Brand String</h3>
+<h2>How Brand Strings Work</h2>
+<p>To use the brand string method, execute CPUID with EAX input of 8000002H through 80000004H. For each input value, CPUID returns 16 ASCII characters using EAX, EBX, ECX, and EDX. The returned string will be NULL-termi-nated.</p>
+<p>Table 3-13 shows the brand string that is returned by the first processor in the Pentium 4 processor family.</p>
+<h3>Table 3-13.  Processor Brand String Returned with Pentium 4 Processor</h3>
+<table>
+<tr>
+<th>EAX Input Value</th>
+<th>Return Values</th>
+<th>ASCII Equivalent</th></tr>
+<tr>
+<td>80000002H</td>
+<td>
+<p>EAX = 20202020H</p>
+<p>EBX = 20202020H</p>
+<p>ECX = 20202020H</p>
+<p>EDX = 6E492020H</p></td>
+<td>
+<p>“</p>
+<p> ”</p>
+<p>“</p>
+<p>”</p>
+<p>“</p>
+<p>”</p>
+<p>“nI  ”</p></td></tr>
+<tr>
+<td>80000003H</td>
+<td>
+<p>EAX = 286C6574H</p>
+<p>EBX = 50202952H</p>
+<p>ECX = 69746E65H</p>
+<p>EDX = 52286D75H</p></td>
+<td>
+<p>“(let”</p>
+<p>“P )R”</p>
+<p>“itne”</p>
+<p>“R(mu”</p></td></tr></table>
+<h3>Table 3-13.  Processor Brand String Returned with Pentium 4 Processor  (Contd.)</h3>
+<table>
+<tr>
+<th>EAX Input Value</th>
+<th>Return Values</th>
+<th>ASCII Equivalent</th></tr>
+<tr>
+<td>80000004H</td>
+<td>
+<p>EAX = 20342029H</p>
+<p>EBX = 20555043H</p>
+<p>ECX = 30303531H</p>
+<p>EDX = 007A484DH</p></td>
+<td>
+<p>“ 4 )”</p>
+<p>“ UPC”</p>
+<p>“0051”</p>
+<p>“\0zHM”</p></td></tr></table>
+<h2>Extracting the Processor Frequency from Brand Strings</h2>
+<p>Figure 3-10 provides an algorithm which software can use to extract the Processor Base frequency from the processor brand string.</p>
+<svg width="568.7999849999999" height="443.969977500019" viewBox="112.380000 187117.980010 379.199990 295.979985">
+<text x="176.52" y="187141.188914" style="font-size:6.953000pt" textLength="68.73596740000005" lengthAdjust="spacingAndGlyphs">Scan "Brand String" in</text>
+<text x="180.1202634" y="187149.5290375" style="font-size:6.953000pt" textLength="61.73012459999998" lengthAdjust="spacingAndGlyphs">Reverse Byte Order</text>
+<text x="177.66" y="187165.308914" style="font-size:6.953000pt" textLength="29.254747500000008" lengthAdjust="spacingAndGlyphs">"zHM", or</text>
+<text x="214.8603117" y="187169.50808670002" style="font-size:6.953000pt" textLength="19.0456576" lengthAdjust="spacingAndGlyphs">Match</text>
+<text x="178.0201654" y="187173.6490375" style="font-size:6.953000pt" textLength="28.897363300000023" lengthAdjust="spacingAndGlyphs">"zHG", or</text>
+<text x="214.8603117" y="187177.908006" style="font-size:6.953000pt" textLength="29.543297000000024" lengthAdjust="spacingAndGlyphs">Substring</text>
+<text x="189.2402215" y="187182.1087526" style="font-size:6.953000pt" textLength="17.648104599999982" lengthAdjust="spacingAndGlyphs">"zHT"</text>
+<text x="288.54" y="187205.92891400002" style="font-size:6.953000pt" textLength="17.064052599999968" lengthAdjust="spacingAndGlyphs">False</text>
+<text x="177.84" y="187212.408914" style="font-size:6.953000pt" textLength="66.39489230000001" lengthAdjust="spacingAndGlyphs">IF Substring Matched</text>
+<text x="352.26" y="187212.408914" style="font-size:6.953000pt" textLength="38.48555030000006" lengthAdjust="spacingAndGlyphs">Report Error</text>
+<text x="153.66" y="187248.76891400001" style="font-size:6.953000pt" textLength="53.3524549" lengthAdjust="spacingAndGlyphs">Determine "Freq"</text>
+<text x="291.84" y="187248.948914" style="font-size:6.953000pt" textLength="25.09615819999999" lengthAdjust="spacingAndGlyphs">If "zHM"</text>
+<text x="214.3798537" y="187252.0688078" style="font-size:6.953000pt" textLength="14.37254630000001" lengthAdjust="spacingAndGlyphs">True</text>
+<text x="354.54" y="187254.948914" style="font-size:6.953000pt" textLength="54.74653139999998" lengthAdjust="spacingAndGlyphs">Multiplier = 1 x 106</text>
+<text x="160.619953" y="187257.10903750002" style="font-size:6.953000pt" textLength="46.376509999999996" lengthAdjust="spacingAndGlyphs">and "Multiplier"</text>
+<text x="291.6001215" y="187268.9888506" style="font-size:6.953000pt" textLength="24.599018700000045" lengthAdjust="spacingAndGlyphs">If "zHG"</text>
+<text x="354.54" y="187274.508914" style="font-size:6.953000pt" textLength="54.74653139999998" lengthAdjust="spacingAndGlyphs">Multiplier = 1 x 109</text>
+<text x="177.48" y="187287.76891400001" style="font-size:6.953000pt" textLength="66.84475140000004" lengthAdjust="spacingAndGlyphs">Determine "Multiplier"</text>
+<text x="292.0798785" y="187288.8487045" style="font-size:6.953000pt" textLength="23.519913099999997" lengthAdjust="spacingAndGlyphs">If "zHT"</text>
+<text x="353.22" y="187294.068914" style="font-size:6.953000pt" textLength="54.86403710000002" lengthAdjust="spacingAndGlyphs">Multiplier = 1 x 1012</text>
+<text x="275.22" y="187318.608914" style="font-size:6.953000pt" textLength="35.34070839999998" lengthAdjust="spacingAndGlyphs">Scan Digits</text>
+<text x="276.1802093" y="187327.0088333" style="font-size:6.953000pt" textLength="33.4321099" lengthAdjust="spacingAndGlyphs">Until Blank</text>
+<text x="360.54" y="187330.36891400002" style="font-size:6.953000pt" textLength="45.458713999999986" lengthAdjust="spacingAndGlyphs">Reverse Digits</text>
+<text x="184.26" y="187334.688914" style="font-size:6.953000pt" textLength="53.288487300000014" lengthAdjust="spacingAndGlyphs">Determine "Freq"</text>
+<text x="355.67985300000004" y="187338.7090375" style="font-size:6.953000pt" textLength="55.140071199999966" lengthAdjust="spacingAndGlyphs">To Decimal Value</text>
+<text x="265.92" y="187341.168914" style="font-size:6.953000pt" textLength="53.61319240000006" lengthAdjust="spacingAndGlyphs">In Reverse Order</text>
+<text x="186.36" y="187374.168914" style="font-size:6.953000pt" textLength="49.2175058" lengthAdjust="spacingAndGlyphs">Processor Base</text>
+<text x="191.4600255" y="187381.8491978" style="font-size:6.953000pt" textLength="38.84710630000001" lengthAdjust="spacingAndGlyphs">Frequency =</text>
+<text x="359.16" y="187385.748914" style="font-size:6.953000pt" textLength="48.016722699999946" lengthAdjust="spacingAndGlyphs">"Freq" = X.YZ if</text>
+<text x="181.2001787" y="187389.4689905" style="font-size:6.953000pt" textLength="59.350808" lengthAdjust="spacingAndGlyphs">"Freq" x "Multiplier"</text>
+<text x="360.300292" y="187394.92895990002" style="font-size:6.953000pt" textLength="45.74865410000001" lengthAdjust="spacingAndGlyphs">Digits = "ZY.X"</text>
+<rect x="171.72" y="187131.96" width="78.29999999999998" height="23.460000000020955" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="332.28" y="187195.56" width="78.24000000000001" height="29.279999999998836" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="171.72" y="187270.92" width="78.29999999999998" height="29.279999999998836" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="344.04" y="187373.1" width="78.24000000000001" height="29.39999999999418" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="171.72" y="187317.84" width="78.29999999999998" height="29.39999999999418" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="171.72" y="187364.76" width="78.29999999999998" height="29.39999999999418" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M210.900000,187155.420000 L210.900000,187183.980000 " style="stroke:black"></path>
+<path d="M210.900000,187186.680000 L209.160000,187183.200000 L209.580000,187183.380000 L210.140000,187183.643000 L211.730000,187183.626000 L212.280000,187183.380000 L212.700000,187183.200000 L210.900000,187186.680000 " style="stroke:black"></path>
+<path d="M160.020000,187210.260000 L210.900000,187186.680000 L261.780000,187210.260000 L210.900000,187233.720000 L160.020000,187210.260000 " style="stroke:black"></path>
+<path d="M160.020000,187210.260000 L210.900000,187186.680000 L261.780000,187210.260000 L210.900000,187233.720000 L160.020000,187210.260000 " style="stroke:black"></path>
+<path d="M261.780000,187210.260000 L274.020000,187210.260000 L274.020000,187220.760000 L332.280000,187220.760000 L332.280000,187212.840000 " style="stroke:black"></path>
+<path d="M332.280000,187210.260000 L334.020000,187213.740000 L334.020000,187213.800000 L333.600000,187213.560000 L332.958000,187213.314000 L331.523000,187213.300000 L330.900000,187213.560000 L330.540000,187213.800000 L330.480000,187213.740000 L332.280000,187210.260000 " style="stroke:black"></path>
+<path d="M210.900000,187233.720000 L210.900000,187268.220000 " style="stroke:black"></path>
+<path d="M317.940000,187261.080000 L415.740000,187261.080000 L448.380000,187245.480000 L350.520000,187245.480000 L317.940000,187261.080000 " style="stroke:black"></path>
+<path d="M317.940000,187261.080000 L415.740000,187261.080000 L448.380000,187245.480000 L350.520000,187245.480000 L317.940000,187261.080000 " style="stroke:black"></path>
+<path d="M334.200000,187253.280000 L285.300000,187253.280000 L252.780000,187275.900000 " style="stroke:black"></path>
+<path d="M317.940000,187280.640000 L415.740000,187280.640000 L448.380000,187264.980000 L350.520000,187264.980000 L317.940000,187280.640000 " style="stroke:black"></path>
+<path d="M317.940000,187280.640000 L415.740000,187280.640000 L448.380000,187264.980000 L350.520000,187264.980000 L317.940000,187280.640000 " style="stroke:black"></path>
+<path d="M210.900000,187270.920000 L209.160000,187267.380000 L209.580000,187267.500000 L211.096000,187267.875000 L210.714000,187267.840000 L212.280000,187267.500000 L212.700000,187267.380000 L210.900000,187270.920000 " style="stroke:black"></path>
+<path d="M334.200000,187272.840000 L285.300000,187272.840000 L253.140000,187284.480000 " style="stroke:black"></path>
+<path d="M250.020000,187277.700000 L252.360000,187273.440000 L252.540000,187273.980000 L252.857000,187275.245000 L253.424000,187275.968000 L254.460000,187276.740000 L254.880000,187276.980000 L250.020000,187277.700000 " style="stroke:black"></path>
+<path d="M250.020000,187285.620000 L253.380000,187282.020000 L253.380000,187283.160000 L253.500000,187283.700000 L253.680000,187284.240000 L253.920000,187284.720000 L254.160000,187285.260000 L254.880000,187286.100000 L250.020000,187285.620000 " style="stroke:black"></path>
+<path d="M317.940000,187300.200000 L415.740000,187300.200000 L448.380000,187284.540000 L350.520000,187284.540000 L317.940000,187300.200000 " style="stroke:black"></path>
+<path d="M317.940000,187300.200000 L415.740000,187300.200000 L448.380000,187284.540000 L350.520000,187284.540000 L317.940000,187300.200000 " style="stroke:black"></path>
+<path d="M250.020000,187292.880000 L254.460000,187290.720000 L254.160000,187291.260000 L253.823000,187292.514000 L253.820000,187293.304000 L254.160000,187294.560000 L254.460000,187295.100000 L250.020000,187292.880000 " style="stroke:black"></path>
+<path d="M334.200000,187292.880000 L253.380000,187292.880000 " style="stroke:black"></path>
+<path d="M210.900000,187294.380000 L210.900000,187315.140000 " style="stroke:black"></path>
+<path d="M332.280000,187332.000000 L383.160000,187308.540000 L434.040000,187332.000000 L383.160000,187355.580000 L332.280000,187332.000000 " style="stroke:black"></path>
+<path d="M332.280000,187332.000000 L383.160000,187308.540000 L434.040000,187332.000000 L383.160000,187355.580000 L332.280000,187332.000000 " style="stroke:black"></path>
+<path d="M210.900000,187317.840000 L209.160000,187314.300000 L210.000000,187314.660000 L210.420000,187314.720000 L211.320000,187314.720000 L211.860000,187314.660000 L212.700000,187314.300000 L210.900000,187317.840000 " style="stroke:black"></path>
+<path d="M250.560000,187332.000000 L254.100000,187330.260000 L253.920000,187330.740000 L253.740000,187331.160000 L253.680000,187331.580000 L253.680000,187332.540000 L253.740000,187332.960000 L253.920000,187333.380000 L254.100000,187333.860000 L250.560000,187332.000000 " style="stroke:black"></path>
+<path d="M253.200000,187332.000000 L332.280000,187332.000000 " style="stroke:black"></path>
+<path d="M210.900000,187341.300000 L210.900000,187362.180000 " style="stroke:black"></path>
+<path d="M383.160000,187355.580000 L383.160000,187370.460000 " style="stroke:black"></path>
+<path d="M210.900000,187364.760000 L209.160000,187361.280000 L209.580000,187361.460000 L211.096000,187361.835000 L210.714000,187361.800000 L212.280000,187361.460000 L212.700000,187361.280000 L210.900000,187364.760000 " style="stroke:black"></path>
+<path d="M383.160000,187373.100000 L381.420000,187369.560000 L381.840000,187369.800000 L382.394000,187370.057000 L383.994000,187370.049000 L384.540000,187369.800000 L384.960000,187369.560000 L383.160000,187373.100000 " style="stroke:black"></path>
+<rect x="171.72" y="187131.96" width="78.29999999999998" height="23.460000000020955" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="332.28" y="187195.56" width="78.24000000000001" height="29.279999999998836" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="171.72" y="187270.92" width="78.29999999999998" height="29.279999999998836" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="344.04" y="187373.1" width="78.24000000000001" height="29.39999999999418" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="171.72" y="187317.84" width="78.29999999999998" height="29.39999999999418" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="171.72" y="187364.76" width="78.29999999999998" height="29.39999999999418" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<h3>Figure 3-10.  Algorithm for Extracting Processor Frequency</h3>
+<h2>The Processor Brand Index Method</h2>
+<p>The brand index method (introduced with Pentium<sup>®</sup> III Xeon<sup>®</sup> processors) provides an entry point into a brand identification table that is maintained in memory by system software and is accessible from system- and user-level code. In this table, each brand index is associate with an ASCII brand identification string that identifies the official Intel family and model number of a processor.</p>
+<p>When CPUID executes with EAX set to 1, the processor returns a brand index to the low byte in EBX. Software can then use this index to locate the brand identification string for the processor in the brand identification table. The first entry (brand index 0) in this table is reserved, allowing for backward compatibility with processors that do not support the brand identification feature. Starting with processor signature family ID = 0FH, model = 03H, brand index method is no longer supported. Use brand string method instead.</p>
+<p>Table 3-14 shows brand indices that have identification strings associated with them.</p>
+<h3>Table 3-14.  Mapping of Brand Indices; and Intel 64 and IA-32 Processor Brand Strings</h3>
+<table>
+<tr>
+<th>Brand Index</th>
+<th>Brand String</th></tr>
+<tr>
+<td>00H</td>
+<td>This processor does not support the brand identification feature</td></tr>
+<tr>
+<td>01H</td>
+<td>Intel(R) Celeron(R) processor<sup>1</sup></td></tr>
+<tr>
+<td>02H</td>
+<td>Intel(R) Pentium(R) III processor<sup>1</sup></td></tr>
+<tr>
+<td>03H</td>
+<td>Intel(R) Pentium(R) III Xeon(R) processor; If processor signature = 000006B1h, then Intel(R) Celeron(R) processor</td></tr>
+<tr>
+<td>04H</td>
+<td>Intel(R) Pentium(R) III processor</td></tr>
+<tr>
+<td>06H</td>
+<td>Mobile Intel(R) Pentium(R) III processor-M</td></tr>
+<tr>
+<td>07H</td>
+<td>Mobile Intel(R) Celeron(R) processor<sup>1</sup></td></tr>
+<tr>
+<td>08H</td>
+<td>Intel(R) Pentium(R) 4 processor</td></tr>
+<tr>
+<td>09H</td>
+<td>Intel(R) Pentium(R) 4 processor</td></tr>
+<tr>
+<td>0AH</td>
+<td>Intel(R) Celeron(R) processor<sup>1</sup></td></tr>
+<tr>
+<td>0BH</td>
+<td>Intel(R) Xeon(R) processor; If processor signature = 00000F13h, then Intel(R) Xeon(R) processor MP</td></tr>
+<tr>
+<td>0CH</td>
+<td>Intel(R) Xeon(R) processor MP</td></tr>
+<tr>
+<td>0EH</td>
+<td>Mobile Intel(R) Pentium(R) 4 processor-M; If processor signature = 00000F13h, then Intel(R) Xeon(R) processor</td></tr>
+<tr>
+<td>0FH</td>
+<td>Mobile Intel(R) Celeron(R) processor<sup>1</sup></td></tr>
+<tr>
+<td>11H</td>
+<td>Mobile Genuine Intel(R) processor</td></tr>
+<tr>
+<td>12H</td>
+<td>Intel(R) Celeron(R) M processor</td></tr>
+<tr>
+<td>13H</td>
+<td>Mobile Intel(R) Celeron(R) processor<sup>1</sup></td></tr>
+<tr>
+<td>14H</td>
+<td>Intel(R) Celeron(R) processor</td></tr>
+<tr>
+<td>15H</td>
+<td>Mobile Genuine Intel(R) processor</td></tr>
+<tr>
+<td>16H</td>
+<td>Intel(R) Pentium(R) M processor</td></tr>
+<tr>
+<td>17H</td>
+<td>Mobile Intel(R) Celeron(R) processor<sup>1</sup></td></tr>
+<tr>
+<td>18H – 0FFH</td>
+<td>RESERVED</td></tr></table>
+<p>NOTES:</p>
+<p>1.</p>
+<p>Indicates versions of these processors that were introduced after the Pentium III</p>
+<h2>IA-32 Architecture Compatibility</h2>
+<p>CPUID is not supported in early models of the Intel486 processor or in any IA-32 processor earlier than the Intel486 processor.</p>
+<h2>Operation</h2>
+<pre>IA32_BIOS_SIGN_ID MSR := Update with installed microcode revision number;
+CASE (EAX) OF
+    EAX = 0:
+         EAX := Highest basic function input value understood by CPUID;
+         EBX := Vendor identification string;
+         EDX := Vendor identification string;
+         ECX := Vendor identification string;
+    BREAK;
+    EAX = 1H:
+         EAX[3:0] := Stepping ID;
+         EAX[7:4] := Model;
+         EAX[11:8] := Family;
+         EAX[13:12] := Processor type;
+         EAX[15:14] := Reserved;
+         EAX[19:16] := Extended Model;
+         EAX[27:20] := Extended Family;
+         EAX[31:28] := Reserved;
+         EBX[7:0] := Brand Index; (* Reserved if the value is zero. *)
+         EBX[15:8] := CLFLUSH Line Size;
+         EBX[16:23] := Reserved; (* Number of threads enabled = 2 if MT enable fuse set. *)
+         EBX[24:31] := Initial APIC ID;
+         ECX := Feature flags; (* See Figure 3-7. *)
+         EDX := Feature flags; (* See Figure 3-8. *)
+    BREAK;
+    EAX = 2H:
+         EAX := Cache and TLB information;
+         EBX := Cache and TLB information;
+         ECX := Cache and TLB information;
+         EDX := Cache and TLB information;
+    BREAK;
+    EAX = 3H:
+         EAX := Reserved;
+         EBX := Reserved;
+         ECX := ProcessorSerialNumber[31:0];
+         (* Pentium III processors only, otherwise reserved. *)
+         EDX := ProcessorSerialNumber[63:32];
+         (* Pentium III processors only, otherwise reserved. *
+    BREAK
+    EAX = 4H:
+         EAX := Deterministic Cache Parameters Leaf; (* See Table 3-8. *)
+         EBX := Deterministic Cache Parameters Leaf;
+         ECX := Deterministic Cache Parameters Leaf;
+         EDX := Deterministic Cache Parameters Leaf;
+    BREAK;
+    EAX = 5H:
+         EAX := MONITOR/MWAIT Leaf; (* See Table 3-8. *)
+         EBX := MONITOR/MWAIT Leaf;
+         ECX := MONITOR/MWAIT Leaf;
+         EDX := MONITOR/MWAIT Leaf;
+    BREAK;
+    EAX = 6H:
+         EAX := Thermal and Power Management Leaf; (* See Table 3-8. *)
+         EBX := Thermal and Power Management Leaf;
+         ECX := Thermal and Power Management Leaf;
+         EDX := Thermal and Power Management Leaf;
+    BREAK;
+    EAX = 7H:
+         EAX := Structured Extended Feature Flags Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Structured Extended Feature Flags Enumeration Leaf;
+         ECX := Structured Extended Feature Flags Enumeration Leaf;
+         EDX := Structured Extended Feature Flags Enumeration Leaf;
+    BREAK;
+    EAX = 8H:
+         EAX := Reserved = 0;
+         EBX := Reserved = 0;
+         ECX := Reserved = 0;
+         EDX := Reserved = 0;
+    BREAK;
+    EAX = 9H:
+         EAX := Direct Cache Access Information Leaf; (* See Table 3-8. *)
+         EBX := Direct Cache Access Information Leaf;
+         ECX := Direct Cache Access Information Leaf;
+         EDX := Direct Cache Access Information Leaf;
+    BREAK;
+    EAX = AH:
+         EAX := Architectural Performance Monitoring Leaf; (* See Table 3-8. *)
+         EBX := Architectural Performance Monitoring Leaf;
+         ECX := Architectural Performance Monitoring Leaf;
+         EDX := Architectural Performance Monitoring Leaf;
+         BREAK
+    EAX = BH:
+         EAX := Extended Topology Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Extended Topology Enumeration Leaf;
+         ECX := Extended Topology Enumeration Leaf;
+         EDX := Extended Topology Enumeration Leaf;
+    BREAK;
+    EAX = CH:
+         EAX := Reserved = 0;
+         EBX := Reserved = 0;
+         ECX := Reserved = 0;
+         EDX := Reserved = 0;
+    BREAK;
+    EAX = DH:
+         EAX := Processor Extended State Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Processor Extended State Enumeration Leaf;
+         ECX := Processor Extended State Enumeration Leaf;
+         EDX := Processor Extended State Enumeration Leaf;
+    BREAK;
+    EAX = EH:
+         EAX := Reserved = 0;
+         EBX := Reserved = 0;
+         ECX := Reserved = 0;
+         EDX := Reserved = 0;
+    BREAK;
+    EAX = FH:
+         EAX := Intel Resource Director Technology Monitoring Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Intel Resource Director Technology Monitoring Enumeration Leaf;
+         ECX := Intel Resource Director Technology Monitoring Enumeration Leaf;
+         EDX := Intel Resource Director Technology Monitoring Enumeration Leaf;
+    BREAK;
+    EAX = 10H:
+         EAX := Intel Resource Director Technology Allocation Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Intel Resource Director Technology Allocation Enumeration Leaf;
+         ECX := Intel Resource Director Technology Allocation Enumeration Leaf;
+         EDX := Intel Resource Director Technology Allocation Enumeration Leaf;
+    BREAK;
+    EAX = 12H:
+         EAX := Intel SGX Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Intel SGX Enumeration Leaf;
+         ECX := Intel SGX Enumeration Leaf;
+         EDX := Intel SGX Enumeration Leaf;
+    BREAK;
+    EAX = 14H:
+         EAX := Intel Processor Trace Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Intel Processor Trace Enumeration Leaf;
+         ECX := Intel Processor Trace Enumeration Leaf;
+         EDX := Intel Processor Trace Enumeration Leaf;
+    BREAK;
+    EAX = 15H:
+         EAX := Time Stamp Counter and Nominal Core Crystal Clock Information Leaf; (* See Table 3-8. *)
+         EBX := Time Stamp Counter and Nominal Core Crystal Clock Information Leaf;
+         ECX := Time Stamp Counter and Nominal Core Crystal Clock Information Leaf;
+         EDX := Time Stamp Counter and Nominal Core Crystal Clock Information Leaf;
+    BREAK;
+    EAX = 16H:
+         EAX := Processor Frequency Information Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Processor Frequency Information Enumeration Leaf;
+         ECX := Processor Frequency Information Enumeration Leaf;
+         EDX := Processor Frequency Information Enumeration Leaf;
+    BREAK;
+    EAX = 17H:
+         EAX := System-On-Chip Vendor Attribute Enumeration Leaf; (* See Table 3-8. *)
+         EBX := System-On-Chip Vendor Attribute Enumeration Leaf;
+         ECX := System-On-Chip Vendor Attribute Enumeration Leaf;
+         EDX := System-On-Chip Vendor Attribute Enumeration Leaf;
+    BREAK;
+    EAX = 18H:
+         EAX := Deterministic Address Translation Parameters Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Deterministic Address Translation Parameters Enumeration Leaf;
+         ECX := Deterministic Address Translation Parameters Enumeration Leaf;
+         EDX := Deterministic Address Translation Parameters Enumeration Leaf;
+    BREAK;</pre>
+<p>EAX = 19H:</p>
+<p>EAX := Key Locker Enumeration Leaf; (* See Table 3-8. *)</p>
+<pre>         EBX := Key Locker Enumeration Leaf;
+         ECX := Key Locker Enumeration Leaf;
+         EDX := Key Locker Enumeration Leaf;
+    BREAK;
+    EAX = 1AH:
+         EAX := Native Model ID Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Native Model ID Enumeration Leaf;
+         ECX := Native Model ID Enumeration Leaf;
+         EDX := Native Model ID Enumeration Leaf;
+    BREAK;
+    EAX = 1BH:
+         EAX := PCONFIG Information Enumeration Leaf; (* See “INPUT EAX = 1BH: Returns PCONFIG Information” on page 3-252. *)
+         EBX := PCONFIG Information Enumeration Leaf;
+         ECX := PCONFIG Information Enumeration Leaf;
+         EDX := PCONFIG Information Enumeration Leaf;
+    BREAK;
+    EAX = 1CH:
+         EAX := Last Branch Record Information Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Last Branch Record Information Enumeration Leaf;
+         ECX := Last Branch Record Information Enumeration Leaf;
+         EDX := Last Branch Record Information Enumeration Leaf;
+    BREAK;
+    EAX = 1DH:
+         EAX := Tile Information Enumeration Leaf; (* See Table 3-8. *)
+         EBX := Tile Information Enumeration Leaf;
+         ECX := Tile Information Enumeration Leaf;
+         EDX := Tile Information Enumeration Leaf;
+    BREAK;
+    EAX = 1EH:
+         EAX := TMUL Information Enumeration Leaf; (* See Table 3-8. *)
+         EBX := TMUL Information Enumeration Leaf;
+         ECX := TMUL Information Enumeration Leaf;
+         EDX := TMUL Information Enumeration Leaf;
+    BREAK;
+    EAX = 1FH:
+         EAX := V2 Extended Topology Enumeration Leaf; (* See Table 3-8. *)
+         EBX := V2 Extended Topology Enumeration Leaf;
+         ECX := V2 Extended Topology Enumeration Leaf;
+         EDX := V2 Extended Topology Enumeration Leaf;
+    BREAK;
+    EAX = 20H:
+         EAX := Processor History Reset Sub-leaf; (* See Table 3-8. *)
+         EBX := Processor History Reset Sub-leaf;
+         ECX := Processor History Reset Sub-leaf;
+         EDX := Processor History Reset Sub-leaf;
+    BREAK;
+    EAX = 80000000H:
+         EAX := Highest extended function input value understood by CPUID;
+         EBX := Reserved;
+         ECX := Reserved;
+         EDX := Reserved;
+    BREAK;
+    EAX = 80000001H:
+         EAX := Reserved;
+         EBX := Reserved;
+         ECX := Extended Feature Bits (* See Table 3-8.*);
+         EDX := Extended Feature Bits (* See Table 3-8. *);
+    BREAK;
+    EAX = 80000002H:
+         EAX := Processor Brand String;
+         EBX := Processor Brand String, continued;
+         ECX := Processor Brand String, continued;
+         EDX := Processor Brand String, continued;
+    BREAK;
+    EAX = 80000003H:
+         EAX := Processor Brand String, continued;
+         EBX := Processor Brand String, continued;
+         ECX := Processor Brand String, continued;
+         EDX := Processor Brand String, continued;
+    BREAK;
+    EAX = 80000004H:
+         EAX := Processor Brand String, continued;
+         EBX := Processor Brand String, continued;
+         ECX := Processor Brand String, continued;
+         EDX := Processor Brand String, continued;
+    BREAK;
+    EAX = 80000005H:
+         EAX := Reserved = 0;
+         EBX := Reserved = 0;
+         ECX := Reserved = 0;
+         EDX := Reserved = 0;
+    BREAK;
+    EAX = 80000006H:
+         EAX := Reserved = 0;
+         EBX := Reserved = 0;
+         ECX := Cache information;
+         EDX := Reserved = 0;
+    BREAK;
+    EAX = 80000007H:
+         EAX := Reserved = 0;
+         EBX := Reserved = 0;
+         ECX := Reserved = 0;
+         EDX := Reserved = Misc Feature Flags;
+    BREAK;
+    EAX = 80000008H:
+         EAX := Reserved = Physical Address Size Information;
+         EBX := Reserved = Virtual Address Size Information;
+         ECX := Reserved = 0;
+         EDX := Reserved = 0;
+    BREAK;
+    EAX &gt;= 40000000H and EAX &lt;= 4FFFFFFFH:
+    DEFAULT: (* EAX = Value outside of recognized range for CPUID. *)
+         (* If the highest basic information leaf data depend on ECX input value, ECX is honored.*)
+         EAX := Reserved; (* Information returned for highest basic information leaf. *)
+         EBX := Reserved; (* Information returned for highest basic information leaf. *)
+         ECX := Reserved; (* Information returned for highest basic information leaf. *)
+         EDX := Reserved; (* Information returned for highest basic information leaf. *)
+    BREAK;
+ESAC;</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Exceptions (All Operating Modes)</h2>
+<p>#UD</p>
+<p>If the LOCK prefix is used.</p>
+<p>In earlier IA-32 processors that do not support the CPUID instruction, execution of the instruc-tion results in an invalid opcode (#UD) exception being generated.</p></div></body></html>

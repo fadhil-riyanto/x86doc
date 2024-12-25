@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VCVTTPD2UQQ - Convert With Truncation Packed Double Precision Floating-Point Values to Packed Unsigned Quadword Integers </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VCVTTPD2UQQ - Convert With Truncation Packed Double Precision Floating-Point Values to Packed Unsigned Quadword Integers </div>
+<div id="body">
+<h1>VCVTTPD2UQQ—Convert With Truncation Packed Double Precision Floating-Point Values to Packed Unsigned Quadword Integers</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F.W1 78 /r VCVTTPD2UQQ xmm1 {k1}{z}, xmm2/m128/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Convert two packed double precision floating-point values from xmm2/m128/m64bcst to two packed unsigned quadword integers in xmm1 using truncation with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F.W1 78 /r VCVTTPD2UQQ ymm1 {k1}{z}, ymm2/m256/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Convert four packed double precision floating-point values from ymm2/m256/m64bcst to four packed unsigned quadword integers in ymm1 using truncation with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F.W1 78 /r VCVTTPD2UQQ zmm1 {k1}{z}, zmm2/m512/m64bcst{sae}</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512DQ</td>
+<td>Convert eight packed double precision floating-point values from zmm2/mem to eight packed unsigned quadword integers in zmm1 using truncation with writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Converts with truncation packed double precision floating-point values in the source operand (second operand) to packed unsigned quadword integers in the destination operand (first operand).</p>
+<p>When a conversion is inexact, a truncated (round toward zero) value is returned. If a converted result cannot be represented in the destination format, the floating-point invalid exception is raised, and if this exception is masked, the integer value 2<sup>w</sup> – 1 is returned, where w represents the number of bits in the destination format.</p>
+<p>EVEX encoded versions: The source operand is a ZMM/YMM/XMM register or a 512/256/128-bit memory location. The destination operation is a ZMM/YMM/XMM register conditionally updated with writemask k1.</p>
+<p>Note: EVEX.vvvv is reserved and must be 1111b, otherwise instructions will #UD.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VCVTTPD2UQQ (EVEX Encoded Versions) When SRC Operand is a Register</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+63:i] :=</p>
+<p>Convert_Double_Precision_Floating_Point_To_UQuadInteger_Truncate(SRC[i+63:i])</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+63:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>VCVTTPD2UQQ (EVEX Encoded Versions) When SRC Operand is a Memory Source</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN</p>
+<p>IF (EVEX.b == 1)</p>
+<p>THEN</p>
+<p>DEST[i+63:i] :=</p>
+<p>Convert_Double_Precision_Floating_Point_To_UQuadInteger_Truncate(SRC[63:0])</p>
+<p>ELSE</p>
+<p>DEST[i+63:i] :=</p>
+<p>Convert_Double_Precision_Floating_Point_To_UQuadInteger_Truncate(SRC[i+63:i])</p>
+<p>FI;</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+63:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VCVTTPD2UQQ _mm&lt;size&gt;[_mask[z]]_cvtt[_round]pd_epu64</p>
+<p>VCVTTPD2UQQ __m512i _mm512_cvttpd_epu64( __m512d a);</p>
+<p>VCVTTPD2UQQ __m512i _mm512_mask_cvttpd_epu64( __m512i s, __mmask8 k, __m512d a);</p>
+<p>VCVTTPD2UQQ __m512i _mm512_maskz_cvttpd_epu64( __mmask8 k, __m512d a);</p>
+<p>VCVTTPD2UQQ __m512i _mm512_cvtt_roundpd_epu64( __m512d a, int sae);</p>
+<p>VCVTTPD2UQQ __m512i _mm512_mask_cvtt_roundpd_epu64( __m512i s, __mmask8 k, __m512d a, int sae);</p>
+<p>VCVTTPD2UQQ __m512i _mm512_maskz_cvtt_roundpd_epu64( __mmask8 k, __m512d a, int sae);</p>
+<p>VCVTTPD2UQQ __m256i _mm256_mask_cvttpd_epu64( __m256i s, __mmask8 k, __m256d a);</p>
+<p>VCVTTPD2UQQ __m256i _mm256_maskz_cvttpd_epu64( __mmask8 k, __m256d a);</p>
+<p>VCVTTPD2UQQ __m128i _mm_mask_cvttpd_epu64( __m128i s, __mmask8 k, __m128d a);</p>
+<p>VCVTTPD2UQQ __m128i _mm_maskz_cvttpd_epu64( __mmask8 k, __m128d a);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Precision.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instructions, see Table 2-46, “Type E2 Class Exception Conditions.”</p>
+<p>Additionally:</p>
+<table>
+<tr>
+<td>#UD</td>
+<td>If EVEX.vvvv != 1111B.</td></tr></table></div></body></html>

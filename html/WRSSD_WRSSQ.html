@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>WRSSD/WRSSQ - Write to Shadow Stack </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › WRSSD/WRSSQ - Write to Shadow Stack </div>
+<div id="body">
+<h1>WRSSD/WRSSQ—Write to Shadow Stack</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>0F 38 F6 !(11):rrr:bbb WRSSD m32, r32</td>
+<td>MR</td>
+<td>V/V</td>
+<td>CET_SS</td>
+<td>Write 4 bytes to shadow stack.</td></tr>
+<tr>
+<td>REX.W 0F 38 F6 !(11):rrr:bbb WRSSQ m64, r64</td>
+<td>MR</td>
+<td>V/N.E.</td>
+<td>CET_SS</td>
+<td>Write 8 bytes to shadow stack.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>MR</td>
+<td>ModRM:r/m (w)</td>
+<td>ModRM:reg (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Writes bytes in register source to the shadow stack.</p>
+<h2>Operation</h2>
+<pre>IF CPL = 3
+    IF (CR4.CET &amp; IA32_U_CET.SH_STK_EN) = 0
+         THEN #UD; FI;
+    IF (IA32_U_CET.WR_SHSTK_EN) = 0
+         THEN #UD; FI;
+ELSE
+    IF (CR4.CET &amp; IA32_S_CET.SH_STK_EN) = 0
+         THEN #UD; FI;
+    IF (IA32_S_CET.WR_SHSTK_EN) = 0
+         THEN #UD; FI;
+FI;
+DEST_LA = Linear_Address(mem operand)
+IF (operand size is 64 bit)
+    THEN
+         (* Destination not 8B aligned *)
+         IF DEST_LA[2:0]
+              THEN GP(0); FI;
+         Shadow_stack_store 8 bytes of SRC to DEST_LA;
+    ELSE
+         (* Destination not 4B aligned *)
+         IF DEST_LA[1:0]
+              THEN GP(0); FI;
+         Shadow_stack_store 4 bytes of SRC[31:0] to DEST_LA;
+FI;</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>C/C++ Compiler Intrinsic Equivalent</h2>
+<p>WRSSD void _wrssd(__int32, void *);</p>
+<p>WRSSQ void _wrssq(__int64, void *);</p>
+<h2>Protected Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used.</p>
+<p>If CR4.CET = 0.</p>
+<p>If CPL = 3 and IA32_U_CET.SH_STK_EN = 0.</p>
+<p>If CPL &lt; 3 and IA32_S_CET.SH_STK_EN = 0.</p>
+<p>If CPL = 3 and IA32_U_CET.WR_SHSTK_EN = 0.</p>
+<p>If CPL &lt; 3 and IA32_S_CET.WR_SHSTK_EN = 0.</p></td></tr>
+<tr>
+<td>#GP(0)</td>
+<td>
+<p>If a memory operand effective address is outside the CS, DS, ES, FS, or GS segment limit.</p>
+<p>If destination is located in a non-writeable segment.</p>
+<p>If the DS, ES, FS, or GS register is used to access memory and it contains a NULL segment selector.</p>
+<p>If linear address of destination is not 4 byte aligned.</p></td></tr>
+<tr>
+<td>#SS(0)</td>
+<td>If a memory operand effective address is outside the SS segment limit.</td></tr>
+<tr>
+<td>#PF(fault-code)</td>
+<td>
+<p>If a page fault occurs if destination is not a user shadow stack when CPL3 and not a supervisor shadow stack when CPL &lt; 3.</p>
+<p>Other terminal and non-terminal faults.</p></td></tr></table>
+<h2>Real-Address Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>The WRSS instruction is not recognized in real-address mode.</td></tr></table>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>The WRSS instruction is not recognized in virtual-8086 mode.</td></tr></table>
+<h2>Compatibility Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used.</p>
+<p>If CR4.CET = 0.</p>
+<p>If CPL = 3 and IA32_U_CET.SH_STK_EN = 0.</p>
+<p>If CPL &lt; 3 and IA32_S_CET.SH_STK_EN = 0.</p>
+<p>If CPL = 3 and IA32_U_CET.WR_SHSTK_EN = 0.</p>
+<p>If CPL &lt; 3 and IA32_S_CET.WR_SHSTK_EN = 0.</p></td></tr>
+<tr>
+<td>#PF(fault-code)</td>
+<td>
+<p>If a page fault occurs if destination is not a user shadow stack when CPL3 and not a supervisor shadow stack when CPL &lt; 3.</p>
+<p>Other terminal and non-terminal faults.</p></td></tr></table>
+<h2>64-Bit Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used.</p>
+<p>If CR4.CET = 0.</p>
+<p>If CPL = 3 and IA32_U_CET.SH_STK_EN = 0.</p>
+<p>If CPL &lt; 3 and IA32_S_CET.SH_STK_EN = 0.</p>
+<p>If CPL = 3 and IA32_U_CET.WR_SHSTK_EN = 0.</p>
+<p>If CPL &lt; 3 and IA32_S_CET.WR_SHSTK_EN = 0.</p></td></tr>
+<tr>
+<td>#GP(0)</td>
+<td>
+<p>If a memory address is in a non-canonical form.</p>
+<p>If linear address of destination is not 4 byte aligned.</p></td></tr>
+<tr>
+<td>#PF(fault-code)</td>
+<td>
+<p>If a page fault occurs if destination is not a user shadow stack when CPL3 and not a supervisor shadow stack when CPL &lt; 3.</p>
+<p>Other terminal and non-terminal faults.</p></td></tr></table></div></body></html>

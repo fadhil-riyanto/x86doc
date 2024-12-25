@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>PUNPCKHBW/PUNPCKHWD/PUNPCKHDQ/PUNPCKHQDQ - Unpack High Data </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › PUNPCKHBW/PUNPCKHWD/PUNPCKHDQ/PUNPCKHQDQ - Unpack High Data </div>
+<div id="body">
+<h1>PUNPCKHBW/PUNPCKHWD/PUNPCKHDQ/PUNPCKHQDQ— Unpack High Data</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>NP 0F 68 /r<sup>1</sup></p>
+<p>PUNPCKHBW mm, mm/m64</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>MMX</td>
+<td>Unpack and interleave high-order bytes from mm and mm/m64 into mm.</td></tr>
+<tr>
+<td>
+<p>66 0F 68 /r</p>
+<p>PUNPCKHBW xmm1, xmm2/m128</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>SSE2</td>
+<td>Unpack and interleave high-order bytes from xmm1 and xmm2/m128 into xmm1.</td></tr>
+<tr>
+<td>
+<p>NP 0F 69 /r<sup>1</sup></p>
+<p>PUNPCKHWD mm, mm/m64</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>MMX</td>
+<td>Unpack and interleave high-order words from mm and mm/m64 into mm.</td></tr>
+<tr>
+<td>
+<p>66 0F 69 /r</p>
+<p>PUNPCKHWD xmm1, xmm2/m128</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>SSE2</td>
+<td>Unpack and interleave high-order words from xmm1 and xmm2/m128 into xmm1.</td></tr>
+<tr>
+<td>
+<p>NP 0F 6A /r<sup>1</sup></p>
+<p>PUNPCKHDQ mm, mm/m64</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>MMX</td>
+<td>Unpack and interleave high-order doublewords from mm and mm/m64 into mm.</td></tr>
+<tr>
+<td>
+<p>66 0F 6A /r</p>
+<p>PUNPCKHDQ xmm1, xmm2/m128</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>SSE2</td>
+<td>Unpack and interleave high-order doublewords from xmm1 and xmm2/m128 into xmm1.</td></tr>
+<tr>
+<td>
+<p>66 0F 6D /r</p>
+<p>PUNPCKHQDQ xmm1, xmm2/m128</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>SSE2</td>
+<td>Unpack and interleave high-order quadwords from xmm1 and xmm2/m128 into xmm1.</td></tr>
+<tr>
+<td>
+<p>VEX.128.66.0F.WIG 68/r</p>
+<p>VPUNPCKHBW xmm1,xmm2, xmm3/m128</p></td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Interleave high-order bytes from xmm2 and xmm3/m128 into xmm1.</td></tr>
+<tr>
+<td>
+<p>VEX.128.66.0F.WIG 69/r</p>
+<p>VPUNPCKHWD xmm1,xmm2, xmm3/m128</p></td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Interleave high-order words from xmm2 and xmm3/m128 into xmm1.</td></tr>
+<tr>
+<td>
+<p>VEX.128.66.0F.WIG 6A/r</p>
+<p>VPUNPCKHDQ xmm1, xmm2, xmm3/m128</p></td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Interleave high-order doublewords from xmm2 and xmm3/m128 into xmm1.</td></tr>
+<tr>
+<td>VEX.128.66.0F.WIG 6D/r VPUNPCKHQDQ xmm1, xmm2, xmm3/m128</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Interleave high-order quadword from xmm2 and xmm3/m128 into xmm1 register.</td></tr>
+<tr>
+<td>VEX.256.66.0F.WIG 68 /r VPUNPCKHBW ymm1, ymm2, ymm3/m256</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX2</td>
+<td>Interleave high-order bytes from ymm2 and ymm3/m256 into ymm1 register.</td></tr>
+<tr>
+<td>VEX.256.66.0F.WIG 69 /r VPUNPCKHWD ymm1, ymm2, ymm3/m256</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX2</td>
+<td>Interleave high-order words from ymm2 and ymm3/m256 into ymm1 register.</td></tr>
+<tr>
+<td>VEX.256.66.0F.WIG 6A /r VPUNPCKHDQ ymm1, ymm2, ymm3/m256</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX2</td>
+<td>Interleave high-order doublewords from ymm2 and ymm3/m256 into ymm1 register.</td></tr>
+<tr>
+<td>VEX.256.66.0F.WIG 6D /r VPUNPCKHQDQ ymm1, ymm2, ymm3/m256</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX2</td>
+<td>Interleave high-order quadword from ymm2 and ymm3/m256 into ymm1 register.</td></tr>
+<tr>
+<td>EVEX.128.66.0F.WIG 68 /r VPUNPCKHBW xmm1 {k1}{z}, xmm2, xmm3/m128</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Interleave high-order bytes from xmm2 and xmm3/m128 into xmm1 register using k1 write mask.</td></tr>
+<tr>
+<td>EVEX.128.66.0F.WIG 69 /r VPUNPCKHWD xmm1 {k1}{z}, xmm2, xmm3/m128</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Interleave high-order words from xmm2 and xmm3/m128 into xmm1 register using k1 write mask.</td></tr>
+<tr>
+<td>EVEX.128.66.0F.W0 6A /r VPUNPCKHDQ xmm1 {k1}{z}, xmm2, xmm3/m128/m32bcst</td>
+<td>D</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Interleave high-order doublewords from xmm2 and xmm3/m128/m32bcst into xmm1 register using k1 write mask.</td></tr>
+<tr>
+<td>EVEX.128.66.0F.W1 6D /r VPUNPCKHQDQ xmm1 {k1}{z}, xmm2, xmm3/m128/m64bcst</td>
+<td>D</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Interleave high-order quadword from xmm2 and xmm3/m128/m64bcst into xmm1 register using k1 write mask.</td></tr></table>
+<p><strong>Opcode/</strong></p>
+<p><strong>Op/</strong></p>
+<p><strong>64/32 bit</strong></p>
+<p><strong>CPUID</strong></p>
+<p><strong>Description</strong></p>
+<table>
+<tr>
+<th>Instruction</th>
+<th>En</th>
+<th>Mode Support</th>
+<th>Feature Flag</th>
+<th></th></tr>
+<tr>
+<td>EVEX.256.66.0F.WIG 68 /r VPUNPCKHBW ymm1 {k1}{z}, ymm2, ymm3/m256</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Interleave high-order bytes from ymm2 and ymm3/m256 into ymm1 register using k1 write mask.</td></tr>
+<tr>
+<td>EVEX.256.66.0F.WIG 69 /r VPUNPCKHWD ymm1 {k1}{z}, ymm2, ymm3/m256</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Interleave high-order words from ymm2 and ymm3/m256 into ymm1 register using k1 write mask.</td></tr>
+<tr>
+<td>EVEX.256.66.0F.W0 6A /r VPUNPCKHDQ ymm1 {k1}{z}, ymm2, ymm3/m256/m32bcst</td>
+<td>D</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Interleave high-order doublewords from ymm2 and ymm3/m256/m32bcst into ymm1 register using k1 write mask.</td></tr>
+<tr>
+<td>EVEX.256.66.0F.W1 6D /r VPUNPCKHQDQ ymm1 {k1}{z}, ymm2, ymm3/m256/m64bcst</td>
+<td>D</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Interleave high-order quadword from ymm2 and ymm3/m256/m64bcst into ymm1 register using k1 write mask.</td></tr>
+<tr>
+<td>EVEX.512.66.0F.WIG 68/r VPUNPCKHBW zmm1 {k1}{z}, zmm2, zmm3/m512</td>
+<td>C</td>
+<td>V/V</td>
+<td></td>
+<td>
+<p>AVX512BW Interleave high-order bytes from zmm2 and</p>
+<p>zmm3/m512 into zmm1 register.</p></td></tr>
+<tr>
+<td>EVEX.512.66.0F.WIG 69/r VPUNPCKHWD zmm1 {k1}{z}, zmm2, zmm3/m512</td>
+<td>C</td>
+<td>V/V</td>
+<td></td>
+<td>
+<p>AVX512BW Interleave high-order words from zmm2 and</p>
+<p>zmm3/m512 into zmm1 register.</p></td></tr>
+<tr>
+<td>EVEX.512.66.0F.W0 6A /r VPUNPCKHDQ zmm1 {k1}{z}, zmm2, zmm3/m512/m32bcst</td>
+<td>D</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Interleave high-order doublewords from zmm2 and zmm3/m512/m32bcst into zmm1 register using k1 write mask.</td></tr>
+<tr>
+<td>EVEX.512.66.0F.W1 6D /r VPUNPCKHQDQ zmm1 {k1}{z}, zmm2, zmm3/m512/m64bcst</td>
+<td>D</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Interleave high-order quadword from zmm2 and zmm3/m512/m64bcst into zmm1 register using k1 write mask.</td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1.  See note in Section 2.5, “Intel® AVX and Intel® SSE Instruction Exception Specification” in the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Soft-</p>
+<p>ware Developer’s Manual, Volume 2A and Section 23.25.3, “Exception Conditions of Legacy SIMD Instructions Operating on MMX Reg-isters” in the Intel<em><sup>® </sup></em>64 and IA-32 Architectures Software Developer’s Manual, Volume 3A.</p>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:reg (r, w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>C</td>
+<td>Full Mem</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>D</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Unpacks and interleaves the high-order data elements (bytes, words, doublewords, or quadwords) of the destina-tion operand (first operand) and source operand (second operand) into the destination operand. Figure 4-20 shows the unpack operation for bytes in 64-bit operands. The low-order data elements are ignored.</p>
+<svg width="568.7999849999999" height="145.89000000001397" viewBox="112.380000 388954.020010 379.199990 97.260000">
+<text x="126.90182399999999" y="388974.825432" style="font-size:7.980000pt" textLength="16.86094200000001" lengthAdjust="spacingAndGlyphs">SRC</text>
+<text x="313.261956" y="388975.12548" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X7</text>
+<text x="330.360702" y="388975.12548" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X6</text>
+<text x="349.619634" y="388975.12548" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X5</text>
+<text x="366.661722" y="388975.12548" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X4</text>
+<text x="384.540912" y="388975.18533" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X3</text>
+<text x="401.700306" y="388975.18533" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X2</text>
+<text x="420.899388" y="388975.18533" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X1</text>
+<text x="437.940678" y="388975.18533" style="font-size:7.980000pt" textLength="9.717245999999989" lengthAdjust="spacingAndGlyphs">X0</text>
+<text x="454.80162" y="388975.18533" style="font-size:7.980000pt" textLength="21.320964000000004" lengthAdjust="spacingAndGlyphs">DEST</text>
+<text x="150.362226" y="388975.785426" style="font-size:7.980000pt" textLength="9.777096" lengthAdjust="spacingAndGlyphs">Y7</text>
+<text x="167.460972" y="388975.785426" style="font-size:7.980000pt" textLength="9.777096" lengthAdjust="spacingAndGlyphs">Y6</text>
+<text x="186.71990399999999" y="388975.785426" style="font-size:7.980000pt" textLength="9.777096" lengthAdjust="spacingAndGlyphs">Y5</text>
+<text x="203.761992" y="388975.785426" style="font-size:7.980000pt" textLength="9.777096" lengthAdjust="spacingAndGlyphs">Y4</text>
+<text x="222.18142799999998" y="388976.385522" style="font-size:7.980000pt" textLength="9.777096" lengthAdjust="spacingAndGlyphs">Y3</text>
+<text x="239.280174" y="388976.385522" style="font-size:7.980000pt" textLength="9.777096" lengthAdjust="spacingAndGlyphs">Y2</text>
+<text x="258.539106" y="388976.385522" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">Y1</text>
+<text x="275.581194" y="388976.385522" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">Y0</text>
+<text x="168.660366" y="389037.46524" style="font-size:7.980000pt" textLength="9.777096" lengthAdjust="spacingAndGlyphs">Y7</text>
+<text x="186.35962800000001" y="389037.46524" style="font-size:7.980000pt" textLength="9.777096" lengthAdjust="spacingAndGlyphs">X7</text>
+<text x="203.99899800000003" y="389037.46524" style="font-size:7.980000pt" textLength="9.777096" lengthAdjust="spacingAndGlyphs">Y6</text>
+<text x="222.77875200000003" y="389037.46524" style="font-size:7.980000pt" textLength="9.777096" lengthAdjust="spacingAndGlyphs">X6</text>
+<text x="239.81802600000003" y="389037.46524" style="font-size:7.980000pt" textLength="9.777096" lengthAdjust="spacingAndGlyphs">Y5</text>
+<text x="258.117384" y="389037.46524" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X5</text>
+<text x="275.1" y="389037.46524" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">Y4</text>
+<text x="294.42" y="389037.46524" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X4</text>
+<text x="140.82133799999997" y="389037.70543800003" style="font-size:7.980000pt" textLength="21.320964000000004" lengthAdjust="spacingAndGlyphs">DEST</text>
+<rect x="164.4" y="389026.74" width="143.99999999999997" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="308.46" y="388963.98" width="144.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="146.22" y="388964.1" width="144.00000000000003" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M317.460000,388981.980000 L317.700000,388981.920000 L317.520000,388981.440000 L317.280000,388981.500000 " style="stroke:black"></path>
+<path d="M353.940000,388981.980000 L354.120000,388981.860000 L353.880000,388981.440000 L353.700000,388981.560000 " style="stroke:black"></path>
+<path d="M371.040000,388981.980000 L371.220000,388981.860000 L370.980000,388981.440000 L370.800000,388981.560000 " style="stroke:black"></path>
+<path d="M317.460000,388981.980000 L317.280000,388981.500000 L198.660000,389023.920000 L198.840000,389024.400000 " style="stroke:black"></path>
+<path d="M335.160000,388981.980000 L335.340000,388981.920000 L335.160000,388981.500000 L334.980000,388981.560000 " style="stroke:black"></path>
+<path d="M335.160000,388981.980000 L334.980000,388981.560000 L235.440000,389023.620000 L235.620000,389024.040000 " style="stroke:black"></path>
+<path d="M353.940000,388981.980000 L353.700000,388981.560000 L270.000000,389023.140000 L270.240000,389023.560000 " style="stroke:black"></path>
+<path d="M371.040000,388981.980000 L370.800000,388981.560000 L305.040000,389022.540000 L305.280000,389022.960000 " style="stroke:black"></path>
+<path d="M172.380000,388982.160000 L172.260000,388981.980000 L171.900000,388982.280000 L172.020000,388982.460000 " style="stroke:black"></path>
+<path d="M190.560000,388982.100000 L190.380000,388981.980000 L190.080000,388982.340000 L190.260000,388982.460000 " style="stroke:black"></path>
+<path d="M156.360000,388982.220000 L156.300000,388982.040000 L155.880000,388982.220000 L155.940000,388982.400000 " style="stroke:black"></path>
+<path d="M190.560000,388982.100000 L190.260000,388982.460000 L239.460000,389022.120000 L239.760000,389021.760000 " style="stroke:black"></path>
+<path d="M172.380000,388982.160000 L172.020000,388982.460000 L204.060000,389021.040000 L204.420000,389020.740000 " style="stroke:black"></path>
+<path d="M156.360000,388982.220000 L155.940000,388982.400000 L170.760000,389019.720000 L171.180000,389019.540000 " style="stroke:black"></path>
+<path d="M209.820000,388982.640000 L209.640000,388982.520000 L209.400000,388982.940000 L209.580000,388983.060000 " style="stroke:black"></path>
+<path d="M209.820000,388982.640000 L209.580000,388983.060000 L273.720000,389022.960000 L273.960000,389022.540000 " style="stroke:black"></path>
+<path d="M171.000000,389020.260000 L172.200000,389019.180000 L172.980000,389018.460000 L173.100000,389019.540000 L173.640000,389025.060000 L173.760000,389026.740000 L172.740000,389025.420000 L169.320000,389021.040000 L168.660000,389020.200000 L169.680000,389020.140000 L170.100000,389020.380000 L173.520000,389024.760000 L172.740000,389025.420000 L172.620000,389025.120000 L172.080000,389019.600000 L173.100000,389019.540000 L172.920000,389019.900000 L171.720000,389020.980000 " style="stroke:black"></path>
+<path d="M204.480000,389021.400000 L205.320000,389020.020000 L205.800000,389019.120000 L206.220000,389020.080000 L208.440000,389025.180000 L209.100000,389026.740000 L207.720000,389025.780000 L203.100000,389022.660000 L202.260000,389022.120000 L203.100000,389021.820000 L203.640000,389021.820000 L208.260000,389024.940000 L207.720000,389025.780000 L207.540000,389025.600000 L205.320000,389020.500000 L206.220000,389020.080000 L206.160000,389020.500000 L205.320000,389021.880000 " style="stroke:black"></path>
+<path d="M171.360000,389020.620000 L172.560000,389019.540000 L173.100000,389025.060000 L169.680000,389020.680000 " style="stroke:black"></path>
+<path d="M171.180000,389019.540000 L170.700000,389019.660000 L171.120000,389020.680000 L171.600000,389020.560000 " style="stroke:black"></path>
+<path d="M171.180000,389019.540000 L171.240000,389019.720000 L170.820000,389019.900000 L170.760000,389019.720000 " style="stroke:black"></path>
+<path d="M239.940000,389022.420000 L240.480000,389020.860000 L240.780000,389019.900000 L241.380000,389020.800000 L244.560000,389025.360000 L245.580000,389026.740000 L243.960000,389026.080000 L238.800000,389023.920000 L237.840000,389023.500000 L238.740000,389023.020000 L239.160000,389023.020000 L244.320000,389025.180000 L243.960000,389026.080000 L243.720000,389025.900000 L240.540000,389021.340000 L241.380000,389020.800000 L241.440000,389021.220000 L240.900000,389022.780000 " style="stroke:black"></path>
+<path d="M169.680000,389020.140000 L171.360000,389020.080000 L171.720000,389020.980000 L171.540000,389021.100000 L171.360000,389021.160000 L169.680000,389021.220000 " style="stroke:black"></path>
+<path d="M204.900000,389021.640000 L205.740000,389020.260000 L207.960000,389025.360000 L203.340000,389022.240000 " style="stroke:black"></path>
+<path d="M274.260000,389023.140000 L274.620000,389021.520000 L274.800000,389020.560000 L275.520000,389021.340000 L279.300000,389025.540000 L280.440000,389026.800000 L278.760000,389026.320000 L273.360000,389024.760000 L272.340000,389024.520000 L273.180000,389023.860000 L273.660000,389023.800000 L279.060000,389025.360000 L278.760000,389026.320000 L278.520000,389026.200000 L274.740000,389022.000000 L275.520000,389021.340000 L275.580000,389021.760000 L275.220000,389023.380000 " style="stroke:black"></path>
+<path d="M304.560000,389022.840000 L305.820000,389023.860000 L306.660000,389024.520000 L305.640000,389024.760000 L300.240000,389026.260000 L298.560000,389026.740000 L299.700000,389025.480000 L303.480000,389021.340000 L304.200000,389020.560000 L304.380000,389021.520000 L304.260000,389022.000000 L300.480000,389026.140000 L299.700000,389025.480000 L299.940000,389025.300000 L305.340000,389023.800000 L305.640000,389024.760000 L305.220000,389024.700000 L303.960000,389023.680000 " style="stroke:black"></path>
+<path d="M204.420000,389020.680000 L204.060000,389021.040000 L204.720000,389021.820000 L205.080000,389021.460000 " style="stroke:black"></path>
+<path d="M204.420000,389020.740000 L204.540000,389020.920000 L204.180000,389021.220000 L204.060000,389021.040000 " style="stroke:black"></path>
+<path d="M240.420000,389022.600000 L240.960000,389021.040000 L244.140000,389025.600000 L238.980000,389023.440000 " style="stroke:black"></path>
+<path d="M269.520000,389023.440000 L270.720000,389024.580000 L271.500000,389025.240000 L270.420000,389025.420000 L264.960000,389026.440000 L263.280000,389026.740000 L264.540000,389025.600000 L268.620000,389021.820000 L269.400000,389021.100000 L269.460000,389022.120000 L269.280000,389022.540000 L265.200000,389026.320000 L264.540000,389025.600000 L264.780000,389025.480000 L270.240000,389024.460000 L270.420000,389025.420000 L270.000000,389025.300000 L268.800000,389024.160000 " style="stroke:black"></path>
+<path d="M203.100000,389021.820000 L204.660000,389021.220000 L205.320000,389021.880000 L205.260000,389022.060000 L205.080000,389022.120000 L203.520000,389022.720000 " style="stroke:black"></path>
+<path d="M234.900000,389023.800000 L236.040000,389025.060000 L236.760000,389025.840000 L235.680000,389025.960000 L230.100000,389026.620000 L228.360000,389026.800000 L229.740000,389025.720000 L234.120000,389022.180000 L234.960000,389021.520000 L235.020000,389022.540000 L234.780000,389022.960000 L230.400000,389026.500000 L229.740000,389025.720000 L230.040000,389025.600000 L235.620000,389024.940000 L235.680000,389025.960000 L235.320000,389025.780000 L234.180000,389024.520000 " style="stroke:black"></path>
+<path d="M304.380000,389021.520000 L304.740000,389023.140000 L303.960000,389023.680000 L303.780000,389023.560000 L303.780000,389023.380000 L303.420000,389021.760000 " style="stroke:black"></path>
+<path d="M274.740000,389023.260000 L275.100000,389021.640000 L278.880000,389025.840000 L273.480000,389024.280000 " style="stroke:black"></path>
+<path d="M304.260000,389023.260000 L305.520000,389024.280000 L300.120000,389025.780000 L303.900000,389021.640000 " style="stroke:black"></path>
+<path d="M239.760000,389021.760000 L239.400000,389022.120000 L240.240000,389022.780000 L240.600000,389022.420000 " style="stroke:black"></path>
+<path d="M239.760000,389021.760000 L239.940000,389021.880000 L239.640000,389022.240000 L239.460000,389022.120000 " style="stroke:black"></path>
+<path d="M198.120000,389024.160000 L199.140000,389025.420000 L199.800000,389026.260000 L198.720000,389026.320000 L193.140000,389026.680000 L191.400000,389026.740000 L192.840000,389025.720000 L197.340000,389022.480000 L198.240000,389021.880000 L198.240000,389022.900000 L198.000000,389023.320000 L193.440000,389026.560000 L192.840000,389025.720000 L193.080000,389025.660000 L198.660000,389025.300000 L198.720000,389026.320000 L198.300000,389026.140000 L197.280000,389024.880000 " style="stroke:black"></path>
+<path d="M269.460000,389022.120000 L269.700000,389023.740000 L268.800000,389024.160000 L268.680000,389024.040000 L268.680000,389023.860000 L268.500000,389022.240000 " style="stroke:black"></path>
+<path d="M238.740000,389023.020000 L240.180000,389022.180000 L240.900000,389022.780000 L240.840000,389022.960000 L240.660000,389023.020000 L239.220000,389023.860000 " style="stroke:black"></path>
+<path d="M269.160000,389023.800000 L270.360000,389024.940000 L264.900000,389025.960000 L268.980000,389022.180000 " style="stroke:black"></path>
+<path d="M234.540000,389024.160000 L235.680000,389025.420000 L230.100000,389026.080000 L234.480000,389022.540000 " style="stroke:black"></path>
+<path d="M235.020000,389022.540000 L235.080000,389024.160000 L234.180000,389024.520000 L234.060000,389024.340000 L234.000000,389024.160000 L233.940000,389022.540000 " style="stroke:black"></path>
+<path d="M273.960000,389022.540000 L273.720000,389022.900000 L274.620000,389023.440000 L274.860000,389023.080000 " style="stroke:black"></path>
+<path d="M273.960000,389022.540000 L274.140000,389022.660000 L273.900000,389023.080000 L273.720000,389022.960000 " style="stroke:black"></path>
+<path d="M305.280000,389022.900000 L305.040000,389022.540000 L304.140000,389023.080000 L304.380000,389023.440000 " style="stroke:black"></path>
+<path d="M305.280000,389022.960000 L305.100000,389023.080000 L304.860000,389022.660000 L305.040000,389022.540000 " style="stroke:black"></path>
+<path d="M273.180000,389023.860000 L274.440000,389022.840000 L275.220000,389023.380000 L275.220000,389023.560000 L275.040000,389023.680000 L273.780000,389024.700000 " style="stroke:black"></path>
+<path d="M197.700000,389024.520000 L198.720000,389025.780000 L193.140000,389026.140000 L197.700000,389022.900000 " style="stroke:black"></path>
+<path d="M198.240000,389022.900000 L198.240000,389024.520000 L197.280000,389024.880000 L197.220000,389024.700000 L197.160000,389024.520000 L197.160000,389022.900000 " style="stroke:black"></path>
+<path d="M270.240000,389023.560000 L270.000000,389023.080000 L269.040000,389023.560000 L269.280000,389024.040000 " style="stroke:black"></path>
+<path d="M270.240000,389023.560000 L270.060000,389023.680000 L269.820000,389023.260000 L270.000000,389023.140000 " style="stroke:black"></path>
+<path d="M235.620000,389024.040000 L235.380000,389023.560000 L234.420000,389023.920000 L234.660000,389024.400000 " style="stroke:black"></path>
+<path d="M235.620000,389024.040000 L235.440000,389024.100000 L235.260000,389023.680000 L235.440000,389023.620000 " style="stroke:black"></path>
+<path d="M198.780000,389024.400000 L198.660000,389023.920000 L197.640000,389024.280000 L197.760000,389024.760000 " style="stroke:black"></path>
+<path d="M198.840000,389024.400000 L198.600000,389024.460000 L198.420000,389023.980000 L198.660000,389023.920000 " style="stroke:black"></path></svg>
+<h3>Figure 4-20.  PUNPCKHBW Instruction Operation Using 64-bit Operands</h3>
+<p>31</p>
+<p>0</p>
+<p>255</p>
+<p>255</p>
+<p>31</p>
+<p>0</p>
+<table class="exception-table">
+<tr>
+<td>X7</td>
+<td>X6</td>
+<td>X5</td>
+<td>X4</td>
+<td>X3</td>
+<td>X2</td>
+<td>X1</td>
+<td>X0</td></tr></table>
+<table class="exception-table">
+<tr>
+<td>Y7</td>
+<td>Y6</td>
+<td>Y5</td>
+<td>Y4</td>
+<td>Y3</td>
+<td>Y2</td>
+<td>Y1</td>
+<td>Y0</td></tr></table>
+<p>SRC</p>
+<p>255</p>
+<p>0</p>
+<table>
+<tr>
+<td>Y7</td>
+<td>X7</td>
+<td>Y6</td>
+<td>X6</td>
+<td>Y3</td>
+<td>X3</td>
+<td>Y2</td>
+<td>X2</td></tr></table>
+<p>DEST</p>
+<h3>Figure 4-21.  256-bit VPUNPCKHDQ Instruction Operation</h3>
+<p>When the source data comes from a 64-bit memory operand, the full 64-bit operand is accessed from memory, but the instruction uses only the high-order 32 bits. When the source data comes from a 128-bit memory operand, an implementation may fetch only the appropriate 64 bits; however, alignment to a 16-byte boundary and normal segment checking will still be enforced.</p>
+<p>The (V)PUNPCKHBW instruction interleaves the high-order bytes of the source and destination operands, the (V)PUNPCKHWD instruction interleaves the high-order words of the source and destination operands, the (V)PUNP-CKHDQ instruction interleaves the high-order doubleword (or doublewords) of the source and destination oper-ands, and the (V)PUNPCKHQDQ instruction interleaves the high-order quadwords of the source and destination operands.</p>
+<p>These instructions can be used to convert bytes to words, words to doublewords, doublewords to quadwords, and quadwords to double quadwords, respectively, by placing all 0s in the source operand. Here, if the source operand contains all 0s, the result (stored in the destination operand) contains zero extensions of the high-order data elements from the original value in the destination operand. For example, with the (V)PUNPCKHBW instruction the high-order bytes are zero extended (that is, unpacked into unsigned word integers), and with the (V)PUNPCKHWD instruction, the high-order words are zero extended (unpacked into unsigned doubleword integers).</p>
+<p>In 64-bit mode and not encoded with VEX/EVEX, using a REX prefix in the form of REX.R permits this instruction to access additional registers (XMM8-XMM15).</p>
+<p>Legacy SSE versions 64-bit operand: The source operand can be an MMX technology register or a 64-bit memory location. The destination operand is an MMX technology register.</p>
+<p>128-bit Legacy SSE versions: The second source operand is an XMM register or a 128-bit memory location. The first source operand and destination operands are XMM registers. Bits (MAXVL-1:128) of the corresponding YMM destination register remain unchanged.</p>
+<p>VEX.128 encoded versions: The second source operand is an XMM register or a 128-bit memory location. The first source operand and destination operands are XMM registers. Bits (MAXVL-1:128) of the destination YMM register are zeroed.</p>
+<p>VEX.256 encoded version: The second source operand is an YMM register or an 256-bit memory location. The first source operand and destination operands are YMM registers.</p>
+<p>EVEX encoded VPUNPCKHDQ/QDQ: The second source operand is a ZMM/YMM/XMM register, a 512/256/128-bit memory location or a 512/256/128-bit vector broadcasted from a 32/64-bit memory location. The first source operand and destination operands are ZMM/YMM/XMM registers. The destination is conditionally updated with writemask k1.</p>
+<p>EVEX encoded VPUNPCKHWD/BW: The second source operand is a ZMM/YMM/XMM register, a 512/256/128-bit memory location. The first source operand and destination operands are ZMM/YMM/XMM registers. The destination is conditionally updated with writemask k1.</p>
+<h2>Operation</h2>
+<p><strong>PUNPCKHBW Instruction With 64-bit Operands:</strong></p>
+<pre>    DEST[7:0] := DEST[39:32];
+    DEST[15:8] := SRC[39:32];
+    DEST[23:16] := DEST[47:40];
+    DEST[31:24] := SRC[47:40];
+    DEST[39:32] := DEST[55:48];
+    DEST[47:40] := SRC[55:48];
+    DEST[55:48] := DEST[63:56];
+    DEST[63:56] := SRC[63:56];</pre>
+<p><strong>PUNPCKHW Instruction With 64-bit Operands:</strong></p>
+<pre>    DEST[15:0] := DEST[47:32];
+    DEST[31:16] := SRC[47:32];
+    DEST[47:32] := DEST[63:48];
+    DEST[63:48] := SRC[63:48];</pre>
+<p><strong>PUNPCKHDQ Instruction With 64-bit Operands:</strong></p>
+<pre>    DEST[31:0] := DEST[63:32];
+    DEST[63:32] := SRC[63:32];
+INTERLEAVE_HIGH_BYTES_512b (SRC1, SRC2)
+TMP_DEST[255:0] := INTERLEAVE_HIGH_BYTES_256b(SRC1[255:0], SRC[255:0])
+TMP_DEST[511:256] := INTERLEAVE_HIGH_BYTES_256b(SRC1[511:256], SRC[511:256])
+INTERLEAVE_HIGH_BYTES_256b (SRC1, SRC2)
+DEST[7:0] := SRC1[71:64]
+DEST[15:8] := SRC2[71:64]
+DEST[23:16] := SRC1[79:72]
+DEST[31:24] := SRC2[79:72]
+DEST[39:32] := SRC1[87:80]
+DEST[47:40] := SRC2[87:80]
+DEST[55:48] := SRC1[95:88]
+DEST[63:56] := SRC2[95:88]
+DEST[71:64] := SRC1[103:96]
+DEST[79:72] := SRC2[103:96]
+DEST[87:80] := SRC1[111:104]
+DEST[95:88] := SRC2[111:104]
+DEST[103:96] := SRC1[119:112]
+DEST[111:104] := SRC2[119:112]
+DEST[119:112] := SRC1[127:120]
+DEST[127:120] := SRC2[127:120]
+DEST[135:128] := SRC1[199:192]
+DEST[143:136] := SRC2[199:192]
+DEST[151:144] := SRC1[207:200]
+DEST[159:152] := SRC2[207:200]
+DEST[167:160] := SRC1[215:208]
+DEST[175:168] := SRC2[215:208]
+DEST[183:176] := SRC1[223:216]
+DEST[191:184] := SRC2[223:216]
+DEST[199:192] := SRC1[231:224]
+DEST[207:200] := SRC2[231:224]
+DEST[215:208] := SRC1[239:232]
+DEST[223:216] := SRC2[239:232]
+DEST[231:224] := SRC1[247:240]
+DEST[239:232] := SRC2[247:240]
+DEST[247:240] := SRC1[255:248]
+DEST[255:248] := SRC2[255:248]
+INTERLEAVE_HIGH_BYTES (SRC1, SRC2)
+DEST[7:0] := SRC1[71:64]
+DEST[15:8] := SRC2[71:64]
+DEST[23:16] := SRC1[79:72]
+DEST[31:24] := SRC2[79:72]
+DEST[39:32] := SRC1[87:80]
+DEST[47:40] := SRC2[87:80]
+DEST[55:48] := SRC1[95:88]
+DEST[63:56] := SRC2[95:88]
+DEST[71:64] := SRC1[103:96]
+DEST[79:72] := SRC2[103:96]
+DEST[87:80] := SRC1[111:104]
+DEST[95:88] := SRC2[111:104]
+DEST[103:96] := SRC1[119:112]
+DEST[111:104] := SRC2[119:112]
+DEST[119:112] := SRC1[127:120]
+DEST[127:120] := SRC2[127:120]
+INTERLEAVE_HIGH_WORDS_512b (SRC1, SRC2)
+TMP_DEST[255:0] := INTERLEAVE_HIGH_WORDS_256b(SRC1[255:0], SRC[255:0])
+TMP_DEST[511:256] := INTERLEAVE_HIGH_WORDS_256b(SRC1[511:256], SRC[511:256])
+INTERLEAVE_HIGH_WORDS_256b(SRC1, SRC2)
+DEST[15:0] := SRC1[79:64]
+DEST[31:16] := SRC2[79:64]
+DEST[47:32] := SRC1[95:80]
+DEST[63:48] := SRC2[95:80]
+DEST[79:64] := SRC1[111:96]
+DEST[95:80] := SRC2[111:96]
+DEST[111:96] := SRC1[127:112]
+DEST[127:112] := SRC2[127:112]
+DEST[143:128] := SRC1[207:192]
+DEST[159:144] := SRC2[207:192]
+DEST[175:160] := SRC1[223:208]
+DEST[191:176] := SRC2[223:208]
+DEST[207:192] := SRC1[239:224]
+DEST[223:208] := SRC2[239:224]
+DEST[239:224] := SRC1[255:240]
+DEST[255:240] := SRC2[255:240]
+INTERLEAVE_HIGH_WORDS (SRC1, SRC2)
+DEST[15:0] := SRC1[79:64]
+DEST[31:16] := SRC2[79:64]
+DEST[47:32] := SRC1[95:80]
+DEST[63:48] := SRC2[95:80]
+DEST[79:64] := SRC1[111:96]
+DEST[95:80] := SRC2[111:96]
+DEST[111:96] := SRC1[127:112]
+DEST[127:112] := SRC2[127:112]
+INTERLEAVE_HIGH_DWORDS_512b (SRC1, SRC2)
+TMP_DEST[255:0] := INTERLEAVE_HIGH_DWORDS_256b(SRC1[255:0], SRC2[255:0])
+TMP_DEST[511:256] := INTERLEAVE_HIGH_DWORDS_256b(SRC1[511:256], SRC2[511:256])
+INTERLEAVE_HIGH_DWORDS_256b(SRC1, SRC2)
+DEST[31:0] := SRC1[95:64]
+DEST[63:32] := SRC2[95:64]
+DEST[95:64] := SRC1[127:96]
+DEST[127:96] := SRC2[127:96]
+DEST[159:128] := SRC1[223:192]
+DEST[191:160] := SRC2[223:192]
+DEST[223:192] := SRC1[255:224]
+DEST[255:224] := SRC2[255:224]
+INTERLEAVE_HIGH_DWORDS(SRC1, SRC2)
+DEST[31:0] := SRC1[95:64]
+DEST[63:32] := SRC2[95:64]
+DEST[95:64] := SRC1[127:96]
+DEST[127:96] := SRC2[127:96]
+INTERLEAVE_HIGH_QWORDS_512b (SRC1, SRC2)
+TMP_DEST[255:0] := INTERLEAVE_HIGH_QWORDS_256b(SRC1[255:0], SRC2[255:0])
+TMP_DEST[511:256] := INTERLEAVE_HIGH_QWORDS_256b(SRC1[511:256], SRC2[511:256])
+INTERLEAVE_HIGH_QWORDS_256b(SRC1, SRC2)
+DEST[63:0] := SRC1[127:64]
+DEST[127:64] := SRC2[127:64]
+DEST[191:128] := SRC1[255:192]
+DEST[255:192] := SRC2[255:192]
+INTERLEAVE_HIGH_QWORDS(SRC1, SRC2)
+DEST[63:0] := SRC1[127:64]
+DEST[127:64] := SRC2[127:64]</pre>
+<p><strong>PUNPCKHBW (128-bit Legacy SSE Version)</strong></p>
+<pre>DEST[127:0] := INTERLEAVE_HIGH_BYTES(DEST, SRC)
+DEST[255:127] (Unmodified)</pre>
+<p><strong>VPUNPCKHBW (VEX.128 Encoded Version)</strong></p>
+<pre>DEST[127:0] := INTERLEAVE_HIGH_BYTES(SRC1, SRC2)
+DEST[MAXVL-1:127] := 0</pre>
+<p><strong>VPUNPCKHBW (VEX.256 Encoded Version)</strong></p>
+<pre>DEST[255:0] := INTERLEAVE_HIGH_BYTES_256b(SRC1, SRC2)
+DEST[MAXVL-1:256] := 0</pre>
+<p><strong>VPUNPCKHBW (EVEX Encoded Versions)</strong></p>
+<pre>(KL, VL) = (16, 128), (32, 256), (64, 512)
+IF VL = 128
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_BYTES(SRC1[VL-1:0], SRC2[VL-1:0])
+FI;
+IF VL = 256
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_BYTES_256b(SRC1[VL-1:0], SRC2[VL-1:0])
+FI;
+IF VL = 512
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_BYTES_512b(SRC1[VL-1:0], SRC2[VL-1:0])
+FI;
+FOR j := 0 TO KL-1
+    i := j * 8
+    IF k1[j] OR *no writemask*
+         THEN DEST[i+7:i] := TMP_DEST[i+7:i]
+         ELSE
+              IF *merging-masking*
+                                                         ; merging-masking
+                    THEN *DEST[i+7:i] remains unchanged*
+                    ELSE *zeroing-masking*
+                                                              ; zeroing-masking
+                         DEST[i+7:i] := 0
+              FI
+    FI;
+ENDFOR
+DEST[MAXVL-1:VL] := 0</pre>
+<p><strong>PUNPCKHWD (128-bit Legacy SSE Version)</strong></p>
+<pre>DEST[127:0] := INTERLEAVE_HIGH_WORDS(DEST, SRC)
+DEST[255:127] (Unmodified)</pre>
+<p><strong>VPUNPCKHWD (VEX.128 Encoded Version)</strong></p>
+<pre>DEST[127:0] := INTERLEAVE_HIGH_WORDS(SRC1, SRC2)
+DEST[MAXVL-1:127] := 0</pre>
+<p><strong>VPUNPCKHWD (VEX.256 Encoded Version)</strong></p>
+<pre>DEST[255:0] := INTERLEAVE_HIGH_WORDS_256b(SRC1, SRC2)
+DEST[MAXVL-1:256] := 0</pre>
+<p><strong>VPUNPCKHWD (EVEX Encoded Versions)</strong></p>
+<pre>(KL, VL) = (8, 128), (16, 256), (32, 512)
+IF VL = 128
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_WORDS(SRC1[VL-1:0], SRC2[VL-1:0])
+FI;
+IF VL = 256
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_WORDS_256b(SRC1[VL-1:0], SRC2[VL-1:0])
+FI;
+IF VL = 512
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_WORDS_512b(SRC1[VL-1:0], SRC2[VL-1:0])
+FI;
+FOR j := 0 TO KL-1
+    i := j * 16
+    IF k1[j] OR *no writemask*
+         THEN DEST[i+15:i] := TMP_DEST[i+15:i]
+         ELSE
+              IF *merging-masking*
+                                                         ; merging-masking
+                    THEN *DEST[i+15:i] remains unchanged*
+                    ELSE *zeroing-masking*
+                                                              ; zeroing-masking
+                         DEST[i+15:i] := 0
+              FI
+    FI;
+ENDFOR
+DEST[MAXVL-1:VL] := 0</pre>
+<p><strong>PUNPCKHDQ (128-bit Legacy SSE Version)</strong></p>
+<pre>DEST[127:0] := INTERLEAVE_HIGH_DWORDS(DEST, SRC)
+DEST[255:127] (Unmodified)</pre>
+<p><strong>VPUNPCKHDQ (VEX.128 Encoded Version)</strong></p>
+<pre>DEST[127:0] := INTERLEAVE_HIGH_DWORDS(SRC1, SRC2)
+DEST[MAXVL-1:127] := 0</pre>
+<p><strong>VPUNPCKHDQ (VEX.256 Encoded Version)</strong></p>
+<pre>DEST[255:0] := INTERLEAVE_HIGH_DWORDS_256b(SRC1, SRC2)
+DEST[MAXVL-1:256] := 0</pre>
+<p><strong>VPUNPCKHDQ (EVEX.512 Encoded Version)</strong></p>
+<pre>(KL, VL) = (4, 128), (8, 256), (16, 512)
+FOR j := 0 TO KL-1
+    i := j * 32
+    IF (EVEX.b = 1) AND (SRC2 *is memory*)
+         THEN TMP_SRC2[i+31:i] := SRC2[31:0]
+         ELSE TMP_SRC2[i+31:i] := SRC2[i+31:i]
+    FI;
+ENDFOR;
+IF VL = 128
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_DWORDS(SRC1[VL-1:0], TMP_SRC2[VL-1:0])
+FI;
+IF VL = 256
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_DWORDS_256b(SRC1[VL-1:0], TMP_SRC2[VL-1:0])
+FI;
+IF VL = 512
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_DWORDS_512b(SRC1[VL-1:0], TMP_SRC2[VL-1:0])
+FI;
+FOR j := 0 TO KL-1
+    i := j * 32
+    IF k1[j] OR *no writemask*
+         THEN DEST[i+31:i] := TMP_DEST[i+31:i]
+         ELSE
+              IF *merging-masking*
+                                                         ; merging-masking
+                    THEN *DEST[i+31:i] remains unchanged*
+                    ELSE *zeroing-masking*
+                                                              ; zeroing-masking
+                         DEST[i+31:i] := 0
+              FI
+    FI;
+ENDFOR
+DEST[MAXVL-1:VL] := 0</pre>
+<p><strong>PUNPCKHQDQ (128-bit Legacy SSE Version)</strong></p>
+<pre>DEST[127:0] := INTERLEAVE_HIGH_QWORDS(DEST, SRC)
+DEST[MAXVL-1:128] (Unmodified)</pre>
+<p><strong>VPUNPCKHQDQ (VEX.128 Encoded Version)</strong></p>
+<pre>DEST[127:0] := INTERLEAVE_HIGH_QWORDS(SRC1, SRC2)
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>VPUNPCKHQDQ (VEX.256 Encoded Version)</strong></p>
+<pre>DEST[255:0] := INTERLEAVE_HIGH_QWORDS_256b(SRC1, SRC2)
+DEST[MAXVL-1:256] := 0</pre>
+<p><strong>VPUNPCKHQDQ (EVEX Encoded Versions)</strong></p>
+<pre>(KL, VL) = (2, 128), (4, 256), (8, 512)
+FOR j := 0 TO KL-1
+    i := j * 64
+    IF (EVEX.b = 1) AND (SRC2 *is memory*)
+         THEN TMP_SRC2[i+63:i] := SRC2[63:0]
+         ELSE TMP_SRC2[i+63:i] := SRC2[i+63:i]
+    FI;
+ENDFOR;
+IF VL = 128
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_QWORDS(SRC1[VL-1:0], TMP_SRC2[VL-1:0])
+FI;
+IF VL = 256
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_QWORDS_256b(SRC1[VL-1:0], TMP_SRC2[VL-1:0])
+FI;
+IF VL = 512
+    TMP_DEST[VL-1:0] := INTERLEAVE_HIGH_QWORDS_512b(SRC1[VL-1:0], TMP_SRC2[VL-1:0])
+FI;
+FOR j := 0 TO KL-1
+    i := j * 64
+    IF k1[j] OR *no writemask*
+         THEN DEST[i+63:i] := TMP_DEST[i+63:i]
+         ELSE
+              IF *merging-masking*
+                                                         ; merging-masking
+                    THEN *DEST[i+63:i] remains unchanged*
+                    ELSE *zeroing-masking*
+                                                              ; zeroing-masking
+                         DEST[i+63:i] := 0
+              FI
+    FI;
+ENDFOR
+DEST[MAXVL-1:VL] := 0</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalents</h2>
+<p>VPUNPCKHBW __m512i _mm512_unpackhi_epi8(__m512i a, __m512i b);</p>
+<p>VPUNPCKHBW __m512i _mm512_mask_unpackhi_epi8(__m512i s, __mmask64 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHBW __m512i _mm512_maskz_unpackhi_epi8( __mmask64 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHBW __m256i _mm256_mask_unpackhi_epi8(__m256i s, __mmask32 k, __m256i a, __m256i b);</p>
+<p>VPUNPCKHBW __m256i _mm256_maskz_unpackhi_epi8( __mmask32 k, __m256i a, __m256i b);</p>
+<p>VPUNPCKHBW __m128i _mm_mask_unpackhi_epi8(v s, __mmask16 k, __m128i a, __m128i b);</p>
+<p>VPUNPCKHBW __m128i _mm_maskz_unpackhi_epi8( __mmask16 k, __m128i a, __m128i b);</p>
+<p>VPUNPCKHWD __m512i _mm512_unpackhi_epi16(__m512i a, __m512i b);</p>
+<p>VPUNPCKHWD __m512i _mm512_mask_unpackhi_epi16(__m512i s, __mmask32 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHWD __m512i _mm512_maskz_unpackhi_epi16( __mmask32 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHWD __m256i _mm256_mask_unpackhi_epi16(__m256i s, __mmask16 k, __m256i a, __m256i b);</p>
+<p>VPUNPCKHWD __m256i _mm256_maskz_unpackhi_epi16( __mmask16 k, __m256i a, __m256i b);</p>
+<p>VPUNPCKHWD __m128i _mm_mask_unpackhi_epi16(v s, __mmask8 k, __m128i a, __m128i b);</p>
+<p>VPUNPCKHWD __m128i _mm_maskz_unpackhi_epi16( __mmask8 k, __m128i a, __m128i b);</p>
+<p>VPUNPCKHDQ __m512i _mm512_unpackhi_epi32(__m512i a, __m512i b);</p>
+<p>VPUNPCKHDQ __m512i _mm512_mask_unpackhi_epi32(__m512i s, __mmask16 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHDQ __m512i _mm512_maskz_unpackhi_epi32( __mmask16 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHDQ __m256i _mm256_mask_unpackhi_epi32(__m512i s, __mmask8 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHDQ __m256i _mm256_maskz_unpackhi_epi32( __mmask8 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHDQ __m128i _mm_mask_unpackhi_epi32(__m512i s, __mmask8 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHDQ __m128i _mm_maskz_unpackhi_epi32( __mmask8 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHQDQ __m512i _mm512_unpackhi_epi64(__m512i a, __m512i b);</p>
+<p>VPUNPCKHQDQ __m512i _mm512_mask_unpackhi_epi64(__m512i s, __mmask8 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHQDQ __m512i _mm512_maskz_unpackhi_epi64( __mmask8 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHQDQ __m256i _mm256_mask_unpackhi_epi64(__m512i s, __mmask8 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHQDQ __m256i _mm256_maskz_unpackhi_epi64( __mmask8 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHQDQ __m128i _mm_mask_unpackhi_epi64(__m512i s, __mmask8 k, __m512i a, __m512i b);</p>
+<p>VPUNPCKHQDQ __m128i _mm_maskz_unpackhi_epi64( __mmask8 k, __m512i a, __m512i b);</p>
+<p>PUNPCKHBW __m64 _mm_unpackhi_pi8(__m64 m1, __m64 m2)</p>
+<p>(V)PUNPCKHBW __m128i _mm_unpackhi_epi8(__m128i m1, __m128i m2)</p>
+<p>VPUNPCKHBW __m256i _mm256_unpackhi_epi8(__m256i m1, __m256i m2)</p>
+<p>PUNPCKHWD __m64 _mm_unpackhi_pi16(__m64 m1,__m64 m2)</p>
+<p>(V)PUNPCKHWD __m128i _mm_unpackhi_epi16(__m128i m1,__m128i m2)</p>
+<p>VPUNPCKHWD __m256i _mm256_unpackhi_epi16(__m256i m1,__m256i m2)</p>
+<p>PUNPCKHDQ __m64 _mm_unpackhi_pi32(__m64 m1, __m64 m2)</p>
+<p>(V)PUNPCKHDQ __m128i _mm_unpackhi_epi32(__m128i m1, __m128i m2)</p>
+<p>VPUNPCKHDQ __m256i _mm256_unpackhi_epi32(__m256i m1, __m256i m2)</p>
+<p>(V)PUNPCKHQDQ __m128i _mm_unpackhi_epi64 ( __m128i a, __m128i b)</p>
+<p>VPUNPCKHQDQ __m256i _mm256_unpackhi_epi64 ( __m256i a, __m256i b)</p>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Numeric Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>Non-EVEX-encoded instruction, see Table 2-21, “Type 4 Class Exception Conditions.”</p>
+<table class="exception-table">
+<tr>
+<td>EVEX-encoded VPUNPCKHQDQ/QDQ, see Table 2-50, “Type E4NF Class Exception Conditions.”</td></tr>
+<tr>
+<td>EVEX-encoded VPUNPCKHBW/WD, see Exceptions Type E4NF.nb in Table 2-50, “Type E4NF Class Exception Condi-</td></tr></table>
+<p>tions.”</p></div></body></html>

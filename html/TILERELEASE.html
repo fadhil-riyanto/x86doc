@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>TILERELEASE - Release Tile </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › TILERELEASE - Release Tile </div>
+<div id="body">
+<h1>TILERELEASE—Release Tile</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>VEX.128.NP.0F38.W0 49 C0 TILERELEASE</td>
+<td>A</td>
+<td>V/N.E.</td>
+<td>AMX-TILE</td>
+<td>Initialize TILECFG and TILEDATA.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>This instruction returns TILECFG and TILEDATA to the INIT state.</p>
+<p>Any attempt to execute the TILERELEASE instruction inside an Intel TSX transaction will result in a transaction abort.</p>
+<h2>Operation</h2>
+<pre>zero_all_tile_data()
+tilecfg := 0// equivalent to 64B of zeros
+TILES_CONFIGURED := 0</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>TILERELEASE void _tile_release(void);</p>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Exceptions</h2>
+<p>AMX-E6; see Section 2.10, “Intel® AMX Instruction Exception Classes,” for details.</p></div></body></html>

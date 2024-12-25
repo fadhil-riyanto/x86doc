@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VSHUFF32x4/VSHUFF64x2/VSHUFI32x4/VSHUFI64x2 - Shuffle Packed Values at 128-Bit Granularity </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VSHUFF32x4/VSHUFF64x2/VSHUFI32x4/VSHUFI64x2 - Shuffle Packed Values at 128-Bit Granularity </div>
+<div id="body">
+<h1>VSHUFF32x4/VSHUFF64x2/VSHUFI32x4/VSHUFI64x2—Shuffle Packed Values at 128-Bit Granularity</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W0 23 /r ib VSHUFF32X4 ymm1{k1}{z}, ymm2, ymm3/m256/m32bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Shuffle 128-bit packed single-precision floating-point values selected by imm8 from ymm2 and ymm3/m256/m32bcst and place results in ymm1 subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W0 23 /r ib VSHUFF32x4 zmm1{k1}{z}, zmm2, zmm3/m512/m32bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Shuffle 128-bit packed single-precision floating-point values selected by imm8 from zmm2 and zmm3/m512/m32bcst and place results in zmm1 subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W1 23 /r ib VSHUFF64X2 ymm1{k1}{z}, ymm2, ymm3/m256/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Shuffle 128-bit packed double precision floating-point values selected by imm8 from ymm2 and ymm3/m256/m64bcst and place results in ymm1 subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W1 23 /r ib VSHUFF64x2 zmm1{k1}{z}, zmm2, zmm3/m512/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Shuffle 128-bit packed double precision floating-point values selected by imm8 from zmm2 and zmm3/m512/m64bcst and place results in zmm1 subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W0 43 /r ib VSHUFI32X4 ymm1{k1}{z}, ymm2, ymm3/m256/m32bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Shuffle 128-bit packed double-word values selected by imm8 from ymm2 and ymm3/m256/m32bcst and place results in ymm1 subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W0 43 /r ib VSHUFI32x4 zmm1{k1}{z}, zmm2, zmm3/m512/m32bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Shuffle 128-bit packed double-word values selected by imm8 from zmm2 and zmm3/m512/m32bcst and place results in zmm1 subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W1 43 /r ib VSHUFI64X2 ymm1{k1}{z}, ymm2, ymm3/m256/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Shuffle 128-bit packed quad-word values selected by imm8 from ymm2 and ymm3/m256/m64bcst and place results in ymm1 subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W1 43 /r ib VSHUFI64x2 zmm1{k1}{z}, zmm2, zmm3/m512/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Shuffle 128-bit packed quad-word values selected by imm8 from zmm2 and zmm3/m512/m64bcst and place results in zmm1 subject to writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>256-bit Version: Moves one of the two 128-bit packed single-precision floating-point values from the first source operand (second operand) into the low 128-bit of the destination operand (first operand); moves one of the two packed 128-bit floating-point values from the second source operand (third operand) into the high 128-bit of the destination operand. The selector operand (third operand) determines which values are moved to the destination operand.</p>
+<p>512-bit Version: Moves two of the four 128-bit packed single-precision floating-point values from the first source operand (second operand) into the low 256-bit of each double qword of the destination operand (first operand); moves two of the four packed 128-bit floating-point values from the second source operand (third operand) into the high 256-bit of the destination operand. The selector operand (third operand) determines which values are moved to the destination operand.</p>
+<p>The first source operand is a vector register. The second source operand can be a ZMM register, a 512-bit memory location or a 512-bit vector broadcasted from a 32/64-bit memory location. The destination operand is a vector register.</p>
+<p>The writemask updates the destination operand with the granularity of 32/64-bit data elements.</p>
+<p><strong>Operation</strong></p>
+<p>Select2(SRC, control) {</p>
+<p>CASE (control[0]) OF</p>
+<p>0:</p>
+<p>TMP := SRC[127:0];</p>
+<p>1:</p>
+<p>TMP := SRC[255:128];</p>
+<p>ESAC;</p>
+<p>RETURN TMP</p>
+<p>}</p>
+<p>Select4(SRC, control) {</p>
+<p>CASE (control[1:0]) OF</p>
+<p>0:</p>
+<p>TMP := SRC[127:0];</p>
+<p>1:</p>
+<p>TMP := SRC[255:128];</p>
+<p>2:</p>
+<p>TMP := SRC[383:256];</p>
+<p>3:</p>
+<p>TMP := SRC[511:384];</p>
+<p>ESAC;</p>
+<p>RETURN TMP</p>
+<p>}</p>
+<p><strong>VSHUFF32x4 (EVEX versions)</strong></p>
+<p>(KL, VL) = (8, 256), (16, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF (EVEX.b = 1) AND (SRC2 *is memory*)</p>
+<p>THEN TMP_SRC2[i+31:i] := SRC2[31:0]</p>
+<p>ELSE TMP_SRC2[i+31:i] := SRC2[i+31:i]</p>
+<p>FI;</p>
+<p>ENDFOR;</p>
+<p>IF VL = 256</p>
+<p>TMP_DEST[127:0] := Select2(SRC1[255:0], imm8[0]);</p>
+<p>TMP_DEST[255:128] := Select2(SRC2[255:0], imm8[1]);</p>
+<p>FI;</p>
+<p>IF VL = 512</p>
+<p>TMP_DEST[127:0] := Select4(SRC1[511:0], imm8[1:0]);</p>
+<p>TMP_DEST[255:128] := Select4(SRC1[511:0], imm8[3:2]);</p>
+<p>TMP_DEST[383:256] := Select4(TMP_SRC2[511:0], imm8[5:4]);</p>
+<p>TMP_DEST[511:384] := Select4(TMP_SRC2[511:0], imm8[7:6]);</p>
+<p>FI;</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+31:i] := TMP_DEST[i+31:i]</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+31:i] remains unchanged*</p>
+<p>ELSE *zeroing-masking*</p>
+<p>; zeroing-masking</p>
+<p>THEN DEST[i+31:i] := 0</p>
+<p>FI;</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>VSHUFF64x2 (EVEX 512-bit version)</strong></p>
+<p>(KL, VL) = (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF (EVEX.b = 1) AND (SRC2 *is memory*)</p>
+<p>THEN TMP_SRC2[i+63:i] := SRC2[63:0]</p>
+<p>ELSE TMP_SRC2[i+63:i] := SRC2[i+63:i]</p>
+<p>FI;</p>
+<p>ENDFOR;</p>
+<p>IF VL = 256</p>
+<p>TMP_DEST[127:0] := Select2(SRC1[255:0], imm8[0]);</p>
+<p>TMP_DEST[255:128] := Select2(SRC2[255:0], imm8[1]);</p>
+<p>FI;</p>
+<p>IF VL = 512</p>
+<p>TMP_DEST[127:0] := Select4(SRC1[511:0], imm8[1:0]);</p>
+<p>TMP_DEST[255:128] := Select4(SRC1[511:0], imm8[3:2]);</p>
+<p>TMP_DEST[383:256] := Select4(TMP_SRC2[511:0], imm8[5:4]);</p>
+<p>TMP_DEST[511:384] := Select4(TMP_SRC2[511:0], imm8[7:6]);</p>
+<p>FI;</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+63:i] := TMP_DEST[i+63:i]</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE *zeroing-masking*</p>
+<p>; zeroing-masking</p>
+<p>THEN DEST[i+63:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>VSHUFI32x4 (EVEX 512-bit version)</strong></p>
+<p>(KL, VL) = (8, 256), (16, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF (EVEX.b = 1) AND (SRC2 *is memory*)</p>
+<p>THEN TMP_SRC2[i+31:i] := SRC2[31:0]</p>
+<p>ELSE TMP_SRC2[i+31:i] := SRC2[i+31:i]</p>
+<p>FI;</p>
+<p>ENDFOR;</p>
+<p>IF VL = 256</p>
+<p>TMP_DEST[127:0] := Select2(SRC1[255:0], imm8[0]);</p>
+<p>TMP_DEST[255:128] := Select2(SRC2[255:0], imm8[1]);</p>
+<p>FI;</p>
+<p>IF VL = 512</p>
+<p>TMP_DEST[127:0] := Select4(SRC1[511:0], imm8[1:0]);</p>
+<p>TMP_DEST[255:128] := Select4(SRC1[511:0], imm8[3:2]);</p>
+<p>TMP_DEST[383:256] := Select4(TMP_SRC2[511:0], imm8[5:4]);</p>
+<p>TMP_DEST[511:384] := Select4(TMP_SRC2[511:0], imm8[7:6]);</p>
+<p>FI;</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+31:i] := TMP_DEST[i+31:i]</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+31:i] remains unchanged*</p>
+<p>ELSE *zeroing-masking*</p>
+<p>; zeroing-masking</p>
+<p>THEN DEST[i+31:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>VSHUFI64x2 (EVEX 512-bit version)</strong></p>
+<p>(KL, VL) = (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF (EVEX.b = 1) AND (SRC2 *is memory*)</p>
+<p>THEN TMP_SRC2[i+63:i] := SRC2[63:0]</p>
+<p>ELSE TMP_SRC2[i+63:i] := SRC2[i+63:i]</p>
+<p>FI;</p>
+<p>ENDFOR;</p>
+<p>IF VL = 256</p>
+<p>TMP_DEST[127:0] := Select2(SRC1[255:0], imm8[0]);</p>
+<p>TMP_DEST[255:128] := Select2(SRC2[255:0], imm8[1]);</p>
+<p>FI;</p>
+<p>IF VL = 512</p>
+<p>TMP_DEST[127:0] := Select4(SRC1[511:0], imm8[1:0]);</p>
+<p>TMP_DEST[255:128] := Select4(SRC1[511:0], imm8[3:2]);</p>
+<p>TMP_DEST[383:256] := Select4(TMP_SRC2[511:0], imm8[5:4]);</p>
+<p>TMP_DEST[511:384] := Select4(TMP_SRC2[511:0], imm8[7:6]);</p>
+<p>FI;</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+63:i] := TMP_DEST[i+63:i]</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE *zeroing-masking*</p>
+<p>; zeroing-masking</p>
+<p>THEN DEST[i+63:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VSHUFI32x4 __m512i _mm512_shuffle_i32x4(__m512i a, __m512i b, int imm);</p>
+<p>VSHUFI32x4 __m512i _mm512_mask_shuffle_i32x4(__m512i s, __mmask16 k, __m512i a, __m512i b, int imm);</p>
+<p>VSHUFI32x4 __m512i _mm512_maskz_shuffle_i32x4( __mmask16 k, __m512i a, __m512i b, int imm);</p>
+<p>VSHUFI32x4 __m256i _mm256_shuffle_i32x4(__m256i a, __m256i b, int imm);</p>
+<p>VSHUFI32x4 __m256i _mm256_mask_shuffle_i32x4(__m256i s, __mmask8 k, __m256i a, __m256i b, int imm);</p>
+<p>VSHUFI32x4 __m256i _mm256_maskz_shuffle_i32x4( __mmask8 k, __m256i a, __m256i b, int imm);</p>
+<p>VSHUFF32x4 __m512 _mm512_shuffle_f32x4(__m512 a, __m512 b, int imm);</p>
+<p>VSHUFF32x4 __m512 _mm512_mask_shuffle_f32x4(__m512 s, __mmask16 k, __m512 a, __m512 b, int imm);</p>
+<p>VSHUFF32x4 __m512 _mm512_maskz_shuffle_f32x4( __mmask16 k, __m512 a, __m512 b, int imm);</p>
+<p>VSHUFI64x2 __m512i _mm512_shuffle_i64x2(__m512i a, __m512i b, int imm);</p>
+<p>VSHUFI64x2 __m512i _mm512_mask_shuffle_i64x2(__m512i s, __mmask8 k, __m512i b, __m512i b, int imm);</p>
+<p>VSHUFI64x2 __m512i _mm512_maskz_shuffle_i64x2( __mmask8 k, __m512i a, __m512i b, int imm);</p>
+<p>VSHUFF64x2 __m512d _mm512_shuffle_f64x2(__m512d a, __m512d b, int imm);</p>
+<p>VSHUFF64x2 __m512d _mm512_mask_shuffle_f64x2(__m512d s, __mmask8 k, __m512d a, __m512d b, int imm);</p>
+<p>VSHUFF64x2 __m512d _mm512_maskz_shuffle_f64x2( __mmask8 k, __m512d a, __m512d b, int imm);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-50, “Type E4NF Class Exception Conditions.”</p>
+<p>Additionally:</p>
+<table>
+<tr>
+<td>#UD</td>
+<td>If EVEX.L’L = 0 for VSHUFF32x4/VSHUFF64x2.</td></tr></table></div></body></html>

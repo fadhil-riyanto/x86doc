@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>XABORT - Transactional Abort </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › XABORT - Transactional Abort </div>
+<div id="body">
+<h1>XABORT—Transactional Abort</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>C6 F8 ib XABORT imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>RTM</td>
+<td>Causes an RTM abort if in RTM execution.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand2</th>
+<th>Operand3</th>
+<th>Operand4</th></tr>
+<tr>
+<td>A</td>
+<td>imm8</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>XABORT forces an RTM abort. Following an RTM abort, the logical processor resumes execution at the fallback address computed through the outermost XBEGIN instruction. The EAX register is updated to reflect an XABORT instruction caused the abort, and the imm8 argument will be provided in bits 31:24 of EAX.</p>
+<h2>Operation</h2>
+<p><strong>XABORT</strong></p>
+<pre>IF RTM_ACTIVE = 0
+    THEN
+         Treat as NOP;
+    ELSE
+         GOTO RTM_ABORT_PROCESSING;
+FI;
+(* For any RTM abort condition encountered during RTM execution *)
+RTM_ABORT_PROCESSING:
+    Restore architectural register state;
+    Discard memory updates performed in transaction;
+    Update EAX with status and XABORT argument;
+    RTM_NEST_COUNT:= 0;
+    RTM_ACTIVE:= 0;
+    SUSLDTRK_ACTIVE := 0;
+    IF 64-bit Mode
+         THEN
+              RIP:= fallbackRIP;
+         ELSE
+              EIP := fallbackEIP;
+    FI;
+END</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>XABORT void _xabort( unsigned int);</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>CPUID.(EAX=7, ECX=0):EBX.RTM[bit 11] = 0.</p>
+<p>If LOCK prefix is used.</p></td></tr></table></div></body></html>

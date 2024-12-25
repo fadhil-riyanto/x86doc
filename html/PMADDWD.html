@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>PMADDWD - Multiply and Add Packed Integers </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › PMADDWD - Multiply and Add Packed Integers </div>
+<div id="body">
+<h1>PMADDWD—Multiply and Add Packed Integers</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>NP 0F F5 /r<sup>1</sup></p>
+<p>PMADDWD mm, mm/m64</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>MMX</td>
+<td>Multiply the packed words in mm by the packed words in mm/m64, add adjacent doubleword results, and store in mm.</td></tr>
+<tr>
+<td>
+<p>66 0F F5 /r</p>
+<p>PMADDWD xmm1, xmm2/m128</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>SSE2</td>
+<td>Multiply the packed word integers in xmm1 by the packed word integers in xmm2/m128, add adjacent doubleword results, and store in xmm1.</td></tr>
+<tr>
+<td>
+<p>VEX.128.66.0F.WIG F5 /r</p>
+<p>VPMADDWD xmm1, xmm2, xmm3/m128</p></td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Multiply the packed word integers in xmm2 by the packed word integers in xmm3/m128, add adjacent doubleword results, and store in xmm1.</td></tr>
+<tr>
+<td>
+<p>VEX.256.66.0F.WIG F5 /r</p>
+<p>VPMADDWD ymm1, ymm2, ymm3/m256</p></td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX2</td>
+<td>Multiply the packed word integers in ymm2 by the packed word integers in ymm3/m256, add adjacent doubleword results, and store in ymm1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F.WIG F5 /r VPMADDWD xmm1 {k1}{z}, xmm2, xmm3/m128</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Multiply the packed word integers in xmm2 by the packed word integers in xmm3/m128, add adjacent doubleword results, and store in xmm1 under writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F.WIG F5 /r VPMADDWD ymm1 {k1}{z}, ymm2, ymm3/m256</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Multiply the packed word integers in ymm2 by the packed word integers in ymm3/m256, add adjacent doubleword results, and store in ymm1 under writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F.WIG F5 /r VPMADDWD zmm1 {k1}{z}, zmm2, zmm3/m512</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Multiply the packed word integers in zmm2 by the packed word integers in zmm3/m512, add adjacent doubleword results, and store in zmm1 under writemask k1.</td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1. See note in Section 2.5, “Intel® AVX and Intel® SSE Instruction Exception Specification” in the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Soft-</p>
+<p>ware Developer’s Manual, Volume 2A and Section 23.25.3, “Exception Conditions of Legacy SIMD Instructions Operating on MMX Reg-isters” in the Intel<em><sup>® </sup></em>64 and IA-32 Architectures Software Developer’s Manual, Volume 3A.</p>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:reg (r, w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>C</td>
+<td>Full Mem</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Multiplies the individual signed words of the destination operand (first operand) by the corresponding signed words of the source operand (second operand), producing temporary signed, doubleword results. The adjacent double-word results are then summed and stored in the destination operand. For example, the corresponding low-order words (15-0) and (31-16) in the source and destination operands are multiplied by one another and the double-word results are added together and stored in the low doubleword of the destination register (31-0). The same operation is performed on the other pairs of adjacent words. (Figure 4-11 shows this operation when using 64-bit operands).</p>
+<p>The (V)PMADDWD instruction wraps around only in one situation: when the 2 pairs of words being operated on in a group are all 8000H. In this case, the result wraps around to 80000000H.</p>
+<p>In 64-bit mode and not encoded with VEX/EVEX, using a REX prefix in the form of REX.R permits this instruction to access additional registers (XMM8-XMM15).</p>
+<p>Legacy SSE version: The first source and destination operands are MMX registers. The second source operand is an MMX register or a 64-bit memory location.</p>
+<p>128-bit Legacy SSE version: The first source and destination operands are XMM registers. The second source operand is an XMM register or a 128-bit memory location. Bits (MAXVL-1:128) of the corresponding YMM destina-tion register remain unchanged.</p>
+<p>VEX.128 encoded version: The first source and destination operands are XMM registers. The second source operand is an XMM register or a 128-bit memory location. Bits (MAXVL-1:128) of the destination YMM register are zeroed.</p>
+<p>VEX.256 encoded version: The second source operand can be an YMM register or a 256-bit memory location. The first source and destination operands are YMM registers.</p>
+<p>EVEX.512 encoded version: The second source operand can be an ZMM register or a 512-bit memory location. The first source and destination operands are ZMM registers.</p>
+<svg width="568.7999849999999" height="182.43000000003667" viewBox="111.840000 239466.000010 379.199990 121.620000">
+<text x="201.53946599999998" y="239486.864496" style="font-size:7.980000pt" textLength="16.86014399999999" lengthAdjust="spacingAndGlyphs">SRC</text>
+<text x="251.76" y="239487.52524000002" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X3</text>
+<text x="287.33883000000003" y="239487.52524000002" style="font-size:7.980000pt" textLength="9.777095999999915" lengthAdjust="spacingAndGlyphs">X2</text>
+<text x="324.35805" y="239487.52524000002" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X1</text>
+<text x="360.777174" y="239487.52524000002" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">X0</text>
+<text x="201.53946599999998" y="239513.62462800002" style="font-size:7.980000pt" textLength="21.320964000000004" lengthAdjust="spacingAndGlyphs">DEST</text>
+<text x="254.94" y="239514.82524" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">Y3</text>
+<text x="290.51883" y="239514.82524" style="font-size:7.980000pt" textLength="9.777096000000029" lengthAdjust="spacingAndGlyphs">Y2</text>
+<text x="327.53805" y="239514.82524" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">Y1</text>
+<text x="363.957174" y="239514.82524" style="font-size:7.980000pt" textLength="9.777095999999972" lengthAdjust="spacingAndGlyphs">Y0</text>
+<text x="192.47977199999997" y="239543.204892" style="font-size:7.980000pt" textLength="27.83823000000001" lengthAdjust="spacingAndGlyphs">X3 ∗ Y3</text>
+<text x="265.619664" y="239543.204892" style="font-size:7.980000pt" textLength="27.834239999999966" lengthAdjust="spacingAndGlyphs">X2 ∗ Y2</text>
+<text x="338.876064" y="239543.204892" style="font-size:7.980000pt" textLength="27.83823000000001" lengthAdjust="spacingAndGlyphs">X1 ∗ Y1</text>
+<text x="407.875932" y="239543.204892" style="font-size:7.980000pt" textLength="27.90206999999998" lengthAdjust="spacingAndGlyphs">X0 ∗ Y0</text>
+<text x="143.28128999999996" y="239544.04506600002" style="font-size:7.980000pt" textLength="22.235472000000016" lengthAdjust="spacingAndGlyphs">TEMP</text>
+<text x="202.61915999999997" y="239568.94438200002" style="font-size:7.980000pt" textLength="21.320964000000004" lengthAdjust="spacingAndGlyphs">DEST</text>
+<text x="317.76" y="239572.06524" style="font-size:7.980000pt" textLength="66.61624199999994" lengthAdjust="spacingAndGlyphs">(X1∗Y1) + (X0∗Y0)</text>
+<text x="245.93999999999997" y="239572.42513800002" style="font-size:7.980000pt" textLength="66.58990799999995" lengthAdjust="spacingAndGlyphs">(X3∗Y3) + (X2∗Y2)</text>
+<rect x="276.66" y="239476.62" width="36.360000000000014" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="313.02" y="239476.62" width="36.360000000000014" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="349.38" y="239476.62" width="36.360000000000014" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="240.24" y="239502.84" width="36.360000000000014" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="276.6" y="239502.84" width="36.360000000000014" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="312.96" y="239502.84" width="36.360000000000014" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="240.24" y="239476.62" width="36.420000000000016" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="349.32" y="239502.84" width="36.420000000000016" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="169.26" y="239532.66" width="72.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="241.26" y="239532.66" width="72.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="313.26" y="239532.66" width="72.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="385.26" y="239532.66" width="72.0" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="241.14" y="239560.68" width="72.24000000000001" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="313.26" y="239560.68" width="73.38" height="18.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<h3>Figure 4-11.  PMADDWD Execution Model Using 64-bit Operands</h3>
+<h2>Operation</h2>
+<p><strong>PMADDWD (With 64-bit Operands)</strong></p>
+<pre>    DEST[31:0] := (DEST[15:0] ∗ SRC[15:0]) + (DEST[31:16] ∗ SRC[31:16]);
+    DEST[63:32] := (DEST[47:32] ∗ SRC[47:32]) + (DEST[63:48] ∗ SRC[63:48]);</pre>
+<p><strong>PMADDWD (With 128-bit Operands)</strong></p>
+<pre>    DEST[31:0] := (DEST[15:0] ∗ SRC[15:0]) + (DEST[31:16] ∗ SRC[31:16]);
+    DEST[63:32] := (DEST[47:32] ∗ SRC[47:32]) + (DEST[63:48] ∗ SRC[63:48]);
+    DEST[95:64] := (DEST[79:64] ∗ SRC[79:64]) + (DEST[95:80] ∗ SRC[95:80]);
+    DEST[127:96] := (DEST[111:96] ∗ SRC[111:96]) + (DEST[127:112] ∗ SRC[127:112]);</pre>
+<p><strong>VPMADDWD (VEX.128 Encoded Version)</strong></p>
+<pre>DEST[31:0] := (SRC1[15:0] * SRC2[15:0]) + (SRC1[31:16] * SRC2[31:16])
+DEST[63:32] := (SRC1[47:32] * SRC2[47:32]) + (SRC1[63:48] * SRC2[63:48])
+DEST[95:64] := (SRC1[79:64] * SRC2[79:64]) + (SRC1[95:80] * SRC2[95:80])
+DEST[127:96] := (SRC1[111:96] * SRC2[111:96]) + (SRC1[127:112] * SRC2[127:112])
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>VPMADDWD (VEX.256 Encoded Version)</strong></p>
+<pre>DEST[31:0] := (SRC1[15:0] * SRC2[15:0]) + (SRC1[31:16] * SRC2[31:16])
+DEST[63:32] := (SRC1[47:32] * SRC2[47:32]) + (SRC1[63:48] * SRC2[63:48])
+DEST[95:64] := (SRC1[79:64] * SRC2[79:64]) + (SRC1[95:80] * SRC2[95:80])
+DEST[127:96] := (SRC1[111:96] * SRC2[111:96]) + (SRC1[127:112] * SRC2[127:112])
+DEST[159:128] := (SRC1[143:128] * SRC2[143:128]) + (SRC1[159:144] * SRC2[159:144])
+DEST[191:160] := (SRC1[175:160] * SRC2[175:160]) + (SRC1[191:176] * SRC2[191:176])
+DEST[223:192] := (SRC1[207:192] * SRC2[207:192]) + (SRC1[223:208] * SRC2[223:208])
+DEST[255:224] := (SRC1[239:224] * SRC2[239:224]) + (SRC1[255:240] * SRC2[255:240])
+DEST[MAXVL-1:256] := 0</pre>
+<p><strong>VPMADDWD (EVEX Encoded Versions)</strong></p>
+<pre>(KL, VL) = (4, 128), (8, 256), (16, 512)
+FOR j := 0 TO KL-1
+    i := j * 32
+    IF k1[j] OR *no writemask*
+         THEN DEST[i+31:i] := (SRC2[i+31:i+16]* SRC1[i+31:i+16]) + (SRC2[i+15:i]*SRC1[i+15:i])
+         ELSE
+              IF *merging-masking*
+                                                         ; merging-masking
+                    THEN *DEST[i+31:i] remains unchanged*
+                    ELSE *zeroing-masking*
+                                                              ; zeroing-masking
+                         DEST[i+31:i] = 0
+              FI
+    FI;
+ENDFOR;
+DEST[MAXVL-1:VL] := 0</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>VPMADDWD __m512i _mm512_madd_epi16( __m512i a, __m512i b);</p>
+<p>VPMADDWD __m512i _mm512_mask_madd_epi16(__m512i s, __mmask32 k, __m512i a, __m512i b);</p>
+<p>VPMADDWD __m512i _mm512_maskz_madd_epi16( __mmask32 k, __m512i a, __m512i b);</p>
+<p>VPMADDWD __m256i _mm256_mask_madd_epi16(__m256i s, __mmask16 k, __m256i a, __m256i b);</p>
+<p>VPMADDWD __m256i _mm256_maskz_madd_epi16( __mmask16 k, __m256i a, __m256i b);</p>
+<p>VPMADDWD __m128i _mm_mask_madd_epi16(__m128i s, __mmask8 k, __m128i a, __m128i b);</p>
+<p>VPMADDWD __m128i _mm_maskz_madd_epi16( __mmask8 k, __m128i a, __m128i b);</p>
+<p>PMADDWD __m64 _mm_madd_pi16(__m64 m1, __m64 m2)</p>
+<p>(V)PMADDWD __m128i _mm_madd_epi16 ( __m128i a, __m128i b)</p>
+<p>VPMADDWD __m256i _mm256_madd_epi16 ( __m256i a, __m256i b)</p>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Numeric Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>Non-EVEX-encoded instruction, see Table 2-21, “Type 4 Class Exception Conditions.” EVEX-encoded instruction, see Exceptions Type E4NF.nb in Table 2-50, “Type E4NF Class Exception Conditions.”</p></div></body></html>

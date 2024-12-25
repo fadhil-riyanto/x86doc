@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VPLZCNTD/Q - Count the Number of Leading Zero Bits for Packed Dword, Packed Qword Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VPLZCNTD/Q - Count the Number of Leading Zero Bits for Packed Dword, Packed Qword Values </div>
+<div id="body">
+<h1>VPLZCNTD/Q—Count the Number of Leading Zero Bits for Packed Dword, Packed Qword Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 44 /r VPLZCNTD xmm1 {k1}{z}, xmm2/m128/m32bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512CD</td>
+<td>Count the number of leading zero bits in each dword element of xmm2/m128/m32bcst using writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 44 /r VPLZCNTD ymm1 {k1}{z}, ymm2/m256/m32bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512CD</td>
+<td>Count the number of leading zero bits in each dword element of ymm2/m256/m32bcst using writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 44 /r VPLZCNTD zmm1 {k1}{z}, zmm2/m512/m32bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512CD</td>
+<td>Count the number of leading zero bits in each dword element of zmm2/m512/m32bcst using writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 44 /r VPLZCNTQ xmm1 {k1}{z}, xmm2/m128/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512CD</td>
+<td>Count the number of leading zero bits in each qword element of xmm2/m128/m64bcst using writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 44 /r VPLZCNTQ ymm1 {k1}{z}, ymm2/m256/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512CD</td>
+<td>Count the number of leading zero bits in each qword element of ymm2/m256/m64bcst using writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 44 /r VPLZCNTQ zmm1 {k1}{z}, zmm2/m512/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512CD</td>
+<td>Count the number of leading zero bits in each qword element of zmm2/m512/m64bcst using writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Counts the number of leading most significant zero bits in each dword or qword element of the source operand (the second operand) and stores the results in the destination register (the first operand) according to the writemask. If an element is zero, the result for that element is the operand size of the element.</p>
+<p>EVEX.512 encoded version: The source operand is a ZMM register, a 512-bit memory location, or a 512-bit vector broadcasted from a 32/64-bit memory location. The destination operand is a ZMM register, conditionally updated using writemask k1.</p>
+<p>EVEX.256 encoded version: The source operand is a YMM register, a 256-bit memory location, or a 256-bit vector broadcasted from a 32/64-bit memory location. The destination operand is a YMM register, conditionally updated using writemask k1.</p>
+<p>EVEX.128 encoded version: The source operand is a XMM register, a 128-bit memory location, or a 128-bit vector broadcasted from a 32/64-bit memory location. The destination operand is a XMM register, conditionally updated using writemask k1.</p>
+<p>EVEX.vvvv is reserved and must be 1111b otherwise instructions will #UD.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VPLZCNTD</strong></p>
+<p>(KL, VL) = (4, 128), (8, 256), (16, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j*32</p>
+<p>IF MaskBit(j) OR *no writemask*</p>
+<p>THEN</p>
+<p>temp := 32</p>
+<p>DEST[i+31:i] := 0</p>
+<p>WHILE (temp &gt; 0) AND (SRC[i+temp-1] = 0)</p>
+<p>DO</p>
+<p>temp := temp – 1</p>
+<p>DEST[i+31:i] := DEST[i+31:i] + 1</p>
+<p>OD</p>
+<p>ELSE</p>
+<p>   IF *merging-masking*</p>
+<p>THEN *DEST[i+31:i] remains unchanged*</p>
+<p>ELSE DEST[i+31:i] := 0</p>
+<p>   FI</p>
+<p>FI</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>VPLZCNTQ</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j*64</p>
+<p>IF MaskBit(j) OR *no writemask*</p>
+<p>THEN</p>
+<p>temp := 64</p>
+<p>DEST[i+63:i] := 0</p>
+<p>WHILE (temp &gt; 0) AND (SRC[i+temp-1] = 0)</p>
+<p>DO</p>
+<p>temp := temp – 1</p>
+<p>DEST[i+63:i] := DEST[i+63:i] + 1</p>
+<p>OD</p>
+<p>ELSE</p>
+<p>   IF *merging-masking*</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE DEST[i+63:i] := 0</p>
+<p>   FI</p>
+<p>FI</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VPLZCNTD __m512i _mm512_lzcnt_epi32(__m512i a);</p>
+<p>VPLZCNTD __m512i _mm512_mask_lzcnt_epi32(__m512i s, __mmask16 m, __m512i a);</p>
+<p>VPLZCNTD __m512i _mm512_maskz_lzcnt_epi32( __mmask16 m, __m512i a);</p>
+<p>VPLZCNTQ __m512i _mm512_lzcnt_epi64(__m512i a);</p>
+<p>VPLZCNTQ __m512i _mm512_mask_lzcnt_epi64(__m512i s, __mmask8 m, __m512i a);</p>
+<p>VPLZCNTQ __m512i _mm512_maskz_lzcnt_epi64(__mmask8 m, __m512i a);</p>
+<p>VPLZCNTD __m256i _mm256_lzcnt_epi32(__m256i a);</p>
+<p>VPLZCNTD __m256i _mm256_mask_lzcnt_epi32(__m256i s, __mmask8 m, __m256i a);</p>
+<p>VPLZCNTD __m256i _mm256_maskz_lzcnt_epi32( __mmask8 m, __m256i a);</p>
+<p>VPLZCNTQ __m256i _mm256_lzcnt_epi64(__m256i a);</p>
+<p>VPLZCNTQ __m256i _mm256_mask_lzcnt_epi64(__m256i s, __mmask8 m, __m256i a);</p>
+<p>VPLZCNTQ __m256i _mm256_maskz_lzcnt_epi64(__mmask8 m, __m256i a);</p>
+<p>VPLZCNTD __m128i _mm_lzcnt_epi32(__m128i a);</p>
+<p>VPLZCNTD __m128i _mm_mask_lzcnt_epi32(__m128i s, __mmask8 m, __m128i a);</p>
+<p>VPLZCNTD __m128i _mm_maskz_lzcnt_epi32( __mmask8 m, __m128i a);</p>
+<p>VPLZCNTQ __m128i _mm_lzcnt_epi64(__m128i a);</p>
+<p>VPLZCNTQ __m128i _mm_mask_lzcnt_epi64(__m128i s, __mmask8 m, __m128i a);</p>
+<p>VPLZCNTQ __m128i _mm_maskz_lzcnt_epi64(__mmask8 m, __m128i a);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instruction, see Table 2-49, “Type E4 Class Exception Conditions.”</p></div></body></html>

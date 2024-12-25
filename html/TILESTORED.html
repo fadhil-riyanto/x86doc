@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>TILESTORED - Store Tile </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › TILESTORED - Store Tile </div>
+<div id="body">
+<h1>TILESTORED—Store Tile</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>VEX.128.F3.0F38.W0 4B !(11):rrr:100 TILESTORED sibmem, tmm1</td>
+<td>A</td>
+<td>V/N.E.</td>
+<td>AMX-TILE</td>
+<td>Store a tile in sibmem as specified in tmm1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:r/m (w)</td>
+<td>ModRM:reg (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>This instruction is required to use SIB addressing. The index register serves as a stride indicator. If the SIB encoding omits an index register, the value zero is assumed for the content of the index register.</p>
+<p>This instruction stores a tile source of rows and columns as specified by the tile configuration.</p>
+<p>The TILECFG.start_row in the TILECFG data should be initialized to '0' in order to store the entire tile and are set to zero on successful completion of the TILESTORED instruction. TILESTORED is a restartable instruction and the TILECFG.start_row will be non-zero when restartable events occur during the instruction execution.</p>
+<p>Only memory operands are supported and they can only be accessed using a SIB addressing mode, similar to the V[P]GATHER*/V[P]SCATTER* instructions.</p>
+<p>Any attempt to execute the TILESTORED instruction inside an Intel TSX transaction will result in a transaction abort.</p>
+<h2>Operation</h2>
+<pre>TILESTORED tsib, tsrc
+start := tilecfg.start_row
+membegin := tsib.base + displacement
+// if no index register in the SIB encoding, the value zero is used.
+stride := tsib.index &lt;&lt; tsib.scale
+while start &lt; tdest.rows:
+    memptr := membegin + start * stride
+    write_memory(memptr, tsrc.colsb, tsrc.row[start])
+    start := start + 1
+zero_tilecfg_start()
+// In the case of a memory fault in the middle of an instruction, the tilecfg.start_row := start</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>TILESTORED void _tile_stored(__tile src, void *base, int stride);</p>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Exceptions</h2>
+<p>AMX-E3; see Section 2.10, “Intel® AMX Instruction Exception Classes,” for details.</p></div></body></html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VREDUCEPD - Perform Reduction Transformation on Packed Float64 Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VREDUCEPD - Perform Reduction Transformation on Packed Float64 Values </div>
+<div id="body">
+<h1>VREDUCEPD—Perform Reduction Transformation on Packed Float64 Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F3A.W1 56 /r ib VREDUCEPD xmm1 {k1}{z}, xmm2/m128/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Perform reduction transformation on packed double precision floating-point values in xmm2/m128/m32bcst by subtracting a number of fraction bits specified by the imm8 field. Stores the result in xmm1 register under writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W1 56 /r ib VREDUCEPD ymm1 {k1}{z}, ymm2/m256/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Perform reduction transformation on packed double precision floating-point values in ymm2/m256/m32bcst by subtracting a number of fraction bits specified by the imm8 field. Stores the result in ymm1 register under writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W1 56 /r ib VREDUCEPD zmm1 {k1}{z}, zmm2/m512/m64bcst{sae}, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512DQ</td>
+<td>Perform reduction transformation on double precision floating-point values in zmm2/m512/m32bcst by subtracting a number of fraction bits specified by the imm8 field. Stores the result in zmm1 register under writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Perform reduction transformation of the packed binary encoded double precision floating-point values in the source operand (the second operand) and store the reduced results in binary floating-point format to the destination operand (the first operand) under the writemask k1.</p>
+<p>The reduction transformation subtracts the integer part and the leading M fractional bits from the binary floating-point source value, where M is a unsigned integer specified by imm8[7:4], see Figure 5-28. Specifically, the reduc-tion transformation can be expressed as:</p>
+<p>dest = src – (ROUND(2<sup>M</sup>*src))*2<sup>-M</sup>;</p>
+<p>where “Round()” treats “src”, “2<sup>M</sup>”, and their product as binary floating-point numbers with normalized signifi-cand and biased exponents.</p>
+<p>The magnitude of the reduced result can be expressed by considering src= 2<sup>p</sup>*man2, where ‘man2’ is the normalized significand and ‘p’ is the unbiased exponent</p>
+<p>Then if RC = RNE: 0&lt;=|Reduced Result|&lt;=2<sup>p-M-1</sup></p>
+<p>Then if RC ≠ RNE: 0&lt;=|Reduced Result|&lt;2<sup>p-M</sup></p>
+<p>This instruction might end up with a precision exception set. However, in case of SPE set (i.e., Suppress Precision Exception, which is imm8[3]=1), no precision exception is reported.</p>
+<p>EVEX.vvvv is reserved and must be 1111b otherwise instructions will #UD.</p>
+<table>
+<tr>
+<td>
+<p>7</p>
+<p>imm8</p>
+<p>Imm8[7:4] : Number of fixed points to subtract</p></td>
+<td>
+<p>6</p>
+<p>Fixed point length</p></td>
+<td>5</td>
+<td>
+<p>4</p>
+<p>Suppress Precision Exception: Imm8[3]</p>
+<p>Imm8[3] = 0b : Use MXCSR exception mask</p>
+<p>Imm8[3] = 1b : Suppress</p></td>
+<td>
+<p>3</p>
+<p>SPE</p></td>
+<td>
+<p>2</p>
+<p>RS</p>
+<p>Round Select: Imm8[2]</p></td>
+<td>
+<p>1</p>
+<p>Imm8[2] = 0b : Use Imm8[1:0]</p>
+<p>Imm8[2] = 1b : Use MXCSR</p></td>
+<td>
+<p>0</p>
+<p>Round Control Override</p>
+<p>Imm8[1:0] = 00b : Round nearest even</p>
+<p>Imm8[1:0] = 01b : Round down</p>
+<p>Imm8[1:0] = 10b : Round up</p>
+<p>Imm8[1:0] = 11b : Truncate</p></td></tr></table>
+<h3>Figure 5-28.  Imm8 Controls for VREDUCEPD/SD/PS/SS</h3>
+<p>Handling of special case of input values are listed in Table 5-19.</p>
+<h3>Table 5-19. VREDUCEPD/SD/PS/SS Special Cases</h3>
+<table>
+<tr>
+<td></td>
+<td>Round Mode</td>
+<td>Returned value</td></tr>
+<tr>
+<td>|Src1| &lt; 2<sup>-M-1</sup></td>
+<td>RNE</td>
+<td>Src1</td></tr>
+<tr>
+<td></td>
+<td>RPI, Src1 &gt; 0</td>
+<td>Round (Src1-2<sup>-M</sup>) *</td></tr>
+<tr>
+<td></td>
+<td>RPI, Src1 ≤ 0</td>
+<td>Src1</td></tr>
+<tr>
+<td></td>
+<td>RNI, Src1 ≥ 0</td>
+<td>Src1</td></tr>
+<tr>
+<td>|Src1| &lt; 2<sup>-M</sup></td>
+<td>RNI, Src1 &lt; 0</td>
+<td>Round (Src1+2<sup>-M</sup>) *</td></tr>
+<tr>
+<td>Src1 = ±0, or</td>
+<td>NOT RNI</td>
+<td>+0.0</td></tr>
+<tr>
+<td>Dest = ±0 (Src1!=INF)</td>
+<td>RNI</td>
+<td>-0.0</td></tr>
+<tr>
+<td>Src1 = ±INF</td>
+<td>any</td>
+<td>+0.0</td></tr>
+<tr>
+<td>Src1= ±NAN</td>
+<td>n/a</td>
+<td>QNaN(Src1)</td></tr></table>
+<p>* Round control = (imm8.MS1)? MXCSR.RC: imm8.RC</p>
+<p><strong>Operation</strong></p>
+<p>ReduceArgumentDP(SRC[63:0], imm8[7:0])</p>
+<p>{</p>
+<p>// Check for NaN</p>
+<p>IF (SRC [63:0] = NAN) THEN</p>
+<p>RETURN (Convert SRC[63:0] to QNaN); FI;</p>
+<p>M := imm8[7:4]; // Number of fraction bits of the normalized significand to be subtracted</p>
+<p>RC := imm8[1:0];// Round Control for ROUND() operation</p>
+<p>RC source := imm[2];</p>
+<p>SPE := imm[3];// Suppress Precision Exception</p>
+<p>TMP[63:0] := 2<sup>-M</sup> *{ROUND(2<sup>M</sup>*SRC[63:0], SPE, RC_source, RC)}; // ROUND() treats SRC and 2<sup>M </sup>as standard binary FP values</p>
+<p>TMP[63:0] := SRC[63:0] – TMP[63:0]; // subtraction under the same RC,SPE controls</p>
+<p>RETURN TMP[63:0]; // binary encoded FP with biased exponent and normalized significand</p>
+<p>}</p>
+<p><strong>VREDUCEPD</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask* THEN</p>
+<p>IF (EVEX.b == 1) AND (SRC *is memory*)</p>
+<p>THEN DEST[i+63:i] := ReduceArgumentDP(SRC[63:0], imm8[7:0]);</p>
+<p>ELSE DEST[i+63:i] := ReduceArgumentDP(SRC[i+63:i], imm8[7:0]);</p>
+<p>FI;</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+63:i] = 0</p>
+<p>FI;</p>
+<p>FI;</p>
+<p>ENDFOR;</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VREDUCEPD __m512d _mm512_mask_reduce_pd( __m512d a, int imm, int sae)</p>
+<p>VREDUCEPD __m512d _mm512_mask_reduce_pd(__m512d s, __mmask8 k, __m512d a, int imm, int sae)</p>
+<p>VREDUCEPD __m512d _mm512_maskz_reduce_pd(__mmask8 k, __m512d a, int imm, int sae)</p>
+<p>VREDUCEPD __m256d _mm256_mask_reduce_pd( __m256d a, int imm)</p>
+<p>VREDUCEPD __m256d _mm256_mask_reduce_pd(__m256d s, __mmask8 k, __m256d a, int imm)</p>
+<p>VREDUCEPD __m256d _mm256_maskz_reduce_pd(__mmask8 k, __m256d a, int imm)</p>
+<p>VREDUCEPD __m128d _mm_mask_reduce_pd( __m128d a, int imm)</p>
+<p>VREDUCEPD __m128d _mm_mask_reduce_pd(__m128d s, __mmask8 k, __m128d a, int imm)</p>
+<p>VREDUCEPD __m128d _mm_maskz_reduce_pd(__mmask8 k, __m128d a, int imm)</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Precision.</p>
+<p>If SPE is enabled, precision exception is not reported (regardless of MXCSR exception mask).</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-46, “Type E2 Class Exception Conditions.”</p>
+<p>Additionally:</p>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>If EVEX.vvvv != 1111B.</td></tr></table></div></body></html>

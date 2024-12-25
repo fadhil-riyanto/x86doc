@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>UD - Undefined Instruction </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › UD - Undefined Instruction </div>
+<div id="body">
+<h1>UD—Undefined Instruction</h1>
+<table>
+<tr>
+<th>Opcode</th>
+<th>Instruction</th>
+<th>Op/En</th>
+<th>64-Bit Mode</th>
+<th>Compat/Leg Mode</th>
+<th>Description</th></tr>
+<tr>
+<td>0F FF /r</td>
+<td>UD0<sup>1</sup> r32, r/m32</td>
+<td>RM</td>
+<td>Valid</td>
+<td>Valid</td>
+<td>Raise invalid opcode exception.</td></tr>
+<tr>
+<td>0F B9 /r</td>
+<td>UD1 r32, r/m32</td>
+<td>RM</td>
+<td>Valid</td>
+<td>Valid</td>
+<td>Raise invalid opcode exception.</td></tr>
+<tr>
+<td>0F 0B</td>
+<td>UD2</td>
+<td>ZO</td>
+<td>Valid</td>
+<td>Valid</td>
+<td>Raise invalid opcode exception.</td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1. Some processors decode the UD0 instruction without a ModR/M byte. As a result, those processors would deliver an invalid-opcode</p>
+<p>exception instead of a fault on instruction fetch when the instruction with a ModR/M byte (and any implied bytes) would cross a page or segment boundary.</p>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>ZO</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>RM</td>
+<td>ModRM:reg (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Generates an invalid opcode exception. This instruction is provided for software testing to explicitly generate an invalid opcode exception. The opcodes for this instruction are reserved for this purpose.</p>
+<p>Other than raising the invalid opcode exception, this instruction has no effect on processor state or memory.</p>
+<p>Even though it is the execution of the UD instruction that causes the invalid opcode exception, the instruction pointer saved by delivery of the exception references the UD instruction (and not the following instruction).</p>
+<p>This instruction’s operation is the same in non-64-bit modes and 64-bit mode.</p>
+<h2>Operation</h2>
+<pre>#UD (* Generates invalid opcode exception *);</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Exceptions (All Operating Modes)</h2>
+<p>#UD</p>
+<p>Raises an invalid opcode exception in all operating modes.</p></div></body></html>

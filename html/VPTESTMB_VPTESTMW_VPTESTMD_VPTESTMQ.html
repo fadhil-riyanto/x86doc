@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VPTESTMB/VPTESTMW/VPTESTMD/VPTESTMQ - Logical AND and Set Mask </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VPTESTMB/VPTESTMW/VPTESTMD/VPTESTMQ - Logical AND and Set Mask </div>
+<div id="body">
+<h1>VPTESTMB/VPTESTMW/VPTESTMD/VPTESTMQ—Logical AND and Set Mask</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 26 /r VPTESTMB k2 {k1}, xmm2, xmm3/m128</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Bitwise AND of packed byte integers in xmm2 and xmm3/m128 and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 26 /r VPTESTMB k2 {k1}, ymm2, ymm3/m256</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Bitwise AND of packed byte integers in ymm2 and ymm3/m256 and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 26 /r VPTESTMB k2 {k1}, zmm2, zmm3/m512</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Bitwise AND of packed byte integers in zmm2 and zmm3/m512 and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 26 /r VPTESTMW k2 {k1}, xmm2, xmm3/m128</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Bitwise AND of packed word integers in xmm2 and xmm3/m128 and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 26 /r VPTESTMW k2 {k1}, ymm2, ymm3/m256</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Bitwise AND of packed word integers in ymm2 and ymm3/m256 and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 26 /r VPTESTMW k2 {k1}, zmm2, zmm3/m512</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Bitwise AND of packed word integers in zmm2 and zmm3/m512 and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 27 /r VPTESTMD k2 {k1}, xmm2, xmm3/m128/m32bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Bitwise AND of packed doubleword integers in xmm2 and xmm3/m128/m32bcst and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 27 /r VPTESTMD k2 {k1}, ymm2, ymm3/m256/m32bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Bitwise AND of packed doubleword integers in ymm2 and ymm3/m256/m32bcst and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 27 /r VPTESTMD k2 {k1}, zmm2, zmm3/m512/m32bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Bitwise AND of packed doubleword integers in zmm2 and zmm3/m512/m32bcst and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 27 /r VPTESTMQ k2 {k1}, xmm2, xmm3/m128/m64bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Bitwise AND of packed quadword integers in xmm2 and xmm3/m128/m64bcst and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 27 /r VPTESTMQ k2 {k1}, ymm2, ymm3/m256/m64bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Bitwise AND of packed quadword integers in ymm2 and ymm3/m256/m64bcst and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 27 /r VPTESTMQ k2 {k1}, zmm2, zmm3/m512/m64bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Bitwise AND of packed quadword integers in zmm2 and zmm3/m512/m64bcst and set mask k2 to reflect the zero/non-zero status of each element of the result, under writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full Mem</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Performs a bitwise logical AND operation on the first source operand (the second operand) and second source operand (the third operand) and stores the result in the destination operand (the first operand) under the write-mask. Each bit of the result is set to 1 if the bitwise AND of the corresponding elements of the first and second src operands is non-zero; otherwise it is set to 0.</p>
+<p>VPTESTMD/VPTESTMQ: The first source operand is a ZMM/YMM/XMM register. The second source operand can be a ZMM/YMM/XMM register, a 512/256/128-bit memory location or a 512/256/128-bit vector broadcasted from a 32/64-bit memory location. The destination operand is a mask register updated under the writemask.</p>
+<p>VPTESTMB/VPTESTMW: The first source operand is a ZMM/YMM/XMM register. The second source operand can be a ZMM/YMM/XMM register or a 512/256/128-bit memory location. The destination operand is a mask register updated under the writemask.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VPTESTMB (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (16, 128), (32, 256), (64, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 8</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN</p>
+<p>DEST[j] := (SRC1[i+7:i] BITWISE AND SRC2[i+7:i] != 0)? 1 : 0;</p>
+<p>ELSE</p>
+<p>DEST[j] = 0</p>
+<p>; zeroing-masking only</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAX_KL-1:KL] := 0</p>
+<p><strong>VPTESTMW (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 16</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN</p>
+<p>DEST[j] := (SRC1[i+15:i] BITWISE AND SRC2[i+15:i] != 0)? 1 : 0;</p>
+<p>ELSE</p>
+<p>DEST[j] = 0</p>
+<p>; zeroing-masking only</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAX_KL-1:KL] := 0</p>
+<p><strong>VPTESTMD (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (4, 128), (8, 256), (16, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN</p>
+<p>IF (EVEX.b = 1) AND (SRC2 *is memory*)</p>
+<p>THEN DEST[j] := (SRC1[i+31:i] BITWISE AND SRC2[31:0] != 0)? 1 : 0;</p>
+<p>ELSE DEST[j] := (SRC1[i+31:i] BITWISE AND SRC2[i+31:i] != 0)? 1 : 0;</p>
+<p>FI;</p>
+<p>ELSE</p>
+<p>DEST[j] := 0</p>
+<p>; zeroing-masking only</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAX_KL-1:KL] := 0</p>
+<p><strong>VPTESTMQ (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN</p>
+<p>IF (EVEX.b = 1) AND (SRC2 *is memory*)</p>
+<p>THEN DEST[j] := (SRC1[i+63:i] BITWISE AND SRC2[63:0] != 0)? 1 : 0;</p>
+<p>ELSE DEST[j] := (SRC1[i+63:i] BITWISE AND SRC2[i+63:i] != 0)? 1 : 0;</p>
+<p>FI;</p>
+<p>ELSE</p>
+<p>DEST[j] := 0</p>
+<p>; zeroing-masking only</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAX_KL-1:KL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalents</strong></p>
+<p>VPTESTMB __mmask64 _mm512_test_epi8_mask( __m512i a, __m512i b);</p>
+<p>VPTESTMB __mmask64 _mm512_mask_test_epi8_mask(__mmask64, __m512i a, __m512i b);</p>
+<p>VPTESTMW __mmask32 _mm512_test_epi16_mask( __m512i a, __m512i b);</p>
+<p>VPTESTMW __mmask32 _mm512_mask_test_epi16_mask(__mmask32, __m512i a, __m512i b);</p>
+<p>VPTESTMD __mmask16 _mm512_test_epi32_mask( __m512i a, __m512i b);</p>
+<p>VPTESTMD __mmask16 _mm512_mask_test_epi32_mask(__mmask16, __m512i a, __m512i b);</p>
+<p>VPTESTMQ __mmask8 _mm512_test_epi64_mask(__m512i a, __m512i b);</p>
+<p>VPTESTMQ __mmask8 _mm512_mask_test_epi64_mask(__mmask8, __m512i a, __m512i b);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<table>
+<tr>
+<td>VPTESTMD/Q: See Table 2-49, “Type E4 Class Exception Conditions.”</td></tr>
+<tr>
+<td>VPTESTMB/W: See Exceptions Type E4.nb in Table 2-49, “Type E4 Class Exception Conditions.”</td></tr></table></div></body></html>

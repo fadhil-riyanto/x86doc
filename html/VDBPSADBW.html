@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VDBPSADBW - Double Block Packed Sum-Absolute-Differences (SAD) on Unsigned Bytes </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VDBPSADBW - Double Block Packed Sum-Absolute-Differences (SAD) on Unsigned Bytes </div>
+<div id="body">
+<h1>VDBPSADBW—Double Block Packed Sum-Absolute-Differences (SAD) on Unsigned Bytes</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F3A.W0 42 /r ib VDBPSADBW xmm1 {k1}{z}, xmm2, xmm3/m128, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Compute packed SAD word results of unsigned bytes in dword block from xmm2 with unsigned bytes of dword blocks transformed from xmm3/m128 using the shuffle controls in imm8. Results are written to xmm1 under the writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W0 42 /r ib VDBPSADBW ymm1 {k1}{z}, ymm2, ymm3/m256, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Compute packed SAD word results of unsigned bytes in dword block from ymm2 with unsigned bytes of dword blocks transformed from ymm3/m256 using the shuffle controls in imm8. Results are written to ymm1 under the writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W0 42 /r ib VDBPSADBW zmm1 {k1}{z}, zmm2, zmm3/m512, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Compute packed SAD word results of unsigned bytes in dword block from zmm2 with unsigned bytes of dword blocks transformed from zmm3/m512 using the shuffle controls in imm8. Results are written to zmm1 under the writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full Mem</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Compute packed SAD (sum of absolute differences) word results of unsigned bytes from two 32-bit dword elements. Packed SAD word results are calculated in multiples of qword superblocks, producing 4 SAD word results in each 64-bit superblock of the destination register.</p>
+<p>Within each super block of packed word results, the SAD results from two 32-bit dword elements are calculated as follows:</p>
+<p>The first source operand is a ZMM/YMM/XMM register. The second source operand is a ZMM/YMM/XMM register, or a 512/256/128-bit memory location. The destination operand is conditionally updated based on writemask k1 at 16-bit word granularity.</p>
+<table>
+<tr>
+<td>
+<p>127+128*n</p>
+<p>DW3</p></td>
+<td>
+<p>95+128*n</p>
+<p>DW2</p>
+<p>imm8 shuffle control</p></td>
+<td>
+<p>63+128*n</p>
+<p>DW1</p>
+<p>0</p></td>
+<td>
+<p>31+128*n</p>
+<p>DW0</p>
+<p>00B: DW0 </p></td></tr></table></div></body></html></html><html><body><div id="body"><table><tr><td><p>01B: DW1 </p></td></tr></table></div></body></html></html><html><body><div id="body"><table><tr><td><p>10B: DW2 11B: DW3</p></td>
+<td>128*n</td></tr>
+<tr>
+<td>
+<p>127+128*n</p>
+<p>128-bit Lane of Tmp1</p>
+<p>24</p>
+<p>32</p>
+<p>_</p>
+<p>abs</p>
+<p>+</p>
+<p>47</p>
+<p>63</p>
+<p>_</p>
+<p>abs</p></td>
+<td>
+<p>95+128*n</p>
+<p>Tmp1 sliding dword</p>
+<p>Src1 stationary dword 1</p>
+<p>16</p>
+<p>32</p>
+<p>_</p>
+<p>abs</p>
+<p>+</p></td>
+<td>
+<p>63+128*n</p>
+<p>31</p>
+<p>23</p>
+<p>_</p>
+<p>abs</p>
+<p>Tmp1 sliding dword</p>
+<p>Src1 stationary dword 1</p></td>
+<td>
+<p>31+128*n</p>
+<p>Tmp1 qword superblock</p>
+<p>8</p>
+<p>0</p>
+<p>_</p>
+<p>abs</p>
+<p>+</p>
+<p>15</p>
+<p>15</p>
+<p>_</p>
+<p>abs</p>
+<p>+</p></td>
+<td>
+<p>128*n</p>
+<p>Tmp1 sliding dword</p>
+<p>Src1 stationary dword 0</p>
+<p>0</p>
+<p>Tmp1 sliding dword</p>
+<p>0</p>
+<p>Src1 stationary dword 0</p>
+<p>_</p>
+<p>abs</p></td></tr>
+<tr>
+<td>
+<p>63</p>
+<p>Destination qword superblock</p></td>
+<td>47</td>
+<td>31</td>
+<td>15</td>
+<td>0</td></tr></table>
+<h3>Figure 5-8.  64-bit Super Block of SAD Operation in VDBPSADBW</h3>
+<p><strong>Operation</strong></p>
+<p><strong>VDBPSADBW (EVEX Encoded Versions)</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>Selection of quadruplets:</p>
+<p>FOR I = 0 to VL step 128</p>
+<p>TMP1[I+31:I] := select (SRC2[I+127: I], imm8[1:0])</p>
+<p>TMP1[I+63: I+32] := select (SRC2[I+127: I], imm8[3:2])</p>
+<p>TMP1[I+95: I+64] := select (SRC2[I+127: I], imm8[5:4])</p>
+<p>TMP1[I+127: I+96]  := select (SRC2[I+127: I], imm8[7:6])</p>
+<p>END FOR</p>
+<p>SAD of quadruplets:</p>
+<p>FOR I =0 to VL step 64</p>
+<p>TMP_DEST[I+15:I] := ABS(SRC1[I+7: I] - TMP1[I+7: I]) +</p>
+<p>ABS(SRC1[I+15: I+8]- TMP1[I+15: I+8]) +</p>
+<p>ABS(SRC1[I+23: I+16]- TMP1[I+23: I+16]) +</p>
+<p>ABS(SRC1[I+31: I+24]- TMP1[I+31: I+24])</p>
+<p>TMP_DEST[I+31: I+16] := ABS(SRC1[I+7: I] - TMP1[I+15: I+8]) +</p>
+<p>ABS(SRC1[I+15: I+8]- TMP1[I+23: I+16]) +</p>
+<p>ABS(SRC1[I+23: I+16]- TMP1[I+31: I+24]) +</p>
+<p>ABS(SRC1[I+31: I+24]- TMP1[I+39: I+32])</p>
+<p>TMP_DEST[I+47: I+32] := ABS(SRC1[I+39: I+32] - TMP1[I+23: I+16]) +</p>
+<p>ABS(SRC1[I+47: I+40]- TMP1[I+31: I+24]) +</p>
+<p>ABS(SRC1[I+55: I+48]- TMP1[I+39: I+32]) +</p>
+<p>ABS(SRC1[I+63: I+56]- TMP1[I+47: I+40])</p>
+<p>TMP_DEST[I+63: I+48] := ABS(SRC1[I+39: I+32] - TMP1[I+31: I+24]) +</p>
+<p>ABS(SRC1[I+47: I+40] - TMP1[I+39: I+32]) +</p>
+<p>ABS(SRC1[I+55: I+48] - TMP1[I+47: I+40]) +</p>
+<p>ABS(SRC1[I+63: I+56] - TMP1[I+55: I+48])</p>
+<p>ENDFOR</p>
+<p>FOR j :=  0 TO KL-1</p>
+<p>i :=</p>
+<p> j * 16</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+15:i] :=  TMP_DEST[i+15:i]</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+15:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+15:i] :=  0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] :=  0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VDBPSADBW __m512i _mm512_dbsad_epu8(__m512i a, __m512i b int imm8);</p>
+<p>VDBPSADBW __m512i _mm512_mask_dbsad_epu8(__m512i s, __mmask32 m, __m512i a, __m512i b int imm8);</p>
+<p>VDBPSADBW __m512i _mm512_maskz_dbsad_epu8(__mmask32 m, __m512i a, __m512i b int imm8);</p>
+<p>VDBPSADBW __m256i _mm256_dbsad_epu8(__m256i a, __m256i b int imm8);</p>
+<p>VDBPSADBW __m256i _mm256_mask_dbsad_epu8(__m256i s, __mmask16 m, __m256i a, __m256i b int imm8);</p>
+<p>VDBPSADBW __m256i _mm256_maskz_dbsad_epu8(__mmask16 m, __m256i a, __m256i b int imm8);</p>
+<p>VDBPSADBW __m128i _mm_dbsad_epu8(__m128i a, __m128i b int imm8);</p>
+<p>VDBPSADBW __m128i _mm_mask_dbsad_epu8(__m128i s, __mmask8 m, __m128i a, __m128i b int imm8);</p>
+<p>VDBPSADBW __m128i _mm_maskz_dbsad_epu8(__mmask8 m, __m128i a, __m128i b int imm8);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Exceptions Type E4NF.nb in Table 2-50, “Type E4NF Class Exception Conditions.”</p></div></body></html>

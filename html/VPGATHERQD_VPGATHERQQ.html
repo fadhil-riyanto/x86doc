@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VPGATHERQD/VPGATHERQQ - Gather Packed Dword, Packed Qword with Signed Qword Indices </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VPGATHERQD/VPGATHERQQ - Gather Packed Dword, Packed Qword with Signed Qword Indices </div>
+<div id="body">
+<h1>VPGATHERQD/VPGATHERQQ—Gather Packed Dword, Packed Qword with Signed Qword Indices</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 91 /vsib VPGATHERQD xmm1 {k1}, vm64x</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed qword indices, gather dword values from memory using writemask k1 for merging-masking.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 91 /vsib VPGATHERQD xmm1 {k1}, vm64y</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed qword indices, gather dword values from memory using writemask k1 for merging-masking.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 91 /vsib VPGATHERQD ymm1 {k1}, vm64z</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Using signed qword indices, gather dword values from memory using writemask k1 for merging-masking.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 91 /vsib VPGATHERQQ xmm1 {k1}, vm64x</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed qword indices, gather quadword values from memory using writemask k1 for merging-masking.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 91 /vsib VPGATHERQQ ymm1 {k1}, vm64y</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Using signed qword indices, gather quadword values from memory using writemask k1 for merging-masking.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 91 /vsib VPGATHERQQ zmm1 {k1}, vm64z</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Using signed qword indices, gather quadword values from memory using writemask k1 for merging-masking.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Tuple1 Scalar</td>
+<td>ModRM:reg (w)</td>
+<td>
+<p>BaseReg (R): VSIB:base,</p>
+<p>VectorReg(R): VSIB:index</p></td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>A set of 8 doubleword/quadword memory locations pointed to by base address BASE_ADDR and index vector VINDEX with scale SCALE are gathered. The result is written into a vector register. The elements are specified via the VSIB (i.e., the index register is a vector register, holding packed indices). Elements will only be loaded if their corresponding mask bit is one. If an element’s mask bit is not set, the corresponding element of the destination register is left unchanged. The entire mask register will be set to zero by this instruction unless it triggers an excep-tion.</p>
+<p>This instruction can be suspended by an exception if at least one element is already gathered (i.e., if the exception is triggered by an element other than the rightmost one with its mask bit set). When this happens, the destination register and the mask register (k1) are partially updated; those elements that have been gathered are placed into the destination register and have their mask bits set to zero. If any traps or interrupts are pending from already gathered elements, they will be delivered in lieu of the exception; in this case, EFLAG.RF is set to one so an instruc-tion breakpoint is not re-triggered when the instruction is continued.</p>
+<p>If the data element size is less than the index element size, the higher part of the destination register and the mask register do not correspond to any elements being gathered. This instruction sets those higher parts to zero. It may update these unused elements to one or both of those registers even if the instruction triggers an exception, and even if the instruction triggers the exception before gathering any elements.</p>
+<p>Note that:</p>
+<p>Note that the presence of VSIB byte is enforced in this instruction. Hence, the instruction will #UD fault if ModRM.rm is different than 100b.</p>
+<p>This instruction has the same disp8*N and alignment rules as for scalar instructions (Tuple 1).</p>
+<p>The instruction will #UD fault if the destination vector zmm1 is the same as index vector VINDEX. The instruction will #UD fault if the k0 mask register is specified.</p>
+<p>The scaled index may require more bits to represent than the address bits used by the processor (e.g., in 32-bit mode, if the scale is greater than one). In this case, the most significant bits beyond the number of address bits are ignored.</p>
+<p><strong>Operation</strong></p>
+<p>BASE_ADDR stands for the memory operand base address (a GPR); may not exist</p>
+<p>VINDEX stands for the memory operand vector of indices (a ZMM register)</p>
+<p>SCALE stands for the memory operand scalar (1, 2, 4 or 8)</p>
+<p>DISP is the optional 1 or 4 byte displacement</p>
+<p><strong>VPGATHERQD (EVEX encoded version)</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>k := j * 64</p>
+<p>IF k1[j]</p>
+<p>THEN DEST[i+31:i] := MEM[BASE_ADDR + (VINDEX[k+63:k]) * SCALE + DISP]</p>
+<p>k1[j] := 0</p>
+<p>ELSE *DEST[i+31:i] := remains unchanged*</p>
+<p>; Only merging masking is allowed</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>k1[MAX_KL-1:KL] := 0</p>
+<p>DEST[MAXVL-1:VL/2] := 0</p>
+<p><strong>VPGATHERQQ (EVEX encoded version)</strong></p>
+<p>(KL, VL) = (2, 64), (4, 128), (8, 256)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j]</p>
+<p>THEN DEST[i+63:i] :=</p>
+<p>MEM[BASE_ADDR + (VINDEX[i+63:i]) * SCALE + DISP]</p>
+<p>k1[j] := 0</p>
+<p>ELSE *DEST[i+63:i] := remains unchanged*</p>
+<p>; Only merging masking is allowed</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>k1[MAX_KL-1:KL] := 0</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VPGATHERQD __m256i _mm512_i64gather_epi32(__m512i vdx, void * base, int scale);</p>
+<p>VPGATHERQD __m256i _mm512_mask_i64gather_epi32lo(__m256i s, __mmask8 k, __m512i vdx, void * base, int scale);</p>
+<p>VPGATHERQD __m128i _mm256_mask_i64gather_epi32lo(__m128i s, __mmask8 k, __m256i vdx, void * base, int scale);</p>
+<p>VPGATHERQD __m128i _mm_mask_i64gather_epi32(__m128i s, __mmask8 k, __m128i vdx, void * base, int scale);</p>
+<p>VPGATHERQQ __m512i _mm512_i64gather_epi64( __m512i vdx, void * base, int scale);</p>
+<p>VPGATHERQQ __m512i _mm512_mask_i64gather_epi64(__m512i s, __mmask8 k, __m512i vdx, void * base, int scale);</p>
+<p>VPGATHERQQ __m256i _mm256_mask_i64gather_epi64(__m256i s, __mmask8 k, __m256i vdx, void * base, int scale);</p>
+<p>VPGATHERQQ __m128i _mm_mask_i64gather_epi64(__m128i s, __mmask8 k, __m128i vdx, void * base, int scale);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-61, “Type E12 Class Exception Conditions.”</p></div></body></html>

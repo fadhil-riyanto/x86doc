@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>PDEP - Parallel Bits Deposit </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › PDEP - Parallel Bits Deposit </div>
+<div id="body">
+<h1>PDEP—Parallel Bits Deposit</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32-bit Mode</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>VEX.LZ.F2.0F38.W0 F5 /r PDEP r32a, r32b, r/m32</td>
+<td>RVM</td>
+<td>V/V</td>
+<td>BMI2</td>
+<td>Parallel deposit of bits from r32b using mask in r/m32, result is written to r32a.</td></tr>
+<tr>
+<td>VEX.LZ.F2.0F38.W1 F5 /r PDEP r64a, r64b, r/m64</td>
+<td>RVM</td>
+<td>V/N.E.</td>
+<td>BMI2</td>
+<td>Parallel deposit of bits from r64b using mask in r/m64, result is written to r64a.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>RVM</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>PDEP uses a mask in the second source operand (the third operand) to transfer/scatter contiguous low order bits in the first source operand (the second operand) into the destination (the first operand). PDEP takes the low bits from the first source operand and deposit them in the destination operand at the corresponding bit locations that are set in the second source operand (mask). All other bits (bits not set in mask) in destination are set to zero.</p>
+<p>SRC1</p>
+<table>
+<tr>
+<td>S<sub>7</sub></td>
+<td>S<sub>6</sub></td>
+<td>S<sub>5</sub></td>
+<td>S<sub>4</sub></td>
+<td>S<sub>3</sub></td>
+<td>S<sub>2</sub></td>
+<td></td>
+<td>S<sub>0</sub></td></tr></table>
+<p>S<sub>1</sub></p>
+<p>SRC2</p>
+<p>0</p>
+<p>0</p>
+<p>0</p>
+<p>1</p>
+<p>0</p>
+<p>1</p>
+<p>0</p>
+<p>1</p>
+<p>0</p>
+<p>0</p>
+<p>1</p>
+<p>0</p>
+<p>0</p>
+<svg width="232.02002249999995" height="88.56002250000893" viewBox="314.999990 214229.579995 154.680015 59.040015">
+<rect x="315.0" y="214229.94" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="334.38" y="214229.94" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="353.76" y="214229.94" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="392.28" y="214229.88" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="373.08" y="214229.64" width="19.379999999999995" height="18.479999999981374" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="411.66" y="214229.88" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="431.04" y="214229.88" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="450.3" y="214229.58" width="19.379999999999995" height="18.480000000010477" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="321.18" y="214281.4038" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S2</text>
+<text x="343.3797" y="214280.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="359.88" y="214280.1438" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S1</text>
+<text x="379.62" y="214280.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="401.5197" y="214280.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<rect x="392.28" y="214270.5" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="417.12" y="214280.7438" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S0</text>
+<rect x="411.66" y="214270.5" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="439.02" y="214280.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<rect x="431.04" y="214270.5" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="459.0" y="214280.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text></svg>
+<svg width="145.349985" height="88.11000000002969" viewBox="160.380000 214229.880010 96.899990 58.740000">
+<rect x="218.4" y="214229.94" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="170.8794" y="214280.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<rect x="160.38" y="214270.5" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="187.1415" y="214280.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<rect x="179.76" y="214270.5" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="205.2594" y="214280.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<rect x="199.14" y="214270.5" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="222.66" y="214280.8038" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S3</text>
+<text x="248.9994" y="214280.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text></svg>
+<p>(mask)</p>
+<p>DEST</p>
+<p>bit 0</p>
+<p>bit 31</p>
+<h3>Figure 4-8.  PDEP Example</h3>
+<p>This instruction is not supported in real mode and virtual-8086 mode. The operand size is always 32 bits if not in 64-bit mode. In 64-bit mode operand size 64 requires VEX.W1. VEX.W1 is ignored in non-64-bit modes. An attempt to execute this instruction with VEX.L not equal to 0 will cause #UD.</p>
+<h2>Operation</h2>
+<pre>TEMP := SRC1;
+MASK := SRC2;
+DEST := 0 ;
+m := 0, k := 0;
+DO WHILE m &lt; OperandSize
+         IF MASK[ m] = 1 THEN
+              DEST[ m] := TEMP[ k];
+              k := k+ 1;
+         FI
+         m := m+ 1;
+OD</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>PDEP unsigned __int32 _pdep_u32(unsigned __int32 src, unsigned __int32 mask);</p>
+<p>PDEP unsigned __int64 _pdep_u64(unsigned __int64 src, unsigned __int32 mask);</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>See Table 2-29, “Type 13 Class Exception Conditions.”</p></div></body></html>

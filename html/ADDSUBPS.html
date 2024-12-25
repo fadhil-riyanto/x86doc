@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>ADDSUBPS - Packed Single Precision Floating-Point Add/Subtract </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › ADDSUBPS - Packed Single Precision Floating-Point Add/Subtract </div>
+<div id="body">
+<h1>ADDSUBPS—Packed Single Precision Floating-Point Add/Subtract</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32-bit Mode</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>F2 0F D0 /r</p>
+<p>ADDSUBPS xmm1, xmm2/m128</p></td>
+<td>RM</td>
+<td>V/V</td>
+<td>SSE3</td>
+<td>Add/subtract single precision floating-point values from xmm2/m128 to xmm1.</td></tr>
+<tr>
+<td>
+<p>VEX.128.F2.0F.WIG D0 /r</p>
+<p>VADDSUBPS xmm1, xmm2, xmm3/m128</p></td>
+<td>RVM</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Add/subtract single precision floating-point values from xmm3/mem to xmm2 and stores result in xmm1.</td></tr>
+<tr>
+<td>
+<p>VEX.256.F2.0F.WIG D0 /r</p>
+<p>VADDSUBPS ymm1, ymm2, ymm3/m256</p></td>
+<td>RVM</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Add / subtract single precision floating-point values from ymm3/mem to ymm2 and stores result in ymm1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>RM</td>
+<td>ModRM:reg (r, w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>RVM</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Adds odd-numbered single precision floating-point values of the first source operand (second operand) with the corresponding single precision floating-point values from the second source operand (third operand); stores the result in the odd-numbered values of the destination operand (first operand). Subtracts the even-numbered single precision floating-point values from the second source operand from the corresponding single precision floating values in the first source operand; stores the result into the even-numbered values of the destination operand.</p>
+<p>In 64-bit mode, using a REX prefix in the form of REX.R permits this instruction to access additional registers (XMM8-XMM15).</p>
+<p>128-bit Legacy SSE version: The second source can be an XMM register or an 128-bit memory location. The desti-nation is not distinct from the first source XMM register and the upper bits (MAXVL-1:128) of the corresponding YMM register destination are unmodified. See Figure 3-4.</p>
+<p>VEX.128 encoded version: the first source operand is an XMM register or 128-bit memory location. The destination operand is an XMM register. The upper bits (MAXVL-1:128) of the corresponding YMM register destination are zeroed.</p>
+<p>VEX.256 encoded version: The first source operand is a YMM register. The second source operand can be a YMM register or a 256-bit memory location. The destination operand is a YMM register.</p>
+<svg width="540.0225" height="209.25900000000183" viewBox="117.611000 22265.723000 360.015000 139.506000">
+<text x="221.3897" y="22282.36600672" style="font-size:8.000300pt" textLength="116.46836740000003" lengthAdjust="spacingAndGlyphs">ADDSUBPS xmm1, xmm2/m128</text>
+<text x="437.07378785" y="22302.87957595" style="font-size:8.000300pt" textLength="24.0009" lengthAdjust="spacingAndGlyphs">xmm2/</text>
+<text x="150.4017" y="22307.67900672" style="font-size:8.000300pt" textLength="28.913084200000014" lengthAdjust="spacingAndGlyphs">[127:96]</text>
+<text x="229.135" y="22307.67900672" style="font-size:8.000300pt" textLength="24.46491740000002" lengthAdjust="spacingAndGlyphs">[95:64]</text>
+<text x="305.6381" y="22307.67900672" style="font-size:8.000300pt" textLength="24.46491739999999" lengthAdjust="spacingAndGlyphs">[63:32]</text>
+<text x="384.3613" y="22307.67900672" style="font-size:8.000300pt" textLength="20.016750599999966" lengthAdjust="spacingAndGlyphs">[31:0]</text>
+<text x="437.07378785" y="22312.47993595" style="font-size:8.000300pt" textLength="20.00875030000003" lengthAdjust="spacingAndGlyphs">m128</text>
+<text x="437.07378785" y="22356.88160095" style="font-size:8.000300pt" textLength="32.30521139999996" lengthAdjust="spacingAndGlyphs">RESULT:</text>
+<text x="139.5214" y="22356.88600672" style="font-size:7.273000pt" textLength="52.351054000000005" lengthAdjust="spacingAndGlyphs">xmm1[127:96] +</text>
+<text x="207.3341" y="22356.88600672" style="font-size:7.273000pt" textLength="70.32263700000001" lengthAdjust="spacingAndGlyphs">xmm1[95:64] - xmm2/</text>
+<text x="294.4876" y="22356.88600672" style="font-size:7.273000pt" textLength="48.30726600000003" lengthAdjust="spacingAndGlyphs">xmm1[63:32] +</text>
+<text x="373.8308" y="22356.88600672" style="font-size:7.273000pt" textLength="42.437955000000045" lengthAdjust="spacingAndGlyphs">xmm1[31:0] -</text>
+<text x="437.07378785" y="22366.48196095" style="font-size:8.000300pt" textLength="21.776816600000018" lengthAdjust="spacingAndGlyphs">xmm1</text>
+<text x="132.7713287" y="22366.48636672" style="font-size:7.273000pt" textLength="66.293395" lengthAdjust="spacingAndGlyphs">xmm2/m128[127:96]</text>
+<text x="221.7950059" y="22366.48636672" style="font-size:7.273000pt" textLength="40.43060699999998" lengthAdjust="spacingAndGlyphs">m128[95:64]</text>
+<text x="287.7375287" y="22366.48636672" style="font-size:7.273000pt" textLength="62.24960699999997" lengthAdjust="spacingAndGlyphs">xmm2/m128[63:32]</text>
+<text x="366.2006957" y="22366.48636672" style="font-size:7.273000pt" textLength="58.20581899999996" lengthAdjust="spacingAndGlyphs">xmm2/m128[31:0]</text>
+<text x="150.41210039" y="22389.75728454" style="font-size:8.000300pt" textLength="28.913084200000014" lengthAdjust="spacingAndGlyphs">[127:96]</text>
+<text x="229.14545278" y="22389.75728454" style="font-size:8.000300pt" textLength="24.46491740000002" lengthAdjust="spacingAndGlyphs">[95:64]</text>
+<text x="305.64832153000003" y="22389.75728454" style="font-size:8.000300pt" textLength="24.46491739999999" lengthAdjust="spacingAndGlyphs">[63:32]</text>
+<text x="384.37127353000005" y="22389.75728454" style="font-size:8.000300pt" textLength="20.016750599999966" lengthAdjust="spacingAndGlyphs">[31:0]</text>
+<rect x="117.611" y="22265.723" width="360.015" height="139.50599999999758" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M164.862000,22334.816000 L164.862000,22318.605000 " style="stroke:black"></path>
+<path d="M241.366000,22334.816000 L241.366000,22318.605000 " style="stroke:black"></path>
+<path d="M317.869000,22334.816000 L317.869000,22318.605000 " style="stroke:black"></path>
+<path d="M394.372000,22334.816000 L394.372000,22318.605000 " style="stroke:black"></path>
+<path d="M167.623000,22334.456000 L164.863000,22339.976000 L162.103000,22334.456000 L167.623000,22334.456000 " style="stroke:black"></path>
+<path d="M244.126000,22334.456000 L241.366000,22339.976000 L238.606000,22334.456000 L244.126000,22334.456000 " style="stroke:black"></path>
+<path d="M320.629000,22334.456000 L317.869000,22339.976000 L315.109000,22334.456000 L320.629000,22334.456000 " style="stroke:black"></path>
+<path d="M397.132000,22334.456000 L394.372000,22339.976000 L391.612000,22334.456000 L397.132000,22334.456000 " style="stroke:black"></path>
+<rect x="126.611" y="22291.599" width="76.503" height="27.001000000000204" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="279.617" y="22291.599" width="76.50299999999999" height="27.001000000000204" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="356.12" y="22291.599" width="76.50299999999999" height="27.001000000000204" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="203.114" y="22291.599" width="76.50300000000001" height="27.001000000000204" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="279.617" y="22339.976" width="76.50299999999999" height="38.25200000000041" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="356.12" y="22339.976" width="76.50299999999999" height="38.25200000000041" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="126.611" y="22339.976" width="76.503" height="38.25200000000041" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="203.114" y="22339.976" width="76.50300000000001" height="38.25200000000041" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="126.611" y="22291.599" width="76.503" height="27.001000000000204" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="279.617" y="22291.599" width="76.50299999999999" height="27.001000000000204" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="356.12" y="22291.599" width="76.50299999999999" height="27.001000000000204" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="203.114" y="22291.599" width="76.50300000000001" height="27.001000000000204" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="279.617" y="22339.976" width="76.50299999999999" height="38.25200000000041" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="356.12" y="22339.976" width="76.50299999999999" height="38.25200000000041" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="126.611" y="22339.976" width="76.503" height="38.25200000000041" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="203.114" y="22339.976" width="76.50300000000001" height="38.25200000000041" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<p>OM15992</p>
+<h3>Figure 3-4.  ADDSUBPS—Packed Single Precision Floating-Point Add/Subtract</h3>
+<h2>Operation</h2>
+<p><strong>ADDSUBPS (128-bit Legacy SSE Version)</strong></p>
+<pre>DEST[31:0] := DEST[31:0] - SRC[31:0]
+DEST[63:32] := DEST[63:32] + SRC[63:32]
+DEST[95:64] := DEST[95:64] - SRC[95:64]
+DEST[127:96] := DEST[127:96] + SRC[127:96]
+DEST[MAXVL-1:128] (Unmodified)</pre>
+<p><strong>VADDSUBPS (VEX.128 Encoded Version)</strong></p>
+<pre>DEST[31:0] := SRC1[31:0] - SRC2[31:0]
+DEST[63:32] := SRC1[63:32] + SRC2[63:32]
+DEST[95:64] := SRC1[95:64] - SRC2[95:64]
+DEST[127:96] := SRC1[127:96] + SRC2[127:96]
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>VADDSUBPS (VEX.256 Encoded Version)</strong></p>
+<pre>DEST[31:0] := SRC1[31:0] - SRC2[31:0]
+DEST[63:32] := SRC1[63:32] + SRC2[63:32]
+DEST[95:64] := SRC1[95:64] - SRC2[95:64]
+DEST[127:96] := SRC1[127:96] + SRC2[127:96]
+DEST[159:128] := SRC1[159:128] - SRC2[159:128]
+DEST[191:160] := SRC1[191:160] + SRC2[191:160]
+DEST[223:192] := SRC1[223:192] - SRC2[223:192]
+DEST[255:224] := SRC1[255:224] + SRC2[255:224]</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>ADDSUBPS __m128 _mm_addsub_ps(__m128 a, __m128 b)</p>
+<p>VADDSUBPS __m256 _mm256_addsub_ps (__m256 a, __m256 b)</p>
+<h2>Exceptions</h2>
+<p>When the source operand is a memory operand, the operand must be aligned on a 16-byte boundary or a general-protection exception (#GP) will be generated.</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>Overflow, Underflow, Invalid, Precision, Denormal.</p>
+<h2>Other Exceptions</h2>
+<p>See Table 2-19, “Type 2 Class Exception Conditions.”</p></div></body></html>

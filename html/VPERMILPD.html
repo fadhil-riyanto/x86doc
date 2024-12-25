@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VPERMILPD - Permute In-Lane of Pairs of Double Precision Floating-Point Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VPERMILPD - Permute In-Lane of Pairs of Double Precision Floating-Point Values </div>
+<div id="body">
+<h1>VPERMILPD—Permute In-Lane of Pairs of Double Precision Floating-Point Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op / En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>VEX.128.66.0F38.W0 0D /r VPERMILPD xmm1, xmm2, xmm3/m128</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Permute double precision floating-point values in xmm2 using controls from xmm3/m128 and store result in xmm1.</td></tr>
+<tr>
+<td>VEX.256.66.0F38.W0 0D /r VPERMILPD ymm1, ymm2, ymm3/m256</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Permute double precision floating-point values in ymm2 using controls from ymm3/m256 and store result in ymm1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 0D /r VPERMILPD xmm1 {k1}{z}, xmm2, xmm3/m128/m64bcst</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Permute double precision floating-point values in xmm2 using control from xmm3/m128/m64bcst and store the result in xmm1 using writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 0D /r VPERMILPD ymm1 {k1}{z}, ymm2, ymm3/m256/m64bcst</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Permute double precision floating-point values in ymm2 using control from ymm3/m256/m64bcst and store the result in ymm1 using writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 0D /r VPERMILPD zmm1 {k1}{z}, zmm2, zmm3/m512/m64bcst</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Permute double precision floating-point values in zmm2 using control from zmm3/m512/m64bcst and store the result in zmm1 using writemask k1.</td></tr>
+<tr>
+<td>VEX.128.66.0F3A.W0 05 /r ib VPERMILPD xmm1, xmm2/m128, imm8</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Permute double precision floating-point values in xmm2/m128 using controls from imm8.</td></tr>
+<tr>
+<td>VEX.256.66.0F3A.W0 05 /r ib VPERMILPD ymm1, ymm2/m256, imm8</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Permute double precision floating-point values in ymm2/m256 using controls from imm8.</td></tr>
+<tr>
+<td>EVEX.128.66.0F3A.W1 05 /r ib VPERMILPD xmm1 {k1}{z}, xmm2/m128/m64bcst, imm8</td>
+<td>D</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Permute double precision floating-point values in xmm2/m128/m64bcst using controls from imm8 and store the result in xmm1 using writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W1 05 /r ib VPERMILPD ymm1 {k1}{z}, ymm2/m256/m64bcst, imm8</td>
+<td>D</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Permute double precision floating-point values in ymm2/m256/m64bcst using controls from imm8 and store the result in ymm1 using writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W1 05 /r ib VPERMILPD zmm1 {k1}{z}, zmm2/m512/m64bcst, imm8</td>
+<td>D</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Permute double precision floating-point values in zmm2/m512/m64bcst using controls from imm8 and store the result in zmm1 using writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>C</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>D</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>(variable control version)</p>
+<p>Permute pairs of double precision floating-point values in the first source operand (second operand), each using a 1-bit control field residing in the corresponding quadword element of the second source operand (third operand). Permuted results are stored in the destination operand (first operand).</p>
+<p>The control bits are located at bit 0 of each quadword element (see Figure 5-24). Each control determines which of the source element in an input pair is selected for the destination element. Each pair of source elements must lie in the same 128-bit region as the destination.</p>
+<p>EVEX version: The second source operand (third operand) is a ZMM/YMM/XMM register, a 512/256/128-bit memory location or a 512/256/128-bit vector broadcasted from a 64-bit memory location. Permuted results are written to the destination under the writemask.</p>
+<svg width="718.0199849999999" height="175.94997750007315" viewBox="62.640000 377214.000010 478.679990 117.299985">
+<text x="201.36" y="377244.555" style="font-size:7.500000pt" textLength="9.149999999999977" lengthAdjust="spacingAndGlyphs">X3</text>
+<text x="275.64" y="377244.555" style="font-size:7.500000pt" textLength="9.210000000000036" lengthAdjust="spacingAndGlyphs">X2</text>
+<text x="349.86" y="377244.555" style="font-size:7.500000pt" textLength="9.150000000000034" lengthAdjust="spacingAndGlyphs">X1</text>
+<text x="424.14" y="377244.555" style="font-size:7.500000pt" textLength="9.150000000000034" lengthAdjust="spacingAndGlyphs">X0</text>
+<text x="145.49999999999997" y="377246.175" style="font-size:7.500000pt" textLength="20.006999999999977" lengthAdjust="spacingAndGlyphs">SRC1</text>
+<text x="145.26" y="377312.055" style="font-size:7.500000pt" textLength="20.001000000000005" lengthAdjust="spacingAndGlyphs">DEST</text>
+<text x="200.22" y="377312.055" style="font-size:7.500000pt" textLength="22.531499999999994" lengthAdjust="spacingAndGlyphs">X2..X3</text>
+<text x="274.5" y="377312.055" style="font-size:7.500000pt" textLength="22.47150000000005" lengthAdjust="spacingAndGlyphs">X2..X3</text>
+<text x="349.86" y="377312.055" style="font-size:7.500000pt" textLength="22.47225000000003" lengthAdjust="spacingAndGlyphs">X0..X1</text>
+<text x="424.14" y="377312.055" style="font-size:7.500000pt" textLength="22.47150000000005" lengthAdjust="spacingAndGlyphs">X0..X1</text>
+<rect x="314.04" y="377236.5" width="74.21999999999997" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="314.04" y="377304.0" width="74.21999999999997" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="165.54" y="377236.5" width="74.22" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="165.54" y="377304.0" width="74.22" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="239.76" y="377236.5" width="74.27999999999997" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="388.26" y="377236.5" width="74.27999999999997" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="239.76" y="377304.0" width="74.27999999999997" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="388.26" y="377304.0" width="74.27999999999997" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M240.540000,377249.400000 L238.980000,377250.600000 L269.100000,377290.740000 L270.660000,377289.540000 " style="stroke:black"></path>
+<path d="M389.040000,377249.400000 L387.480000,377250.600000 L417.600000,377290.740000 L419.160000,377289.540000 " style="stroke:black"></path>
+<path d="M240.600000,377250.540000 L238.920000,377249.520000 L214.380000,377288.880000 L216.060000,377289.900000 " style="stroke:black"></path>
+<path d="M389.100000,377250.540000 L387.420000,377249.520000 L362.880000,377288.880000 L364.560000,377289.900000 " style="stroke:black"></path>
+<path d="M215.160000,377289.360000 L218.820000,377291.640000 L219.360000,377292.060000 L218.880000,377292.480000 L207.300000,377302.920000 L206.040000,377304.060000 L206.520000,377302.380000 L210.780000,377287.380000 L210.960000,377286.720000 L211.500000,377287.080000 L211.740000,377287.680000 L207.480000,377302.620000 L206.520000,377302.380000 L206.640000,377302.140000 L218.220000,377291.700000 L218.880000,377292.480000 L218.280000,377292.540000 L214.620000,377290.260000 " style="stroke:black"></path>
+<path d="M363.660000,377289.360000 L367.320000,377291.640000 L367.860000,377292.060000 L367.380000,377292.480000 L355.800000,377302.920000 L354.540000,377304.060000 L355.020000,377302.380000 L359.280000,377287.380000 L359.460000,377286.720000 L360.000000,377287.080000 L360.240000,377287.680000 L355.980000,377302.620000 L355.020000,377302.380000 L355.140000,377302.140000 L366.720000,377291.700000 L367.380000,377292.480000 L366.780000,377292.540000 L363.120000,377290.260000 " style="stroke:black"></path>
+<path d="M211.500000,377287.080000 L215.160000,377289.360000 L214.620000,377290.260000 L210.960000,377287.980000 " style="stroke:black"></path>
+<path d="M360.000000,377287.080000 L363.660000,377289.360000 L363.120000,377290.260000 L359.460000,377287.980000 " style="stroke:black"></path>
+<path d="M269.880000,377290.200000 L273.360000,377287.620000 L273.960000,377287.260000 L274.140000,377287.860000 L279.660000,377302.440000 L280.320000,377304.060000 L278.880000,377302.980000 L266.460000,377293.560000 L265.920000,377293.140000 L266.460000,377292.780000 L267.060000,377292.780000 L279.480000,377302.200000 L278.880000,377302.980000 L278.700000,377302.740000 L273.180000,377288.160000 L274.140000,377287.860000 L273.960000,377288.400000 L270.480000,377290.980000 " style="stroke:black"></path>
+<path d="M418.380000,377290.200000 L421.860000,377287.620000 L422.460000,377287.260000 L422.640000,377287.860000 L428.160000,377302.440000 L428.820000,377304.060000 L427.380000,377302.980000 L414.960000,377293.560000 L414.420000,377293.140000 L414.960000,377292.780000 L415.560000,377292.780000 L427.980000,377302.200000 L427.380000,377302.980000 L427.200000,377302.740000 L421.680000,377288.160000 L422.640000,377287.860000 L422.460000,377288.400000 L418.980000,377290.980000 " style="stroke:black"></path>
+<path d="M214.920000,377289.780000 L218.580000,377292.060000 L207.000000,377302.500000 L211.260000,377287.500000 " style="stroke:black"></path>
+<path d="M363.420000,377289.780000 L367.080000,377292.060000 L355.500000,377302.500000 L359.760000,377287.500000 " style="stroke:black"></path>
+<path d="M270.180000,377290.560000 L273.660000,377287.980000 L279.180000,377302.560000 L266.760000,377293.140000 " style="stroke:black"></path>
+<path d="M418.680000,377290.560000 L422.160000,377287.980000 L427.680000,377302.560000 L415.260000,377293.140000 " style="stroke:black"></path>
+<path d="M363.180000,377290.200000 L363.540000,377290.320000 L364.550000,377290.473000 L365.066000,377289.207000 L364.380000,377288.640000 L364.020000,377288.400000 L363.138000,377288.025000 L362.296000,377289.170000 L362.880000,377289.900000 L363.000000,377290.080000 L363.180000,377290.200000 " style="stroke:black"></path>
+<path d="M214.680000,377290.200000 L215.040000,377290.320000 L216.050000,377290.473000 L216.566000,377289.207000 L215.880000,377288.640000 L215.520000,377288.400000 L214.560000,377288.032000 L213.822000,377289.181000 L214.380000,377289.900000 L214.500000,377290.080000 L214.680000,377290.200000 " style="stroke:black"></path>
+<path d="M270.480000,377290.980000 L270.660000,377290.860000 L270.780000,377290.680000 L271.195000,377289.755000 L270.425000,377288.915000 L269.460000,377289.240000 L269.280000,377289.360000 L269.160000,377289.480000 L268.509000,377290.222000 L269.138000,377291.317000 L270.120000,377291.160000 L270.300000,377291.100000 L270.480000,377290.980000 " style="stroke:black"></path>
+<path d="M418.980000,377290.980000 L419.160000,377290.860000 L419.280000,377290.680000 L419.695000,377289.755000 L418.925000,377288.915000 L417.960000,377289.240000 L417.780000,377289.360000 L417.660000,377289.480000 L417.053000,377290.298000 L417.599000,377291.278000 L418.620000,377291.160000 L418.800000,377291.100000 L418.980000,377290.980000 " style="stroke:black"></path>
+<path d="M266.460000,377292.780000 L269.880000,377290.200000 L270.480000,377290.980000 L267.060000,377293.560000 " style="stroke:black"></path>
+<path d="M414.960000,377292.780000 L418.380000,377290.200000 L418.980000,377290.980000 L415.560000,377293.560000 " style="stroke:black"></path></svg>
+<h3>Figure 5-23.  VPERMILPD Operation</h3>
+<p>VEX.256 encoded version: Bits (MAXVL-1:256) of the corresponding ZMM register are zeroed.</p>
+<svg width="707.04003" height="165.14999999996508" viewBox="66.300000 377399.280010 471.360020 110.100000">
+<text x="470.58" y="377421.188136" style="font-size:9.960000pt" textLength="12.191040000000044" lengthAdjust="spacingAndGlyphs">Bit</text>
+<text x="323.58" y="377430.72813600005" style="font-size:9.960000pt" textLength="9.960000000000036" lengthAdjust="spacingAndGlyphs">66</text>
+<text x="455.76" y="377430.72813600005" style="font-size:9.960000pt" textLength="4.980000000000018" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="174.06" y="377431.20813600003" style="font-size:9.960000pt" textLength="34.199651999999986" lengthAdjust="spacingAndGlyphs">194 193</text>
+<text x="344.28" y="377431.20813600003" style="font-size:9.960000pt" textLength="9.960000000000036" lengthAdjust="spacingAndGlyphs">65</text>
+<text x="432.06" y="377431.20813600003" style="font-size:9.960000pt" textLength="4.980000000000018" lengthAdjust="spacingAndGlyphs">2</text>
+<text x="268.559964" y="377431.208208" style="font-size:9.960000pt" textLength="14.999760000000038" lengthAdjust="spacingAndGlyphs">127</text>
+<text x="119.04" y="377431.688136" style="font-size:9.960000pt" textLength="14.999759999999995" lengthAdjust="spacingAndGlyphs">255</text>
+<text x="377.039964" y="377431.68820800004" style="font-size:9.960000pt" textLength="9.960000000000036" lengthAdjust="spacingAndGlyphs">63</text>
+<text x="209.11524" y="377443.38831193995" style="font-size:0.000000pt" textLength="13.416120000000006" lengthAdjust="spacingAndGlyphs">d</text>
+<text x="358.09524" y="377443.38831193995" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">d</text>
+<text x="467.11524" y="377443.38831193995" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">d</text>
+<text x="238.08" y="377460.4056" style="font-size:18.000000pt" textLength="22.50000000000003" lengthAdjust="spacingAndGlyphs">. . .</text>
+<text x="209.11524" y="377447.47389744" style="font-size:0.000000pt" textLength="13.416120000000006" lengthAdjust="spacingAndGlyphs">e</text>
+<text x="358.09524" y="377447.47389744" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">e</text>
+<text x="467.11524" y="377447.47389744" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">e</text>
+<text x="296.58" y="377456.40813600004" style="font-size:9.129800pt" textLength="27.56377918000004" lengthAdjust="spacingAndGlyphs">ignored</text>
+<text x="147.06" y="377456.948136" style="font-size:9.129800pt" textLength="27.53821574" lengthAdjust="spacingAndGlyphs">ignored</text>
+<text x="405.06" y="377456.948136" style="font-size:9.129800pt" textLength="27.523608060000015" lengthAdjust="spacingAndGlyphs">ignored</text>
+<text x="193.38" y="377457.428136" style="font-size:9.129800pt" textLength="10.037302119999993" lengthAdjust="spacingAndGlyphs">sel</text>
+<text x="342.36" y="377457.428136" style="font-size:9.129800pt" textLength="10.036389139999983" lengthAdjust="spacingAndGlyphs">sel</text>
+<text x="451.38" y="377457.428136" style="font-size:9.129800pt" textLength="10.037302119999993" lengthAdjust="spacingAndGlyphs">sel</text>
+<text x="209.11524" y="377450.64650294004" style="font-size:0.000000pt" textLength="13.416120000000006" lengthAdjust="spacingAndGlyphs">r</text>
+<text x="358.09524" y="377450.64650294004" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">r</text>
+<text x="467.11524" y="377450.64650294004" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">r</text>
+<text x="209.11524" y="377454.83616815996" style="font-size:0.000000pt" textLength="13.416120000000006" lengthAdjust="spacingAndGlyphs">o</text>
+<text x="358.09524" y="377454.83616815996" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">o</text>
+<text x="467.11524" y="377454.83616815996" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">o</text>
+<text x="209.11524" y="377459.3307687" style="font-size:0.000000pt" textLength="13.416120000000006" lengthAdjust="spacingAndGlyphs">n</text>
+<text x="358.09524" y="377459.3307687" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">n</text>
+<text x="467.11524" y="377459.3307687" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">n</text>
+<text x="209.11524" y="377463.82536923996" style="font-size:0.000000pt" textLength="13.416120000000006" lengthAdjust="spacingAndGlyphs">g</text>
+<text x="358.09524" y="377463.82536923996" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">g</text>
+<text x="467.11524" y="377463.82536923996" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">g</text>
+<text x="209.11524" y="377466.75238312" style="font-size:0.000000pt" textLength="13.416120000000006" lengthAdjust="spacingAndGlyphs">i</text>
+<text x="358.09524" y="377466.75238312" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">i</text>
+<text x="467.11524" y="377466.75238312" style="font-size:0.000000pt" textLength="13.416120000000035" lengthAdjust="spacingAndGlyphs">i</text>
+<text x="162.060288" y="377493.188136" style="font-size:9.960000pt" textLength="61.06774800000002" lengthAdjust="spacingAndGlyphs">Control Field 4</text>
+<text x="310.079832" y="377493.188136" style="font-size:9.960000pt" textLength="61.06077600000003" lengthAdjust="spacingAndGlyphs">Control Field 2</text>
+<text x="419.1" y="377493.188136" style="font-size:9.960000pt" textLength="58.56778800000001" lengthAdjust="spacingAndGlyphs">Control Field1</text>
+<rect x="340.86" y="377435.76" width="17.220000000000027" height="35.52000000001863" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="449.88" y="377435.76" width="17.220000000000027" height="35.52000000001863" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="358.38" y="377435.52" width="18.95999999999998" height="36.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="467.4" y="377435.52" width="18.95999999999998" height="36.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="209.34" y="377435.52" width="19.02000000000001" height="36.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="268.56" y="377434.98" width="71.51999999999998" height="36.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="377.04" y="377435.52" width="71.51999999999998" height="36.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="119.04" y="377435.52" width="71.52" height="36.0" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<h3>Figure 5-24.  VPERMILPD Shuffle Control</h3>
+<p>Immediate control version: Permute pairs of double precision floating-point values in the first source operand (second operand), each pair using a 1-bit control field in the imm8 byte. Each element in the destination operand (first operand) use a separate control bit of the imm8 byte.</p>
+<p>VEX version: The source operand is a YMM/XMM register or a 256/128-bit memory location and the destination operand is a YMM/XMM register. Imm8 byte provides the lower 4/2 bit as permute control fields.</p>
+<p>EVEX version: The source operand (second operand) is a ZMM/YMM/XMM register, a 512/256/128-bit memory location or a 512/256/128-bit vector broadcasted from a 64-bit memory location. Permuted results are written to the destination under the writemask. Imm8 byte provides the lower 8/4/2 bit as permute control fields.</p>
+<p>Note: For the imm8 versions, VEX.vvvv and EVEX.vvvv are reserved and must be 1111b otherwise instruction will #UD.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VPERMILPD (EVEX immediate versions)</strong></p>
+<p>(KL, VL) = (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF (EVEX.b = 1) AND (SRC1 *is memory*)</p>
+<p>THEN TMP_SRC1[i+63:i] := SRC1[63:0];</p>
+<p>ELSE TMP_SRC1[i+63:i] := SRC1[i+63:i];</p>
+<p>FI;</p>
+<p>ENDFOR;</p>
+<p>IF (imm8[0] = 0) THEN TMP_DEST[63:0] := SRC1[63:0]; FI;</p>
+<p>IF (imm8[0] = 1) THEN TMP_DEST[63:0] := TMP_SRC1[127:64]; FI;</p>
+<p>IF (imm8[1] = 0) THEN TMP_DEST[127:64] := TMP_SRC1[63:0]; FI;</p>
+<p>IF (imm8[1] = 1) THEN TMP_DEST[127:64] := TMP_SRC1[127:64]; FI;</p>
+<p>IF VL &gt;= 256</p>
+<p>IF (imm8[2] = 0) THEN TMP_DEST[191:128] := TMP_SRC1[191:128]; FI;</p>
+<p>IF (imm8[2] = 1) THEN TMP_DEST[191:128] := TMP_SRC1[255:192]; FI;</p>
+<p>IF (imm8[3] = 0) THEN TMP_DEST[255:192] := TMP_SRC1[191:128]; FI;</p>
+<p>IF (imm8[3] = 1) THEN TMP_DEST[255:192] := TMP_SRC1[255:192]; FI;</p>
+<p>FI;</p>
+<p>IF VL &gt;= 512</p>
+<p>IF (imm8[4] = 0) THEN TMP_DEST[319:256] := TMP_SRC1[319:256]; FI;</p>
+<p>IF (imm8[4] = 1) THEN TMP_DEST[319:256] := TMP_SRC1[383:320]; FI;</p>
+<p>IF (imm8[5] = 0) THEN TMP_DEST[383:320] := TMP_SRC1[319:256]; FI;</p>
+<p>IF (imm8[5] = 1) THEN TMP_DEST[383:320] := TMP_SRC1[383:320]; FI;</p>
+<p>IF (imm8[6] = 0) THEN TMP_DEST[447:384] := TMP_SRC1[447:384]; FI;</p>
+<p>IF (imm8[6] = 1) THEN TMP_DEST[447:384] := TMP_SRC1[511:448]; FI;</p>
+<p>IF (imm8[7] = 0) THEN TMP_DEST[511:448] := TMP_SRC1[447:384]; FI;</p>
+<p>IF (imm8[7] = 1) THEN TMP_DEST[511:448] := TMP_SRC1[511:448]; FI;</p>
+<p>FI;</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+63:i] := TMP_DEST[i+63:i]</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+63:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>VPERMILPD (256-bit immediate version)</strong></p>
+<p>IF (imm8[0] = 0) THEN DEST[63:0] := SRC1[63:0]</p>
+<p>IF (imm8[0] = 1) THEN DEST[63:0] := SRC1[127:64]</p>
+<p>IF (imm8[1] = 0) THEN DEST[127:64] := SRC1[63:0]</p>
+<p>IF (imm8[1] = 1) THEN DEST[127:64] := SRC1[127:64]</p>
+<p>IF (imm8[2] = 0) THEN DEST[191:128] := SRC1[191:128]</p>
+<p>IF (imm8[2] = 1) THEN DEST[191:128] := SRC1[255:192]</p>
+<p>IF (imm8[3] = 0) THEN DEST[255:192] := SRC1[191:128]</p>
+<p>IF (imm8[3] = 1) THEN DEST[255:192] := SRC1[255:192]</p>
+<p>DEST[MAXVL-1:256] := 0</p>
+<p><strong>VPERMILPD (128-bit immediate version)</strong></p>
+<p>IF (imm8[0] = 0) THEN DEST[63:0] := SRC1[63:0]</p>
+<p>IF (imm8[0] = 1) THEN DEST[63:0] := SRC1[127:64]</p>
+<p>IF (imm8[1] = 0) THEN DEST[127:64] := SRC1[63:0]</p>
+<p>IF (imm8[1] = 1) THEN DEST[127:64] := SRC1[127:64]</p>
+<p>DEST[MAXVL-1:128] := 0</p>
+<p><strong>VPERMILPD (EVEX variable versions)</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF (EVEX.b = 1) AND (SRC2 *is memory*)</p>
+<p>THEN TMP_SRC2[i+63:i] := SRC2[63:0];</p>
+<p>ELSE TMP_SRC2[i+63:i] := SRC2[i+63:i];</p>
+<p>FI;</p>
+<p>ENDFOR;</p>
+<p>IF (TMP_SRC2[1] = 0) THEN TMP_DEST[63:0] := SRC1[63:0]; FI;</p>
+<p>IF (TMP_SRC2[1] = 1) THEN TMP_DEST[63:0] := SRC1[127:64]; FI;</p>
+<p>IF (TMP_SRC2[65] = 0) THEN TMP_DEST[127:64] := SRC1[63:0]; FI;</p>
+<p>IF (TMP_SRC2[65] = 1) THEN TMP_DEST[127:64] := SRC1[127:64]; FI;</p>
+<p>IF VL &gt;= 256</p>
+<p>IF (TMP_SRC2[129] = 0) THEN TMP_DEST[191:128] := SRC1[191:128]; FI;</p>
+<p>IF (TMP_SRC2[129] = 1) THEN TMP_DEST[191:128] := SRC1[255:192]; FI;</p>
+<p>IF (TMP_SRC2[193] = 0) THEN TMP_DEST[255:192] := SRC1[191:128]; FI;</p>
+<p>IF (TMP_SRC2[193] = 1) THEN TMP_DEST[255:192] := SRC1[255:192]; FI;</p>
+<p>FI;</p>
+<p>IF VL &gt;= 512</p>
+<p>IF (TMP_SRC2[257] = 0) THEN TMP_DEST[319:256] := SRC1[319:256]; FI;</p>
+<p>IF (TMP_SRC2[257] = 1) THEN TMP_DEST[319:256] := SRC1[383:320]; FI;</p>
+<p>IF (TMP_SRC2[321] = 0) THEN TMP_DEST[383:320] := SRC1[319:256]; FI;</p>
+<p>IF (TMP_SRC2[321] = 1) THEN TMP_DEST[383:320] := SRC1[383:320]; FI;</p>
+<p>IF (TMP_SRC2[385] = 0) THEN TMP_DEST[447:384] := SRC1[447:384]; FI;</p>
+<p>IF (TMP_SRC2[385] = 1) THEN TMP_DEST[447:384] := SRC1[511:448]; FI;</p>
+<p>IF (TMP_SRC2[449] = 0) THEN TMP_DEST[511:448] := SRC1[447:384]; FI;</p>
+<p>IF (TMP_SRC2[449] = 1) THEN TMP_DEST[511:448] := SRC1[511:448]; FI;</p>
+<p>FI;</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN DEST[i+63:i] := TMP_DEST[i+63:i]</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+63:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>VPERMILPD (256-bit variable version)</strong></p>
+<p>IF (SRC2[1] = 0) THEN DEST[63:0] := SRC1[63:0]</p>
+<p>IF (SRC2[1] = 1) THEN DEST[63:0] := SRC1[127:64]</p>
+<p>IF (SRC2[65] = 0) THEN DEST[127:64] := SRC1[63:0]</p>
+<p>IF (SRC2[65] = 1) THEN DEST[127:64] := SRC1[127:64]</p>
+<p>IF (SRC2[129] = 0) THEN DEST[191:128] := SRC1[191:128]</p>
+<p>IF (SRC2[129] = 1) THEN DEST[191:128] := SRC1[255:192]</p>
+<p>IF (SRC2[193] = 0) THEN DEST[255:192] := SRC1[191:128]</p>
+<p>IF (SRC2[193] = 1) THEN DEST[255:192] := SRC1[255:192]</p>
+<p>DEST[MAXVL-1:256] := 0</p>
+<p><strong>VPERMILPD (128-bit variable version)</strong></p>
+<p>IF (SRC2[1] = 0) THEN DEST[63:0] := SRC1[63:0]</p>
+<p>IF (SRC2[1] = 1) THEN DEST[63:0] := SRC1[127:64]</p>
+<p>IF (SRC2[65] = 0) THEN DEST[127:64] := SRC1[63:0]</p>
+<p>IF (SRC2[65] = 1) THEN DEST[127:64] := SRC1[127:64]</p>
+<p>DEST[MAXVL-1:128] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VPERMILPD __m512d _mm512_permute_pd( __m512d a, int imm);</p>
+<p>VPERMILPD __m512d _mm512_mask_permute_pd(__m512d s, __mmask8 k, __m512d a, int imm);</p>
+<p>VPERMILPD __m512d _mm512_maskz_permute_pd( __mmask8 k, __m512d a, int imm);</p>
+<p>VPERMILPD __m256d _mm256_mask_permute_pd(__m256d  s, __mmask8 k, __m256d a, int imm);</p>
+<p>VPERMILPD __m256d _mm256_maskz_permute_pd( __mmask8 k, __m256d a, int imm);</p>
+<p>VPERMILPD __m128d _mm_mask_permute_pd(__m128d s, __mmask8 k, __m128d a, int imm);</p>
+<p>VPERMILPD __m128d _mm_maskz_permute_pd( __mmask8 k, __m128d a, int imm);</p>
+<p>VPERMILPD __m512d _mm512_permutevar_pd( __m512i i, __m512d a);</p>
+<p>VPERMILPD __m512d _mm512_mask_permutevar_pd(__m512d s, __mmask8 k, __m512i i, __m512d a);</p>
+<p>VPERMILPD __m512d _mm512_maskz_permutevar_pd( __mmask8 k, __m512i i, __m512d a);</p>
+<p>VPERMILPD __m256d _mm256_mask_permutevar_pd(__m256d s, __mmask8 k, __m256d i, __m256d a);</p>
+<p>VPERMILPD __m256d _mm256_maskz_permutevar_pd( __mmask8 k, __m256d i, __m256d a);</p>
+<p>VPERMILPD __m128d _mm_mask_permutevar_pd(__m128d s, __mmask8 k, __m128d i, __m128d a);</p>
+<p>VPERMILPD __m128d _mm_maskz_permutevar_pd( __mmask8 k, __m128d i, __m128d a);</p>
+<p>VPERMILPD __m128d _mm_permute_pd (__m128d a, int control)</p>
+<p>VPERMILPD __m256d _mm256_permute_pd (__m256d a, int control)</p>
+<p>VPERMILPD __m128d _mm_permutevar_pd (__m128d a, __m128i control);</p>
+<p>VPERMILPD __m256d _mm256_permutevar_pd (__m256d a, __m256i control);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>Non-EVEX-encoded instruction, see Table 2-21, “Type 4 Class Exception Conditions.”</p>
+<p>Additionally:</p>
+<table class="exception-table">
+<tr>
+<td>
+<p>#UD</p>
+<p>EVEX-encoded instruction, see Table 2-50, “Type E4NF Class Exception Conditions.”</p></td>
+<td>If VEX.W = 1.</td></tr></table>
+<p>Additionally:</p>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>If either (E)VEX.vvvv != 1111B and with imm8.</td></tr></table></div></body></html>

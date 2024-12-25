@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VPOPCNT - Return the Count of Number of Bits Set to 1 in BYTE/WORD/DWORD/QWORD </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VPOPCNT - Return the Count of Number of Bits Set to 1 in BYTE/WORD/DWORD/QWORD </div>
+<div id="body">
+<h1>VPOPCNT—Return the Count of Number of Bits Set to 1 in BYTE/WORD/DWORD/QWORD</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 54 /r VPOPCNTB xmm1{k1}{z}, xmm2/m128</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_BITALG AVX512VL</td>
+<td>Counts the number of bits set to one in xmm2/m128 and puts the result in xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 54 /r VPOPCNTB ymm1{k1}{z}, ymm2/m256</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_BITALG AVX512VL</td>
+<td>Counts the number of bits set to one in ymm2/m256 and puts the result in ymm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 54 /r VPOPCNTB zmm1{k1}{z}, zmm2/m512</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_BITALG</td>
+<td>Counts the number of bits set to one in zmm2/m512 and puts the result in zmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 54 /r VPOPCNTW xmm1{k1}{z}, xmm2/m128</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_BITALG AVX512VL</td>
+<td>Counts the number of bits set to one in xmm2/m128 and puts the result in xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 54 /r VPOPCNTW ymm1{k1}{z}, ymm2/m256</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_BITALG AVX512VL</td>
+<td>Counts the number of bits set to one in ymm2/m256 and puts the result in ymm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 54 /r VPOPCNTW zmm1{k1}{z}, zmm2/m512</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_BITALG</td>
+<td>Counts the number of bits set to one in zmm2/m512 and puts the result in zmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 55 /r VPOPCNTD xmm1{k1}{z}, xmm2/m128/m32bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VPOPCNTDQ AVX512VL</td>
+<td>Counts the number of bits set to one in xmm2/m128/m32bcst and puts the result in xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 55 /r VPOPCNTD ymm1{k1}{z}, ymm2/m256/m32bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VPOPCNTDQ AVX512VL</td>
+<td>Counts the number of bits set to one in ymm2/m256/m32bcst and puts the result in ymm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 55 /r VPOPCNTD zmm1{k1}{z}, zmm2/m512/m32bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VPOPCNTDQ</td>
+<td>Counts the number of bits set to one in zmm2/m512/m32bcst and puts the result in zmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 55 /r VPOPCNTQ xmm1{k1}{z}, xmm2/m128/m64bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VPOPCNTDQ AVX512VL</td>
+<td>Counts the number of bits set to one in xmm2/m128/m32bcst and puts the result in xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 55 /r VPOPCNTQ ymm1{k1}{z}, ymm2/m256/m64bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VPOPCNTDQ AVX512VL</td>
+<td>Counts the number of bits set to one in ymm2/m256/m32bcst and puts the result in ymm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 55 /r VPOPCNTQ zmm1{k1}{z}, zmm2/m512/m64bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VPOPCNTDQ</td>
+<td>Counts the number of bits set to one in zmm2/m512/m64bcst and puts the result in zmm1 with writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full Mem</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction counts the number of bits set to one in each byte, word, dword or qword element of its source (e.g., zmm2 or memory) and places the results in the destination register (zmm1). This instruction supports memory fault suppression.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VPOPCNTB</strong></p>
+<p>(KL, VL) = (16, 128), (32, 256), (64, 512)</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF MaskBit(j) OR *no writemask*:</p>
+<p>DEST.byte[j] := POPCNT(SRC.byte[j])</p>
+<p>ELSE IF *merging-masking*:</p>
+<p>*DEST.byte[j] remains unchanged*</p>
+<p>ELSE:</p>
+<p>DEST.byte[j] := 0</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>VPOPCNTW</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF MaskBit(j) OR *no writemask*:</p>
+<p>DEST.word[j] := POPCNT(SRC.word[j])</p>
+<p>ELSE IF *merging-masking*:</p>
+<p>*DEST.word[j] remains unchanged*</p>
+<p>ELSE:</p>
+<p>DEST.word[j] := 0</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>VPOPCNTD</strong></p>
+<p>(KL, VL) = (4, 128), (8, 256), (16, 512)</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF MaskBit(j) OR *no writemask*:</p>
+<p>IF SRC is broadcast memop:</p>
+<p>t := SRC.dword[0]</p>
+<p>ELSE:</p>
+<p>t := SRC.dword[j]</p>
+<p>DEST.dword[j] := POPCNT(t)</p>
+<p>ELSE IF *merging-masking*:</p>
+<p>*DEST..dword[j] remains unchanged*</p>
+<p>ELSE:</p>
+<p>DEST..dword[j] := 0</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>VPOPCNTQ</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF MaskBit(j) OR *no writemask*:</p>
+<p>IF SRC is broadcast memop:</p>
+<p>t := SRC.qword[0]</p>
+<p>ELSE:</p>
+<p>t := SRC.qword[j]</p>
+<p>DEST.qword[j] := POPCNT(t)</p>
+<p>ELSE IF *merging-masking*:</p>
+<p>*DEST..qword[j] remains unchanged*</p>
+<p>ELSE:</p>
+<p>DEST..qword[j] := 0</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VPOPCNTW __m128i _mm_popcnt_epi16(__m128i);</p>
+<p>VPOPCNTW __m128i _mm_mask_popcnt_epi16(__m128i, __mmask8, __m128i);</p>
+<p>VPOPCNTW __m128i _mm_maskz_popcnt_epi16(__mmask8, __m128i);</p>
+<p>VPOPCNTW __m256i _mm256_popcnt_epi16(__m256i);</p>
+<p>VPOPCNTW __m256i _mm256_mask_popcnt_epi16(__m256i, __mmask16, __m256i);</p>
+<p>VPOPCNTW __m256i _mm256_maskz_popcnt_epi16(__mmask16, __m256i);</p>
+<p>VPOPCNTW __m512i _mm512_popcnt_epi16(__m512i);</p>
+<p>VPOPCNTW __m512i _mm512_mask_popcnt_epi16(__m512i, __mmask32, __m512i);</p>
+<p>VPOPCNTW __m512i  _mm512_maskz_popcnt_epi16(__mmask32, __m512i);</p>
+<p>VPOPCNTQ __m128i  _mm_popcnt_epi64(__m128i);</p>
+<p>VPOPCNTQ __m128i  _mm_mask_popcnt_epi64(__m128i, __mmask8, __m128i);</p>
+<p>VPOPCNTQ __m128i  _mm_maskz_popcnt_epi64(__mmask8, __m128i);</p>
+<p>VPOPCNTQ __m256i  _mm256_popcnt_epi64(__m256i);</p>
+<p>VPOPCNTQ __m256i  _mm256_mask_popcnt_epi64(__m256i, __mmask8, __m256i);</p>
+<p>VPOPCNTQ __m256i  _mm256_maskz_popcnt_epi64(__mmask8, __m256i);</p>
+<p>VPOPCNTQ __m512i  _mm512_popcnt_epi64(__m512i);</p>
+<p>VPOPCNTQ __m512i  _mm512_mask_popcnt_epi64(__m512i, __mmask8, __m512i);</p>
+<p>VPOPCNTQ __m512i  _mm512_maskz_popcnt_epi64(__mmask8, __m512i);</p>
+<p>VPOPCNTD __m128i  _mm_popcnt_epi32(__m128i);</p>
+<p>VPOPCNTD __m128i  _mm_mask_popcnt_epi32(__m128i, __mmask8, __m128i);</p>
+<p>VPOPCNTD __m128i  _mm_maskz_popcnt_epi32(__mmask8, __m128i);</p>
+<p>VPOPCNTD __m256i  _mm256_popcnt_epi32(__m256i);</p>
+<p>VPOPCNTD __m256i  _mm256_mask_popcnt_epi32(__m256i, __mmask8, __m256i);</p>
+<p>VPOPCNTD __m256i  _mm256_maskz_popcnt_epi32(__mmask8, __m256i);</p>
+<p>VPOPCNTD __m512i  _mm512_popcnt_epi32(__m512i);</p>
+<p>VPOPCNTD __m512i  _mm512_mask_popcnt_epi32(__m512i, __mmask16, __m512i);</p>
+<p>VPOPCNTD __m512i  _mm512_maskz_popcnt_epi32(__mmask16, __m512i);</p>
+<p>VPOPCNTB __m128i  _mm_popcnt_epi8(__m128i);</p>
+<p>VPOPCNTB __m128i  _mm_mask_popcnt_epi8(__m128i, __mmask16, __m128i);</p>
+<p>VPOPCNTB __m128i  _mm_maskz_popcnt_epi8(__mmask16, __m128i);</p>
+<p>VPOPCNTB __m256i  _mm256_popcnt_epi8(__m256i);</p>
+<p>VPOPCNTB __m256i  _mm256_mask_popcnt_epi8(__m256i, __mmask32, __m256i);</p>
+<p>VPOPCNTB __m256i  _mm256_maskz_popcnt_epi8(__mmask32, __m256i);</p>
+<p>VPOPCNTB __m512i  _mm512_popcnt_epi8(__m512i);</p>
+<p>VPOPCNTB __m512i  _mm512_mask_popcnt_epi8(__m512i, __mmask64, __m512i);</p>
+<p>VPOPCNTB __m512i  _mm512_maskz_popcnt_epi8(__mmask64, __m512i);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-49, “Type E4 Class Exception Conditions.”</p></div></body></html>

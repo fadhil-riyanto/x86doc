@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VFPCLASSPD - Tests Types of Packed Float64 Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VFPCLASSPD - Tests Types of Packed Float64 Values </div>
+<div id="body">
+<h1>VFPCLASSPD—Tests Types of Packed Float64 Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F3A.W1 66 /r ib VFPCLASSPD k2 {k1}, xmm2/m128/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Tests the input for the following categories:  NaN, +0, -0, +Infinity, -Infinity, denormal, finite negative.  The immediate field provides a mask bit for each of these category tests.  The masked test results are OR-ed together to form a mask result.</td></tr>
+<tr>
+<td>EVEX.256.66.0F3A.W1 66 /r ib VFPCLASSPD k2 {k1}, ymm2/m256/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Tests the input for the following categories:  NaN, +0, -0, +Infinity, -Infinity, denormal, finite negative.  The immediate field provides a mask bit for each of these category tests.  The masked test results are OR-ed together to form a mask result.</td></tr>
+<tr>
+<td>EVEX.512.66.0F3A.W1 66 /r ib VFPCLASSPD k2 {k1}, zmm2/m512/m64bcst, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512DQ</td>
+<td>Tests the input for the following categories:  NaN, +0, -0, +Infinity, -Infinity, denormal, finite negative.  The immediate field provides a mask bit for each of these category tests.  The masked test results are OR-ed together to form a mask result.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>The FPCLASSPD instruction checks the packed double precision floating-point values for special categories, speci-fied by the set bits in the imm8 byte. Each set bit in imm8 specifies a category of floating-point values that the input data element is classified against. The classified results of all specified categories of an input value are ORed together to form the final boolean result for the input element. The result of each element is written to the corre-sponding bit in a mask register k2 according to the writemask k1. Bits [MAX_KL-1:8/4/2] of the destination are cleared.</p>
+<p>The classification categories specified by imm8 are shown in Figure 5-13. The classification test for each category is listed in Table 5-4.</p>
+<table>
+<tr>
+<td>7</td>
+<td>6</td>
+<td>5</td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>0</td></tr>
+<tr>
+<td>SNaN</td>
+<td>Neg. Finite</td>
+<td>Denormal</td>
+<td>Neg. INF</td>
+<td>+INF</td>
+<td>Neg. 0</td>
+<td>+0</td>
+<td>QNaN</td></tr></table>
+<h3>Figure 5-13.  Imm8 Byte Specifier of Special Case Floating-Point Values for VFPCLASSPD/SD/PS/SS</h3>
+<h3>Table 5-4. Classifier Operations for VFPCLASSPD/SD/PS/SS</h3>
+<table>
+<tr>
+<th>Bits</th>
+<th>Imm8[0]</th>
+<th>Imm8[1]</th>
+<th>Imm8[2]</th>
+<th>Imm8[3]</th>
+<th>Imm8[4]</th>
+<th>Imm8[5]</th>
+<th>Imm8[6]</th>
+<th>Imm8[7]</th></tr>
+<tr>
+<td>Category</td>
+<td>QNAN</td>
+<td>PosZero</td>
+<td>NegZero</td>
+<td>PosINF</td>
+<td>NegINF</td>
+<td>Denormal</td>
+<td>Negative</td>
+<td>SNAN</td></tr>
+<tr>
+<td>Classifier</td>
+<td>Checks for QNaN</td>
+<td>Checks for +0</td>
+<td>Checks for -0</td>
+<td>Checks for +INF</td>
+<td>Checks for -INF</td>
+<td>Checks for Denormal</td>
+<td>Checks for Negative finite</td>
+<td>Checks for SNaN</td></tr></table>
+<p>The source operand is a ZMM/YMM/XMM register, a 512/256/128-bit memory location, or a 512/256/128-bit vector broadcasted from a 64-bit memory location.</p>
+<p>EVEX.vvvv is reserved and must be 1111b otherwise instructions will #UD.</p>
+<p><strong>Operation</strong></p>
+<p>CheckFPClassDP (tsrc[63:0], imm8[7:0]){</p>
+<p>//* Start checking the source operand for special type *//</p>
+<p>NegNum  := tsrc[63];</p>
+<p>IF (tsrc[62:52]=07FFh) Then ExpAllOnes := 1; FI;</p>
+<p>IF (tsrc[62:52]=0h) Then ExpAllZeros := 1;</p>
+<p>IF (ExpAllZeros AND MXCSR.DAZ) Then</p>
+<p>MantAllZeros := 1;</p>
+<p>ELSIF (tsrc[51:0]=0h) Then</p>
+<p>MantAllZeros := 1;</p>
+<p>FI;</p>
+<p>ZeroNumber := ExpAllZeros AND MantAllZeros</p>
+<p>SignalingBit := tsrc[51];</p>
+<p>sNaN_res := ExpAllOnes AND  NOT(MantAllZeros) AND NOT(SignalingBit); // sNaN</p>
+<p>qNaN_res := ExpAllOnes AND  NOT(MantAllZeros) AND SignalingBit; // qNaN</p>
+<p>Pzero_res := NOT(NegNum) AND ExpAllZeros AND MantAllZeros; // +0</p>
+<p>Nzero_res := NegNum AND ExpAllZeros AND MantAllZeros; // -0</p>
+<p>PInf_res := NOT(NegNum) AND ExpAllOnes AND MantAllZeros; // +Inf</p>
+<p>NInf_res := NegNum AND ExpAllOnes AND MantAllZeros; // -Inf</p>
+<p>Denorm_res := ExpAllZeros AND  NOT(MantAllZeros); // denorm</p>
+<p>FinNeg_res := NegNum AND NOT(ExpAllOnes) AND NOT(ZeroNumber); // -finite</p>
+<p>bResult = ( imm8[0] AND qNaN_res ) OR (imm8[1] AND Pzero_res ) OR</p>
+<p>( imm8[2] AND Nzero_res ) OR ( imm8[3] AND PInf_res ) OR</p>
+<p>( imm8[4] AND NInf_res ) OR ( imm8[5] AND Denorm_res ) OR</p>
+<p>( imm8[6] AND FinNeg_res ) OR ( imm8[7] AND sNaN_res );</p>
+<p>Return bResult;</p>
+<p>} //* end of CheckFPClassDP() *//</p>
+<p><strong>VFPCLASSPD (EVEX Encoded versions)</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN</p>
+<p>IF (EVEX.b == 1) AND (SRC *is memory*)</p>
+<p>THEN</p>
+<p>DEST[j] := CheckFPClassDP(SRC1[63:0], imm8[7:0]);</p>
+<p>ELSE</p>
+<p>DEST[j] := CheckFPClassDP(SRC1[i+63:i], imm8[7:0]);</p>
+<p>FI;</p>
+<p>ELSE DEST[j] := 0</p>
+<p>; zeroing-masking only</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAX_KL-1:KL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VFPCLASSPD __mmask8 _mm512_fpclass_pd_mask( __m512d a, int c);</p>
+<p>VFPCLASSPD __mmask8 _mm512_mask_fpclass_pd_mask( __mmask8 m, __m512d a, int c)</p>
+<p>VFPCLASSPD __mmask8 _mm256_fpclass_pd_mask( __m256d a, int c)</p>
+<p>VFPCLASSPD __mmask8 _mm256_mask_fpclass_pd_mask( __mmask8 m, __m256d a, int c)</p>
+<p>VFPCLASSPD __mmask8 _mm_fpclass_pd_mask( __m128d a, int c)</p>
+<p>VFPCLASSPD __mmask8 _mm_mask_fpclass_pd_mask( __mmask8 m, __m128d a, int c)</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-49, “Type E4 Class Exception Conditions.”</p>
+<p>Additionally:</p>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>If EVEX.vvvv != 1111B.</td></tr></table></div></body></html>

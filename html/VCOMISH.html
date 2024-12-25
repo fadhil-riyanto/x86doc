@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VCOMISH - Compare Scalar Ordered FP16 Values and Set EFLAGS </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VCOMISH - Compare Scalar Ordered FP16 Values and Set EFLAGS </div>
+<div id="body">
+<h1>VCOMISH—Compare Scalar Ordered FP16 Values and Set EFLAGS</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.LLIG.NP.MAP5.W0 2F /r VCOMISH xmm1, xmm2/m16 {sae}</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16</td>
+<td>Compare low FP16 values in xmm1 and xmm2/m16, and set the EFLAGS flags accordingly.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Scalar</td>
+<td>ModRM:reg (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction compares the FP16 values in the low word of operand 1 (first operand) and operand 2 (second operand), and sets the ZF, PF, and CF flags in the EFLAGS register according to the result (unordered, greater than, less than, or equal). The OF, SF and AF flags in the EFLAGS register are set to 0. The unordered result is returned if either source operand is a NaN (QNaN or SNaN).</p>
+<p>Operand 1 is an XMM register; operand 2 can be an XMM register or a 16-bit memory location.</p>
+<p>The VCOMISH instruction differs from the VUCOMISH instruction in that it signals a SIMD floating-point invalid oper-ation exception (#I) when a source operand is either a QNaN or SNaN. The VUCOMISH instruction signals an invalid numeric exception only if a source operand is an SNaN.</p>
+<p>The EFLAGS register is not updated if an unmasked SIMD floating-point exception is generated. EVEX.vvvv is reserved and must be 1111b, otherwise instructions will #UD.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VCOMISH SRC1, SRC2</strong></p>
+<p>RESULT := OrderedCompare(SRC1.fp16[0],SRC2.fp16[0])</p>
+<p>IF RESULT is UNORDERED:</p>
+<p>ZF, PF, CF := 1, 1, 1</p>
+<p>ELSE IF RESULT is GREATER_THAN:</p>
+<p>ZF, PF, CF := 0, 0, 0</p>
+<p>ELSE IF RESULT is LESS_THAN:</p>
+<p>ZF, PF, CF := 0, 0, 1</p>
+<p>ELSE: // RESULT is EQUALS</p>
+<p>ZF, PF, CF := 1, 0, 0</p>
+<p>OF, AF, SF := 0, 0, 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VCOMISH int _mm_comi_round_sh (__m128h a, __m128h b, const int imm8, const int sae);</p>
+<p>VCOMISH int _mm_comi_sh (__m128h a, __m128h b, const int imm8);</p>
+<p>VCOMISH int _mm_comieq_sh (__m128h a, __m128h b);</p>
+<p>VCOMISH int _mm_comige_sh (__m128h a, __m128h b);</p>
+<p>VCOMISH int _mm_comigt_sh (__m128h a, __m128h b);</p>
+<p>VCOMISH int _mm_comile_sh (__m128h a, __m128h b);</p>
+<p>VCOMISH int _mm_comilt_sh (__m128h a, __m128h b);</p>
+<p>VCOMISH int _mm_comineq_sh (__m128h a, __m128h b);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Denormal.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instructions, see Table 2-48, “Type E3NF Class Exception Conditions.”</p></div></body></html>

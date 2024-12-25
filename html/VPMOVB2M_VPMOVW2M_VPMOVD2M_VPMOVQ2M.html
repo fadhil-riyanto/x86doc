@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VPMOVB2M/VPMOVW2M/VPMOVD2M/VPMOVQ2M - Convert a Vector Register to a Mask </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VPMOVB2M/VPMOVW2M/VPMOVD2M/VPMOVQ2M - Convert a Vector Register to a Mask </div>
+<div id="body">
+<h1>VPMOVB2M/VPMOVW2M/VPMOVD2M/VPMOVQ2M—Convert a Vector Register to a Mask</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.F3.0F38.W0 29 /r VPMOVB2M k1, xmm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding byte in XMM1.</td></tr>
+<tr>
+<td>EVEX.256.F3.0F38.W0 29 /r VPMOVB2M k1, ymm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding byte in YMM1.</td></tr>
+<tr>
+<td>EVEX.512.F3.0F38.W0 29 /r VPMOVB2M k1, zmm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding byte in ZMM1.</td></tr>
+<tr>
+<td>EVEX.128.F3.0F38.W1 29 /r VPMOVW2M k1, xmm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding word in XMM1.</td></tr>
+<tr>
+<td>EVEX.256.F3.0F38.W1 29 /r VPMOVW2M k1, ymm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512VL AVX512BW</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding word in YMM1.</td></tr>
+<tr>
+<td>EVEX.512.F3.0F38.W1 29 /r VPMOVW2M k1, zmm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512BW</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding word in ZMM1.</td></tr>
+<tr>
+<td>EVEX.128.F3.0F38.W0 39 /r VPMOVD2M k1, xmm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding doubleword in XMM1.</td></tr>
+<tr>
+<td>EVEX.256.F3.0F38.W0 39 /r VPMOVD2M k1, ymm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding doubleword in YMM1.</td></tr>
+<tr>
+<td>EVEX.512.F3.0F38.W0 39 /r VPMOVD2M k1, zmm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512DQ</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding doubleword in ZMM1.</td></tr>
+<tr>
+<td>EVEX.128.F3.0F38.W1 39 /r VPMOVQ2M k1, xmm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding quadword in XMM1.</td></tr>
+<tr>
+<td>EVEX.256.F3.0F38.W1 39 /r VPMOVQ2M k1, ymm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512VL AVX512DQ</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding quadword in YMM1.</td></tr>
+<tr>
+<td>EVEX.512.F3.0F38.W1 39 /r VPMOVQ2M k1, zmm1</td>
+<td>RM</td>
+<td>V/V</td>
+<td>AVX512DQ</td>
+<td>Sets each bit in k1 to 1 or 0 based on the value of the most significant bit of the corresponding quadword in ZMM1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>RM</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Converts a vector register to a mask register. Each element in the destination register is set to 1 or 0 depending on the value of most significant bit of the corresponding element in the source register.</p>
+<p>The source operand is a ZMM/YMM/XMM register. The destination operand is a mask register.</p>
+<p>EVEX.vvvv is reserved and must be 1111b otherwise instructions will #UD.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VPMOVB2M (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (16, 128), (32, 256), (64, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 8</p>
+<p>IF SRC[i+7]</p>
+<p>THEN</p>
+<p>DEST[j] := 1</p>
+<p>ELSE</p>
+<p>DEST[j] := 0</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAX_KL-1:KL] := 0</p>
+<p><strong>VPMOVW2M (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (8, 128), (16, 256), (32, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 16</p>
+<p>IF SRC[i+15]</p>
+<p>THEN</p>
+<p>DEST[j] := 1</p>
+<p>ELSE</p>
+<p>DEST[j] := 0</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAX_KL-1:KL] := 0</p>
+<p><strong>VPMOVD2M (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (4, 128), (8, 256), (16, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF SRC[i+31]</p>
+<p>THEN</p>
+<p>DEST[j] := 1</p>
+<p>ELSE</p>
+<p>DEST[j] := 0</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAX_KL-1:KL] := 0</p>
+<p><strong>VPMOVQ2M (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF SRC[i+63]</p>
+<p>THEN</p>
+<p>DEST[j] := 1</p>
+<p>ELSE</p>
+<p>DEST[j] := 0</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAX_KL-1:KL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalents</strong></p>
+<p>VPMPOVB2M __mmask64 _mm512_movepi8_mask( __m512i );</p>
+<p>VPMPOVD2M __mmask16 _mm512_movepi32_mask( __m512i );</p>
+<p>VPMPOVQ2M __mmask8 _mm512_movepi64_mask( __m512i );</p>
+<p>VPMPOVW2M __mmask32 _mm512_movepi16_mask( __m512i );</p>
+<p>VPMPOVB2M __mmask32 _mm256_movepi8_mask( __m256i );</p>
+<p>VPMPOVD2M __mmask8 _mm256_movepi32_mask( __m256i );</p>
+<p>VPMPOVQ2M __mmask8 _mm256_movepi64_mask( __m256i );</p>
+<p>VPMPOVW2M __mmask16 _mm256_movepi16_mask( __m256i );</p>
+<p>VPMPOVB2M __mmask16 _mm_movepi8_mask( __m128i );</p>
+<p>VPMPOVD2M __mmask8 _mm_movepi32_mask( __m128i );</p>
+<p>VPMPOVQ2M __mmask8 _mm_movepi64_mask( __m128i );</p>
+<p>VPMPOVW2M __mmask8 _mm_movepi16_mask( __m128i );</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instruction, see Table 2-55, “Type E7NM Class Exception Conditions.”</p>
+<p>Additionally:</p>
+<table>
+<tr>
+<td>#UD</td>
+<td>If EVEX.vvvv != 1111B.</td></tr></table></div></body></html>

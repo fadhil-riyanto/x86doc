@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VGETEXPSS - Convert Exponents of Scalar Single Precision Floating-Point Value to Single Precision Floating-Point Value </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VGETEXPSS - Convert Exponents of Scalar Single Precision Floating-Point Value to Single Precision Floating-Point Value </div>
+<div id="body">
+<h1>VGETEXPSS—Convert Exponents of Scalar Single Precision Floating-Point Value to Single Precision Floating-Point Value</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.LLIG.66.0F38.W0 43 /r VGETEXPSS xmm1 {k1}{z}, xmm2, xmm3/m32{sae}</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Convert the biased exponent (bits 30:23) of the low single-precision floating-point value in xmm3/m32 to a single-precision floating-point value representing unbiased integer exponent. Stores the result to xmm1 under the writemask k1 and merge with the other elements of xmm2.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Tuple1 Scalar</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Extracts the biased exponent from the normalized single-precision floating-point representation of the low double-word data element of the source operand (the third operand) as unbiased signed integer value, or convert the denormal representation of input data to unbiased negative integer values. The integer value of the unbiased expo-nent is converted to single-precision floating-point value and written to the destination operand (the first operand) as single-precision floating-point numbers. Bits (127:32) of the XMM register destination are copied from corre-sponding bits in the first source operand.</p>
+<p>The destination must be a XMM register, the source operand can be a XMM register or a float32 memory location.</p>
+<p>If writemasking is used, the low doubleword element of the destination operand is conditionally updated depending on the value of writemask register k1. If writemasking is not used, the low doubleword element of the destination operand is unconditionally updated.</p>
+<p>Each GETEXP operation converts the exponent value into a floating-point number (permitting input value in denormal representation). Special cases of input values are listed in Table 5-7.</p>
+<p>The formula is:</p>
+<p>GETEXP(x) = floor(log<sub>2</sub>(|x|))</p>
+<p>Notation <strong>floor(x)</strong> stands for maximal integer not exceeding real number x.</p>
+<p>Software usage of VGETEXPxx and VGETMANTxx instructions generally involve a combination of GETEXP operation and GETMANT operation (see VGETMANTPD). Thus VGETEXPxx instruction do not require software to handle SIMD floating-point exceptions.</p>
+<p><strong>Operation</strong></p>
+<p>// NormalizeExpTinySPFP(SRC[31:0]) is defined in the Operation section of VGETEXPPS</p>
+<p>// ConvertExpSPFP(SRC[31:0]) is defined in the Operation section of VGETEXPPS</p>
+<p><strong>VGETEXPSS (EVEX encoded version)</strong></p>
+<p>IF k1[0] OR *no writemask*</p>
+<p>THEN DEST[31:0] :=</p>
+<p>ConvertExpDPFP(SRC2[31:0])</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[31:0] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[31:0]:= 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[127:32] := SRC1[127:32]</p>
+<p>DEST[MAXVL-1:128] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VGETEXPSS __m128 _mm_getexp_ss( __m128 a, __m128 b);</p>
+<p>VGETEXPSS __m128 _mm_mask_getexp_ss(__m128 s, __mmask8 k, __m128 a, __m128 b);</p>
+<p>VGETEXPSS __m128 _mm_maskz_getexp_ss( __mmask8 k, __m128 a, __m128 b);</p>
+<p>VGETEXPSS __m128 _mm_getexp_round_ss( __m128 a, __m128 b, int sae);</p>
+<p>VGETEXPSS __m128 _mm_mask_getexp_round_ss(__m128 s, __mmask8 k, __m128 a, __m128 b, int sae);</p>
+<p>VGETEXPSS __m128 _mm_maskz_getexp_round_ss( __mmask8 k, __m128 a, __m128 b, int sae);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Denormal</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-47, “Type E3 Class Exception Conditions.”</p></div></body></html>

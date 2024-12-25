@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VGETEXPPS - Convert Exponents of Packed Single Precision Floating-Point Values to Single Precision Floating-Point Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VGETEXPPS - Convert Exponents of Packed Single Precision Floating-Point Values to Single Precision Floating-Point Values </div>
+<div id="body">
+<h1>VGETEXPPS—Convert Exponents of Packed Single Precision Floating-Point Values to Single Precision Floating-Point Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 42 /r VGETEXPPS xmm1 {k1}{z}, xmm2/m128/m32bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Convert the exponent of packed single-precision floating-point values in the source operand to single-precision floating-point results representing unbiased integer exponents and stores the results in the destination register.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 42 /r VGETEXPPS ymm1 {k1}{z}, ymm2/m256/m32bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Convert the exponent of packed single-precision floating-point values in the source operand to single-precision floating-point results representing unbiased integer exponents and stores the results in the destination register.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 42 /r VGETEXPPS zmm1 {k1}{z}, zmm2/m512/m32bcst{sae}</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Convert the exponent of packed single-precision floating-point values in the source operand to single-precision floating-point results representing unbiased integer exponents and stores the results in the destination register.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Extracts the biased exponents from the normalized single-precision floating-point representation of each dword element of the source operand (the second operand) as unbiased signed integer value, or convert the denormal representation of input data to unbiased negative integer values. Each integer value of the unbiased exponent is converted to single-precision floating-point value and written to the corresponding dword elements of the destina-tion operand (the first operand) as single-precision floating-point numbers.</p>
+<p>The destination operand is a ZMM/YMM/XMM register and updated under the writemask. The source operand can be a ZMM/YMM/XMM register, a 512/256/128-bit memory location, or a 512/256/128-bit vector broadcasted from a 32-bit memory location.</p>
+<p>EVEX.vvvv is reserved and must be 1111b, otherwise instructions will #UD.</p>
+<p>Each GETEXP operation converts the exponent value into a floating-point number (permitting input value in denormal representation). Special cases of input values are listed in Table 5-7.</p>
+<p>The formula is:</p>
+<p>GETEXP(x) = floor(log<sub>2</sub>(|x|))</p>
+<p>Notation <strong>floor(x)</strong> stands for maximal integer not exceeding real number x.</p>
+<p>Software usage of VGETEXPxx and VGETMANTxx instructions generally involve a combination of GETEXP operation and GETMANT operation (see VGETMANTPD). Thus VGETEXPxx instruction do not require software to handle SIMD floating-point exceptions.</p>
+<h3>Table 5-7. VGETEXPPS/SS Special Cases</h3>
+<table>
+<tr>
+<th>Input Operand</th>
+<th>Result</th>
+<th>Comments</th></tr>
+<tr>
+<td>src1 = NaN</td>
+<td>QNaN(src1)</td>
+<td></td></tr>
+<tr>
+<td>0 &lt; |src1| &lt; INF</td>
+<td>floor(log<sub>2</sub>(|src1|))</td>
+<td>If (SRC = SNaN) then #IE If (SRC = denormal) then #DE</td></tr>
+<tr>
+<td>| src1| = +INF</td>
+<td>+INF</td>
+<td></td></tr>
+<tr>
+<td>| src1| = 0</td>
+<td>-INF</td>
+<td></td></tr></table>
+<p>Figure 5-14 illustrates the VGETEXPPS functionality on input values with normalized representation.</p>
+<svg width="739.9799774999999" height="189.81004500004929" viewBox="55.320005 280474.979980 493.319985 126.540030">
+<text x="186.42" y="280495.878705" style="font-size:6.472500pt" textLength="204.13682475000027" lengthAdjust="spacingAndGlyphs">31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10</text>
+<text x="396.3768967500003" y="280495.878705" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">9</text>
+<text x="405.73613175000025" y="280495.878705" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">8</text>
+<text x="415.1549137500003" y="280495.878705" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">7</text>
+<text x="424.51414875000023" y="280495.878705" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">6</text>
+<text x="433.93293075000025" y="280495.878705" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">5</text>
+<text x="443.3517127500003" y="280495.878705" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">4</text>
+<text x="452.7109477500002" y="280495.878705" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">3</text>
+<text x="462.12972975000025" y="280495.878705" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">2</text>
+<text x="471.48896475000015" y="280495.878705" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="480.90774675000023" y="280495.878705" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="226.7993385" y="280504.33761525" style="font-size:6.472500pt" textLength="10.198070999999999" lengthAdjust="spacingAndGlyphs">exp</text>
+<text x="366.35744175" y="280504.33761525" style="font-size:6.472500pt" textLength="22.376727000000074" lengthAdjust="spacingAndGlyphs">Fraction</text>
+<text x="185.9397405" y="280504.33890975" style="font-size:6.472500pt" textLength="3.2362500000000125" lengthAdjust="spacingAndGlyphs">s</text>
+<text x="119.279463" y="280513.338921" style="font-size:6.472500pt" textLength="26.097767250000018" lengthAdjust="spacingAndGlyphs">Src = 2^1</text>
+<text x="189.71773875000002" y="280513.338921" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="199.07697375000004" y="280513.338921" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="208.49575575000003" y="280513.338921" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="217.91453775000002" y="280513.338921" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="227.27377275000003" y="280513.338921" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="236.69255475000006" y="280513.338921" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="246.05178975000007" y="280513.338921" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="255.4705717500001" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="264.88935375000005" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="274.24858875000007" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="283.6673707500001" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="293.0266057500001" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="302.4453877500001" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="311.80462275000014" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="321.22340475000016" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="330.6421867500001" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="340.00142175000013" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="349.4202037500001" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="358.7794387500001" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="368.1982207500001" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="377.6170027500001" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="386.97623775000005" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="396.3950197500001" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="405.75425475000003" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="415.17303675" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="424.53227175" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="433.95105374999997" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="443.36983575" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="452.72907074999995" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="462.14785274999997" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="471.5070877499999" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="480.92586974999995" y="280513.338921" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="119.279463" y="280530.25868325" style="font-size:6.472500pt" textLength="55.257027000000036" lengthAdjust="spacingAndGlyphs">SAR Src, 23 = 080h</text>
+<text x="189.71709150000004" y="280530.25868325" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="199.0763265" y="280530.25868325" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="208.4951085" y="280530.25868325" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="217.91389049999998" y="280530.25868325" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="227.2731255" y="280530.25868325" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="236.69190749999999" y="280530.25868325" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="246.0511425" y="280530.25868325" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="255.4699245" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="264.8887065" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="274.2479415" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="283.66672350000005" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="293.02595850000006" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="302.4447405000001" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="311.80397550000004" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="321.22275750000006" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="330.6415395000001" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="340.00077450000003" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="349.41955650000006" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="358.7787915" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="368.19757350000003" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="377.6163555" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="386.9755905" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="396.3943725" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="405.7536075" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="415.17238949999995" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="424.53162449999996" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="433.95040649999993" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="443.3691884999999" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="452.7284234999999" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="462.14720549999987" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="471.5064404999999" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="480.92522249999985" y="280530.25868325" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="119.279463" y="280547.17844550003" style="font-size:6.472500pt" textLength="14.034321750000018" lengthAdjust="spacingAndGlyphs">-Bias</text>
+<text x="189.71773875000002" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="199.07697375000004" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="208.49575575000003" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="217.91453775000002" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="227.27377275000003" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="236.69255475000006" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="246.05178975000007" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="255.4705717500001" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="264.88935375000005" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="274.24858875000007" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="283.6673707500001" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="293.0266057500001" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="302.4453877500001" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="311.80462275000014" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="321.22340475000016" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="330.6421867500001" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="340.00142175000013" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="349.4202037500001" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="358.7794387500001" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="368.1982207500001" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="377.6170027500001" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="386.97623775000005" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="396.3950197500001" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="405.75425475000003" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="415.17303675" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="424.53227175" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="433.95105374999997" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="443.36983575" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="452.72907074999995" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="462.14785274999997" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="471.5070877499999" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="480.92586974999995" y="280547.17844550003" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="119.279463" y="280564.09820775" style="font-size:6.472500pt" textLength="40.67966249999999" lengthAdjust="spacingAndGlyphs">Tmp - Bias = 1</text>
+<text x="189.7196805" y="280564.09820775" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="199.0789155" y="280564.09820775" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="208.49769750000002" y="280564.09820775" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="217.91647950000004" y="280564.09820775" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="227.27571450000005" y="280564.09820775" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="236.69449650000007" y="280564.09820775" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="246.05373150000005" y="280564.09820775" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="255.47251350000005" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="264.89129550000007" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="274.2505305000001" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="283.6693125000001" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="293.0285475000001" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="302.44732950000014" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="311.80656450000015" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="321.2253465000001" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="330.64412850000014" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="340.00336350000015" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="349.4221455000001" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="358.7813805000001" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="368.2001625000001" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="377.6189445000001" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="386.97817950000007" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="396.3969615000001" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="405.75619650000004" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="415.17497850000007" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="424.5342135" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="433.9529955" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="443.3717775" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="452.73101249999996" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="462.1497945" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="471.50902949999994" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="480.92781149999996" y="280564.09820775" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="119.279463" y="280581.01797" style="font-size:6.472500pt" textLength="59.453796" lengthAdjust="spacingAndGlyphs">Cvt_PI2PS(01h) = 2^0</text>
+<text x="189.71385525" y="280581.01797" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="199.07309025" y="280581.01797" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="208.49187224999997" y="280581.01797" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="217.91065424999996" y="280581.01797" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="227.26988924999995" y="280581.01797" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="236.68867124999997" y="280581.01797" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="246.04790624999998" y="280581.01797" style="font-size:6.472500pt" textLength="3.598710000000011" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="255.46668825" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="264.88547025" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="274.24470525000004" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="283.66348725" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="293.02272225" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="302.44150425000004" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="311.80073925000005" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="321.21952125000007" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="330.6383032500001" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="339.9975382500001" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="349.41632025000007" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="358.77555525" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="368.19433725000005" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="377.61311925" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="386.97235425" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="396.39113625" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="405.75037125" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="415.16915324999997" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="424.52838825" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="433.94717024999994" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="443.36595224999996" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="452.7251872499999" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="462.14396924999994" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="471.5032042499999" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="480.92198624999986" y="280581.01797" style="font-size:6.472500pt" textLength="3.5987099999999828" lengthAdjust="spacingAndGlyphs">0</text>
+<rect x="475.8" y="280558.2" width="9.839999999999975" height="8.940000000002328" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="410.04" y="280541.2801" width="75.59999999999997" height="8.939899999997579" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="410.04" y="280524.36" width="75.59999999999997" height="8.940000000002328" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="269.1" y="280575.12" width="216.53999999999996" height="8.940000000002328" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="269.1" y="280490.46" width="216.53999999999996" height="17.459999999962747" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M117.840000,280489.980000 L117.840000,280489.500000 " style="stroke:black"></path>
+<path d="M184.560000,280489.980000 L184.560000,280489.500000 " style="stroke:black"></path>
+<path d="M193.920000,280489.980000 L193.920000,280489.500000 " style="stroke:black"></path>
+<path d="M203.340000,280489.980000 L203.340000,280489.500000 " style="stroke:black"></path>
+<path d="M212.760000,280489.980000 L212.760000,280489.500000 " style="stroke:black"></path>
+<path d="M222.120000,280489.980000 L222.120000,280489.500000 " style="stroke:black"></path>
+<path d="M231.540000,280489.980000 L231.540000,280489.500000 " style="stroke:black"></path>
+<path d="M240.900000,280489.980000 L240.900000,280489.500000 " style="stroke:black"></path>
+<path d="M250.320000,280489.980000 L250.320000,280489.500000 " style="stroke:black"></path>
+<path d="M259.680000,280489.980000 L259.680000,280489.500000 " style="stroke:black"></path>
+<path d="M269.100000,280489.980000 L269.100000,280489.500000 " style="stroke:black"></path>
+<path d="M278.520000,280489.980000 L278.520000,280489.500000 " style="stroke:black"></path>
+<path d="M287.880000,280489.980000 L287.880000,280489.500000 " style="stroke:black"></path>
+<path d="M297.300000,280489.980000 L297.300000,280489.500000 " style="stroke:black"></path>
+<path d="M306.660000,280489.980000 L306.660000,280489.500000 " style="stroke:black"></path>
+<path d="M316.080000,280489.980000 L316.080000,280489.500000 " style="stroke:black"></path>
+<path d="M325.440000,280489.980000 L325.440000,280489.500000 " style="stroke:black"></path>
+<path d="M334.860000,280489.980000 L334.860000,280489.500000 " style="stroke:black"></path>
+<path d="M344.280000,280489.980000 L344.280000,280489.500000 " style="stroke:black"></path>
+<path d="M353.640000,280489.980000 L353.640000,280489.500000 " style="stroke:black"></path>
+<path d="M363.060000,280489.980000 L363.060000,280489.500000 " style="stroke:black"></path>
+<path d="M372.420000,280489.980000 L372.420000,280489.500000 " style="stroke:black"></path>
+<path d="M381.840000,280489.980000 L381.840000,280489.500000 " style="stroke:black"></path>
+<path d="M391.260000,280489.980000 L391.260000,280489.500000 " style="stroke:black"></path>
+<path d="M400.620000,280489.980000 L400.620000,280489.500000 " style="stroke:black"></path>
+<path d="M410.040000,280489.980000 L410.040000,280489.500000 " style="stroke:black"></path>
+<path d="M419.400000,280489.980000 L419.400000,280489.500000 " style="stroke:black"></path>
+<path d="M428.820000,280489.980000 L428.820000,280489.500000 " style="stroke:black"></path>
+<path d="M438.180000,280489.980000 L438.180000,280489.500000 " style="stroke:black"></path>
+<path d="M447.600000,280489.980000 L447.600000,280489.500000 " style="stroke:black"></path>
+<path d="M457.020000,280489.980000 L457.020000,280489.500000 " style="stroke:black"></path>
+<path d="M466.380000,280489.980000 L466.380000,280489.500000 " style="stroke:black"></path>
+<path d="M475.800000,280489.980000 L475.800000,280489.500000 " style="stroke:black"></path>
+<path d="M485.160000,280489.980000 L485.160000,280489.500000 " style="stroke:black"></path></svg>
+<h3>Figure 5-14.  VGETEXPPS Functionality On Normal Input values</h3>
+<p><strong>Operation</strong></p>
+<p>NormalizeExpTinySPFP(SRC[31:0])</p>
+<p>{</p>
+<p>// Jbit is the hidden integral bit of a floating-point number. In case of denormal number it has the value of ZERO.</p>
+<p>Src.Jbit := 0;</p>
+<p>Dst.exp := 1;</p>
+<p>Dst.fraction := SRC[22:0];</p>
+<p>WHILE(Src.Jbit = 0)</p>
+<p>{</p>
+<p>Src.Jbit := Dst.fraction[22];</p>
+<p>// Get the fraction MSB</p>
+<p>Dst.fraction := Dst.fraction &lt;&lt; 1 ;</p>
+<p>// One bit shift left</p>
+<p>Dst.exp-- ;</p>
+<p>// Decrement the exponent</p>
+<p>}</p>
+<p>Dst.fraction := 0;</p>
+<p>// zero out fraction bits</p>
+<p>Dst.sign := 1;</p>
+<p>// Return negative sign</p>
+<p>TMP[31:0] := MXCSR.DAZ? 0 : (Dst.sign &lt;&lt; 31) OR (Dst.exp &lt;&lt; 23) OR (Dst.fraction) ;</p>
+<p>Return (TMP[31:0]);</p>
+<p>}</p>
+<p>ConvertExpSPFP(SRC[31:0])</p>
+<p>{</p>
+<p>Src.sign := 0;</p>
+<p>// Zero out sign bit</p>
+<p>Src.exp := SRC[30:23];</p>
+<p>Src.fraction := SRC[22:0];</p>
+<p>// Check for NaN</p>
+<p>IF (SRC = NaN)</p>
+<p>{</p>
+<p>IF ( SRC = SNAN ) SET IE;</p>
+<p>Return QNAN(SRC);</p>
+<p>}</p>
+<p>// Check for +INF</p>
+<p>IF (Src = +INF) RETURN (Src);</p>
+<p>// check if zero operand</p>
+<p>IF ((Src.exp = 0) AND ((Src.fraction = 0) OR (MXCSR.DAZ = 1))) Return (-INF);</p>
+<p>}</p>
+<p>ELSE</p>
+<p>// check if denormal operand (notice that MXCSR.DAZ = 0)</p>
+<p>{</p>
+<p>IF ((Src.exp = 0) AND (Src.fraction != 0))</p>
+<p>{</p>
+<p>TMP[31:0] := NormalizeExpTinySPFP(SRC[31:0]) ;</p>
+<p>// Get Normalized Exponent</p>
+<p>Set #DE</p>
+<p>}</p>
+<p>ELSE</p>
+<p>// exponent value is correct</p>
+<p>{</p>
+<p>TMP[31:0] := (Src.sign &lt;&lt; 31) OR (Src.exp &lt;&lt; 23) OR (Src.fraction) ;</p>
+<p>}</p>
+<p>TMP := SAR(TMP, 23) ;</p>
+<p>// Shift Arithmetic Right</p>
+<p>TMP := TMP – 127;</p>
+<p>// Subtract Bias</p>
+<p>Return CvtI2S(TMP);</p>
+<p>// Convert INT to single precision floating-point number</p>
+<p>}</p>
+<p>}</p>
+<p><strong>VGETEXPPS (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (4, 128), (8, 256), (16, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 32</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN</p>
+<p>IF (EVEX.b = 1) AND (SRC *is memory*)</p>
+<p>THEN</p>
+<p>DEST[i+31:i] :=</p>
+<p>ConvertExpSPFP(SRC[31:0])</p>
+<p>ELSE</p>
+<p>DEST[i+31:i] :=</p>
+<p>ConvertExpSPFP(SRC[i+31:i])</p>
+<p>FI;</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+31:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+31:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VGETEXPPS __m512 _mm512_getexp_ps( __m512 a);</p>
+<p>VGETEXPPS __m512 _mm512_mask_getexp_ps(__m512 s, __mmask16 k, __m512 a);</p>
+<p>VGETEXPPS __m512 _mm512_maskz_getexp_ps( __mmask16 k, __m512 a);</p>
+<p>VGETEXPPS __m512 _mm512_getexp_round_ps( __m512 a, int sae);</p>
+<p>VGETEXPPS __m512 _mm512_mask_getexp_round_ps(__m512 s, __mmask16 k, __m512 a, int sae);</p>
+<p>VGETEXPPS __m512 _mm512_maskz_getexp_round_ps( __mmask16 k, __m512 a, int sae);</p>
+<p>VGETEXPPS __m256 _mm256_getexp_ps(__m256 a);</p>
+<p>VGETEXPPS __m256 _mm256_mask_getexp_ps(__m256 s, __mmask8 k, __m256 a);</p>
+<p>VGETEXPPS __m256 _mm256_maskz_getexp_ps( __mmask8 k, __m256 a);</p>
+<p>VGETEXPPS __m128 _mm_getexp_ps(__m128 a);</p>
+<p>VGETEXPPS __m128 _mm_mask_getexp_ps(__m128 s, __mmask8 k, __m128 a);</p>
+<p>VGETEXPPS __m128 _mm_maskz_getexp_ps( __mmask8 k, __m128 a);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Denormal.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-46, “Type E2 Class Exception Conditions.”</p>
+<p>Additionally:</p>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>If EVEX.vvvv != 1111B.</td></tr></table></div></body></html>

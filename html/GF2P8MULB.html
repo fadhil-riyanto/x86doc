@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>GF2P8MULB - Galois Field Multiply Bytes </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › GF2P8MULB - Galois Field Multiply Bytes </div>
+<div id="body">
+<h1>GF2P8MULB—Galois Field Multiply Bytes</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>66 0F38 CF /r GF2P8MULB xmm1, xmm2/m128</td>
+<td>A</td>
+<td>V/V</td>
+<td>GFNI</td>
+<td>Multiplies elements in the finite field GF(2^8).</td></tr>
+<tr>
+<td>VEX.128.66.0F38.W0 CF /r VGF2P8MULB xmm1, xmm2, xmm3/m128</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX GFNI</td>
+<td>Multiplies elements in the finite field GF(2^8).</td></tr>
+<tr>
+<td>VEX.256.66.0F38.W0 CF /r VGF2P8MULB ymm1, ymm2, ymm3/m256</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX GFNI</td>
+<td>Multiplies elements in the finite field GF(2^8).</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 CF /r VGF2P8MULB xmm1{k1}{z}, xmm2, xmm3/m128</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL GFNI</td>
+<td>Multiplies elements in the finite field GF(2^8).</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 CF /r VGF2P8MULB ymm1{k1}{z}, ymm2, ymm3/m256</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL GFNI</td>
+<td>Multiplies elements in the finite field GF(2^8).</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 CF /r VGF2P8MULB zmm1{k1}{z}, zmm2, zmm3/m512</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512F GFNI</td>
+<td>Multiplies elements in the finite field GF(2^8).</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:reg (r, w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>C</td>
+<td>Full Mem</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>The instruction multiplies elements in the finite field GF(2<sup>8</sup>), operating on a byte (field element) in the first source operand and the corresponding byte in a second source operand. The field GF(2<sup>8</sup>) is represented in polynomial representation with the reduction polynomial x<sup>8</sup> + x<sup>4</sup> + x<sup>3</sup> + x + 1.</p>
+<p>This instruction does not support broadcasting.</p>
+<p>The EVEX encoded form of this instruction supports memory fault suppression. The SSE encoded forms of the instruction require16B alignment on their memory operations.</p>
+<p><strong>Operation</strong></p>
+<p>define gf2p8mul_byte(src1byte, src2byte):</p>
+<p>tword := 0</p>
+<p>FOR i := 0 to 7:</p>
+<p>IF src2byte.bit[i]:</p>
+<p>tword := tword XOR (src1byte&lt;&lt; i)</p>
+<p>* carry out polynomial reduction by the characteristic polynomial p*</p>
+<p>FOR i := 14 downto 8:</p>
+<p>p := 0x11B &lt;&lt; (i-8)</p>
+<p>*0x11B = 0000_0001_0001_1011 in binary*</p>
+<p>IF tword.bit[i]:</p>
+<p>tword := tword XOR p</p>
+<p>return tword.byte[0]</p>
+<p><strong>VGF2P8MULB dest, src1, src2 (EVEX Encoded Version)</strong></p>
+<p>(KL, VL) = (16, 128), (32, 256), (64, 512)</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF k1[j] OR *no writemask*:</p>
+<p>DEST.byte[j] := gf2p8mul_byte(SRC1.byte[j], SRC2.byte[j])</p>
+<p>ELSE iF *zeroing*:</p>
+<p>DEST.byte[j] := 0</p>
+<p>* ELSE DEST.byte[j] remains unchanged*</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>VGF2P8MULB dest, src1, src2 (128b and 256b VEX Encoded Versions)</strong></p>
+<p>(KL, VL) = (16, 128), (32, 256)</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>DEST.byte[j] := gf2p8mul_byte(SRC1.byte[j], SRC2.byte[j])</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>GF2P8MULB srcdest, src1 (128b SSE Encoded Version)</strong></p>
+<p>FOR j := 0 TO 15:</p>
+<p>SRCDEST.byte[j] :=gf2p8mul_byte(SRCDEST.byte[j], SRC1.byte[j])</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>(V)GF2P8MULB __m128i _mm_gf2p8mul_epi8(__m128i, __m128i);</p>
+<p>(V)GF2P8MULB __m128i _mm_mask_gf2p8mul_epi8(__m128i, __mmask16, __m128i, __m128i);</p>
+<p>(V)GF2P8MULB __m128i _mm_maskz_gf2p8mul_epi8(__mmask16, __m128i, __m128i);</p>
+<p>VGF2P8MULB __m256i _mm256_gf2p8mul_epi8(__m256i, __m256i);</p>
+<p>VGF2P8MULB __m256i _mm256_mask_gf2p8mul_epi8(__m256i, __mmask32, __m256i, __m256i);</p>
+<p>VGF2P8MULB __m256i _mm256_maskz_gf2p8mul_epi8(__mmask32, __m256i, __m256i);</p>
+<p>VGF2P8MULB __m512i _mm512_gf2p8mul_epi8(__m512i, __m512i);</p>
+<p>VGF2P8MULB __m512i _mm512_mask_gf2p8mul_epi8(__m512i, __mmask64, __m512i, __m512i);</p>
+<p>VGF2P8MULB __m512i _mm512_maskz_gf2p8mul_epi8(__mmask64, __m512i, __m512i);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>Legacy-encoded and VEX-encoded: See Table 2-21, “Type 4 Class Exception Conditions.”</p>
+<p>EVEX-encoded: See Table 2-49, “Type E4 Class Exception Conditions.”</p></div></body></html>

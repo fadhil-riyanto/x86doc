@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VREDUCEPH - Perform Reduction Transformation on Packed FP16 Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VREDUCEPH - Perform Reduction Transformation on Packed FP16 Values </div>
+<div id="body">
+<h1>VREDUCEPH—Perform Reduction Transformation on Packed FP16 Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>EVEX.128.NP.0F3A.W0 56 /r /ib</p>
+<p>VREDUCEPH  xmm1{k1}{z},  xmm2/</p>
+<p>imm8</p>
+<p>m128/m16bcst,</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16 AVX512VL</td>
+<td>Perform reduction transformation on packed FP16 values in xmm2/m128/m16bcst by subtracting a number of fraction bits specified by the imm8 field. Store the result in xmm1 subject to writemask k1.</td></tr>
+<tr>
+<td>
+<p>EVEX.256.NP.0F3A.W0 56 /r /ib</p>
+<p>VREDUCEPH  ymm1{k1}{z},  ymm2/m256/m16bcst,</p>
+<p>imm8</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16 AVX512VL</td>
+<td>Perform reduction transformation on packed FP16 values in ymm2/m256/m16bcst by subtracting a number of fraction bits specified by the imm8 field. Store the result in ymm1 subject to writemask k1.</td></tr>
+<tr>
+<td>
+<p>EVEX.512.NP.0F3A.W0 56 /r /ib</p>
+<p>VREDUCEPH  zmm1{k1}{z},  zmm2/m512/m16bcst  {sae},  imm8</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16</td>
+<td>Perform reduction transformation on packed FP16 values in zmm2/m512/m16bcst by subtracting a number of fraction bits specified by the imm8 field. Store the result in zmm1 subject to writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>imm8 (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction performs a reduction transformation of the packed binary encoded FP16 values in the source operand (the second operand) and store the reduced results in binary FP format to the destination operand (the first operand) under the writemask k1.</p>
+<p>The reduction transformation subtracts the integer part and the leading M fractional bits from the binary FP source value, where M is a unsigned integer specified by imm8[7:4]. Specifically, the reduction transformation can be expressed as:</p>
+<p>dest = src − (ROUND(2<sup>M</sup> * src)) * 2<sup>−M</sup></p>
+<p>where ROUND() treats src, 2<sup>M</sup>, and their product as binary FP numbers with normalized significand and biased exponents.</p>
+<p>The magnitude of the reduced result can be expressed by considering src = 2<sup>p</sup> * man2, where ‘man2’ is the normal-ized significand and ‘p’ is the unbiased exponent.</p>
+<p>Then if RC=RNE: 0 ≤ |ReducedResult| ≤ 2<sup>−M−1</sup>.</p>
+<p>Then if RC ≠ RNE: 0 ≤ |ReducedResult| &lt; 2<sup>−M</sup>.</p>
+<p>This instruction might end up with a precision exception set. However, in case of SPE set (i.e., Suppress Precision Exception, which is imm8[3]=1), no precision exception is reported.</p>
+<p>This instruction may generate tiny non-zero result. If it does so, it does not report underflow exception, even if underflow exceptions are unmasked (UM flag in MXCSR register is 0).</p>
+<p>For special cases, see Table 5-20.</p>
+<h3>Table 5-20. VREDUCEPH/VREDUCESH Special Cases</h3>
+<table>
+<tr>
+<th>Input value</th>
+<th>Round Mode</th>
+<th>Returned Value</th></tr>
+<tr>
+<td>|Src1| &lt; 2<em><sup>−</sup></em><sup>M<em>−</em>1</sup></td></tr></table></div></body></html></html><html><body><div id="body"><table><tr><td></td>
+<td>RNE</td>
+<td>
+<p>Src1</p>
+<p>Round(Src1 − 2<em><sup>−</sup></em><sup>M</sup>)<sup>1</sup></p></td></tr></table></div></body></html></html><html><body><div id="body"><table><tr><td><p></p></td></tr>
+<tr>
+<td>|Src1| <em>&lt; </em>2<em><sup>−M</sup></em></td>
+<td>
+<p>RU, Src1 <em>&gt; </em>0</p>
+<p>RU, Src1 ≤ 0</p></td>
+<td></td></tr>
+<tr>
+<td></td>
+<td>RD, Src1 ≥ 0</td>
+<td>Src1</td></tr>
+<tr>
+<td></td>
+<td></td>
+<td>Src1</td></tr>
+<tr>
+<td>Src1 = ±0 or</td>
+<td>RD, Src1 <em>&lt; </em>0</td>
+<td>Round(Src1 + 2<em><sup>−</sup></em><sup>M</sup>)</td></tr></table></div></body></html></html><html><body><div id="body"><table><tr><td></td></tr>
+<tr>
+<td>Dest = ±0 (Src1 ≠ ∞)</td>
+<td>NOT RD</td>
+<td>−0.0 +0.0</td></tr>
+<tr>
+<td>Src1 = ±∞</td>
+<td>RD</td>
+<td></td></tr>
+<tr>
+<td>Src1 = ±NAN</td>
+<td>Any</td>
+<td>+0.0</td></tr>
+<tr>
+<td></td>
+<td>Any</td>
+<td>QNaN (Src1)</td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1. The Round(.) function uses rounding controls specified by (imm8[2]? MXCSR.RC: imm8[1:0]).</p>
+<p><strong>Operation</strong></p>
+<p>def reduce_fp16(src, imm8):</p>
+<p>nan := (src.exp = 0x1F) and (src.fraction != 0)</p>
+<p>if nan:</p>
+<p>return QNAN(src)</p>
+<p>m := imm8[7:4]</p>
+<p>rc := imm8[1:0]</p>
+<p>rc_source := imm8[2]</p>
+<p>spe := imm[3] // suppress precision exception</p>
+<p>tmp := 2^(-m) * ROUND(2^m * src, spe, rc_source, rc)</p>
+<p>tmp := src - tmp // using same RC, SPE controls</p>
+<p>return tmp</p>
+<p><strong>VREDUCEPH dest{k1}, src, imm8</strong></p>
+<p>VL = 128, 256 or 512</p>
+<p>KL := VL/16</p>
+<p>FOR i := 0 to KL-1:</p>
+<p>IF k1[i] or *no writemask*:</p>
+<p>IF SRC is memory and (EVEX.b = 1):</p>
+<p>tsrc := src.fp16[0]</p>
+<p>ELSE:</p>
+<p>tsrc := src.fp16[i]</p>
+<p>DEST.fp16[i] := reduce_fp16(tsrc, imm8)</p>
+<p>ELSE IF *zeroing*:</p>
+<p>DEST.fp16[i] := 0</p>
+<p>//else DEST.fp16[i] remains unchanged</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VREDUCEPH __m128h _mm_mask_reduce_ph (__m128h src, __mmask8 k, __m128h a, int imm8);</p>
+<p>VREDUCEPH __m128h _mm_maskz_reduce_ph (__mmask8 k, __m128h a, int imm8);</p>
+<p>VREDUCEPH __m128h _mm_reduce_ph (__m128h a, int imm8);</p>
+<p>VREDUCEPH __m256h _mm256_mask_reduce_ph (__m256h src, __mmask16 k, __m256h a, int imm8);</p>
+<p>VREDUCEPH __m256h _mm256_maskz_reduce_ph (__mmask16 k, __m256h a, int imm8);</p>
+<p>VREDUCEPH __m256h _mm256_reduce_ph (__m256h a, int imm8);</p>
+<p>VREDUCEPH __m512h _mm512_mask_reduce_ph (__m512h src, __mmask32 k, __m512h a, int imm8);</p>
+<p>VREDUCEPH __m512h _mm512_maskz_reduce_ph (__mmask32 k, __m512h a, int imm8);</p>
+<p>VREDUCEPH __m512h _mm512_reduce_ph (__m512h a, int imm8);</p>
+<p>VREDUCEPH __m512h _mm512_mask_reduce_round_ph (__m512h src, __mmask32 k, __m512h a, int imm8, const int sae);</p>
+<p>VREDUCEPH __m512h _mm512_maskz_reduce_round_ph (__mmask32 k, __m512h a, int imm8, const int sae);</p>
+<p>VREDUCEPH __m512h _mm512_reduce_round_ph (__m512h a, int imm8, const int sae);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Precision.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instruction, see Table 2-46, “Type E2 Class Exception Conditions.”</p></div></body></html>

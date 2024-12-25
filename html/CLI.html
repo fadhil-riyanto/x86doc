@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>CLI - Clear Interrupt Flag </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › CLI - Clear Interrupt Flag </div>
+<div id="body">
+<h1>CLI—Clear Interrupt Flag</h1>
+<table>
+<tr>
+<th>Opcode</th>
+<th>Instruction</th>
+<th>Op/En</th>
+<th>64-bit Mode</th>
+<th>Compat/Leg Mode</th>
+<th>Description</th></tr>
+<tr>
+<td>FA</td>
+<td>CLI</td>
+<td>ZO</td>
+<td>Valid</td>
+<td>Valid</td>
+<td>Clear interrupt flag; interrupts disabled when interrupt flag cleared.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>ZO</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>In most cases, CLI clears the IF flag in the EFLAGS register and no other flags are affected. Clearing the IF flag causes the processor to ignore maskable external interrupts. The IF flag and the CLI and STI instruction have no effect on the generation of exceptions and NMI interrupts.</p>
+<p>Operation is different in two modes defined as follows:</p>
+<p>If IOPL &lt; 3 and either VME mode or PVI mode is active, CLI clears the VIF flag in the EFLAGS register, leaving IF unaffected.</p>
+<p>Table 3-7 indicates the action of the CLI instruction depending on the processor operating mode, IOPL, and CPL.</p>
+<h3>Table 3-7.  Decision Table for CLI Results</h3>
+<p><strong>Mode</strong></p>
+<p><strong>IOPL</strong></p>
+<p><strong>CLI Result</strong></p>
+<table>
+<tr>
+<td></td>
+<td></td>
+<td></td></tr>
+<tr>
+<td>Real-address</td>
+<td>X<sup>1</sup></td>
+<td>IF = 0</td></tr>
+<tr>
+<td>Protected, not PVI<sup>2</sup></td>
+<td>≥ CPL</td>
+<td>IF = 0</td></tr>
+<tr>
+<td></td>
+<td>&lt; CPL</td>
+<td>#GP fault</td></tr>
+<tr>
+<td>Protected, PVI<sup>3</sup></td>
+<td>3</td>
+<td>IF = 0</td></tr>
+<tr>
+<td></td>
+<td>0–2</td>
+<td>VIF = 0</td></tr>
+<tr>
+<td>Virtual-8086, not VME<sup>3</sup></td>
+<td>3</td>
+<td>IF = 0</td></tr>
+<tr>
+<td></td>
+<td>0–2</td>
+<td>#GP fault</td></tr>
+<tr>
+<td>Virtual-8086, VME<sup>3</sup></td>
+<td>3</td>
+<td>IF = 0</td></tr>
+<tr>
+<td></td>
+<td>0–2</td>
+<td>VIF = 0</td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1. X = This setting has no effect on instruction operation.</p>
+<p>2. For this table, “protected mode” applies whenever CR0.PE = 1 and EFLAGS.VM = 0; it includes compatibility mode and 64-bit mode.</p>
+<p>3. PVI mode and virtual-8086 mode each imply CPL = 3.</p>
+<h2>Operation</h2>
+<pre>IF CR0.PE = 0
+    THEN IF := 0; (* Reset Interrupt Flag *)
+    ELSE
+         IF IOPL ≥ CPL (* CPL = 3 if EFLAGS.VM = 1 *)
+              THEN IF := 0; (* Reset Interrupt Flag *)
+              ELSE
+                    IF VME mode OR PVI mode
+                         THEN VIF := 0; (* Reset Virtual Interrupt Flag *)
+                         ELSE #GP(0);
+                    FI;
+         FI;
+FI;</pre>
+<h2>Flags Affected</h2>
+<p>Either the IF flag or the VIF flag is cleared to 0. Other flags are unaffected.</p>
+<h2>Protected Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#GP(0)</td>
+<td>
+<p>If CPL is greater than IOPL and PVI mode is not active.</p>
+<p>If CPL is greater than IOPL and less than 3.</p></td></tr>
+<tr>
+<td>#UD</td>
+<td>If the LOCK prefix is used.</td></tr></table>
+<h2>Real-Address Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>If the LOCK prefix is used.</td></tr></table>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#GP(0)</td>
+<td>If IOPL is less than 3 and VME mode is not active.</td></tr>
+<tr>
+<td>#UD</td>
+<td>If the LOCK prefix is used.</td></tr></table>
+<h2>Compatibility Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>64-Bit Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p></div></body></html>

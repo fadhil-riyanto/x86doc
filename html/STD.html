@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>STD - Set Direction Flag </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › STD - Set Direction Flag </div>
+<div id="body">
+<h1>STD—Set Direction Flag</h1>
+<table>
+<tr>
+<th>Opcode</th>
+<th>Instruction</th>
+<th>Op/En</th>
+<th>64-bit Mode</th>
+<th>Compat/Leg Mode</th>
+<th>Description</th></tr>
+<tr>
+<td>FD</td>
+<td>STD</td>
+<td>ZO</td>
+<td>Valid</td>
+<td>Valid</td>
+<td>Set DF flag.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>ZO</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Sets the DF flag in the EFLAGS register. When the DF flag is set to 1, string operations decrement the index regis-ters (ESI and/or EDI). Operation is the same in all modes.</p>
+<h2>Operation</h2>
+<pre>DF := 1;</pre>
+<h2>Flags Affected</h2>
+<p>The DF flag is set. The CF, OF, ZF, SF, AF, and PF flags are unaffected.</p>
+<h2>Exceptions (All Operating Modes)</h2>
+<p>#UD</p>
+<p>If the LOCK prefix is used.</p></div></body></html>

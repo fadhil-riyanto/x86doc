@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VGETEXPPD - Convert Exponents of Packed Double Precision Floating-Point Values to Double Precision Floating-Point Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VGETEXPPD - Convert Exponents of Packed Double Precision Floating-Point Values to Double Precision Floating-Point Values </div>
+<div id="body">
+<h1>VGETEXPPD—Convert Exponents of Packed Double Precision Floating-Point Values to Double Precision Floating-Point Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 42 /r VGETEXPPD xmm1 {k1}{z}, xmm2/m128/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Convert the exponent of packed double precision floating-point values in the source operand to double precision floating-point results representing unbiased integer exponents and stores the results in the destination register.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 42 /r VGETEXPPD ymm1 {k1}{z}, ymm2/m256/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Convert the exponent of packed double precision floating-point values in the source operand to double precision floating-point results representing unbiased integer exponents and stores the results in the destination register.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 42 /r VGETEXPPD zmm1 {k1}{z}, zmm2/m512/m64bcst{sae}</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Convert the exponent of packed double precision floating-point values in the source operand to double precision floating-point results representing unbiased integer exponents and stores the results in the destination under writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Extracts the biased exponents from the normalized double precision floating-point representation of each qword data element of the source operand (the second operand) as unbiased signed integer value, or convert the denormal representation of input data to unbiased negative integer values. Each integer value of the unbiased exponent is converted to double precision floating-point value and written to the corresponding qword elements of the destination operand (the first operand) as double precision floating-point numbers.</p>
+<p>The destination operand is a ZMM/YMM/XMM register and updated under the writemask. The source operand can be a ZMM/YMM/XMM register, a 512/256/128-bit memory location, or a 512/256/128-bit vector broadcasted from a 64-bit memory location.</p>
+<p>EVEX.vvvv is reserved and must be 1111b, otherwise instructions will #UD.</p>
+<p>Each GETEXP operation converts the exponent value into a floating-point number (permitting input value in denormal representation). Special cases of input values are listed in Table 5-5.</p>
+<p>The formula is:</p>
+<p>GETEXP(x) = floor(log<sub>2</sub>(|x|))</p>
+<p>Notation <strong>floor(x)</strong> stands for the greatest integer not exceeding real number x.</p>
+<h3>Table 5-5. VGETEXPPD/SD Special Cases</h3>
+<table>
+<tr>
+<th>Input Operand</th>
+<th>Result</th>
+<th>Comments</th></tr>
+<tr>
+<td>src1 = NaN</td>
+<td>QNaN(src1)</td>
+<td></td></tr>
+<tr>
+<td>0 &lt; |src1| &lt; INF</td>
+<td>floor(log<sub>2</sub>(|src1|))</td>
+<td>If (SRC = SNaN) then #IE If (SRC = denormal) then #DE</td></tr>
+<tr>
+<td>| src1| = +INF</td>
+<td>+INF</td>
+<td></td></tr>
+<tr>
+<td>| src1| = 0</td>
+<td>-INF</td>
+<td></td></tr></table>
+<p><strong>Operation</strong></p>
+<p>NormalizeExpTinyDPFP(SRC[63:0])</p>
+<p>{</p>
+<p>// Jbit is the hidden integral bit of a floating-point number. In case of denormal number it has the value of ZERO.</p>
+<p>Src.Jbit := 0;</p>
+<p>Dst.exp := 1;</p>
+<p>Dst.fraction := SRC[51:0];</p>
+<p>WHILE(Src.Jbit = 0)</p>
+<p>{</p>
+<p>Src.Jbit := Dst.fraction[51];</p>
+<p>// Get the fraction MSB</p>
+<p>Dst.fraction := Dst.fraction &lt;&lt; 1 ;</p>
+<p>// One bit shift left</p>
+<p>Dst.exp-- ;</p>
+<p>// Decrement the exponent</p>
+<p>}</p>
+<p>Dst.fraction := 0;</p>
+<p>// zero out fraction bits</p>
+<p>Dst.sign := 1;</p>
+<p>// Return negative sign</p>
+<p>TMP[63:0] := MXCSR.DAZ? 0 : (Dst.sign &lt;&lt; 63) OR (Dst.exp &lt;&lt; 52) OR (Dst.fraction) ;</p>
+<p>Return (TMP[63:0]);</p>
+<p>}</p>
+<p>ConvertExpDPFP(SRC[63:0])</p>
+<p>{</p>
+<p>Src.sign := 0;</p>
+<p>// Zero out sign bit</p>
+<p>Src.exp := SRC[62:52];</p>
+<p>Src.fraction := SRC[51:0];</p>
+<p>// Check for NaN</p>
+<p>IF (SRC = NaN)</p>
+<p>{</p>
+<p>IF ( SRC = SNAN ) SET IE;</p>
+<p>Return QNAN(SRC);</p>
+<p>}</p>
+<p>// Check for +INF</p>
+<p>IF (Src = +INF) RETURN (Src);</p>
+<p>// check if zero operand</p>
+<p>IF ((Src.exp = 0) AND ((Src.fraction = 0) OR (MXCSR.DAZ = 1))) Return (-INF);</p>
+<p>}</p>
+<p>ELSE</p>
+<p>// check if denormal operand (notice that MXCSR.DAZ = 0)</p>
+<p>{</p>
+<p>IF ((Src.exp = 0) AND (Src.fraction != 0))</p>
+<p>{</p>
+<p>TMP[63:0] := NormalizeExpTinyDPFP(SRC[63:0]) ;</p>
+<p>// Get Normalized Exponent</p>
+<p>Set #DE</p>
+<p>}</p>
+<p>ELSE</p>
+<p>// exponent value is correct</p>
+<p>{</p>
+<p>TMP[63:0] := (Src.sign &lt;&lt; 63) OR (Src.exp &lt;&lt; 52) OR (Src.fraction) ;</p>
+<p>}</p>
+<p>TMP := SAR(TMP, 52) ;</p>
+<p>// Shift Arithmetic Right</p>
+<p>TMP := TMP – 1023;</p>
+<p>// Subtract Bias</p>
+<p>Return CvtI2D(TMP);</p>
+<p>// Convert INT to double precision floating-point number</p>
+<p>}</p>
+<p>}</p>
+<p><strong>VGETEXPPD (EVEX encoded versions)</strong></p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask*</p>
+<p>THEN</p>
+<p>IF (EVEX.b = 1) AND (SRC *is memory*)</p>
+<p>THEN</p>
+<p>DEST[i+63:i] :=</p>
+<p>ConvertExpDPFP(SRC[63:0])</p>
+<p>ELSE</p>
+<p>DEST[i+63:i] :=</p>
+<p>ConvertExpDPFP(SRC[i+63:i])</p>
+<p>FI;</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+63:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VGETEXPPD __m512d _mm512_getexp_pd(__m512d a);</p>
+<p>VGETEXPPD __m512d _mm512_mask_getexp_pd(__m512d s, __mmask8 k, __m512d a);</p>
+<p>VGETEXPPD __m512d _mm512_maskz_getexp_pd( __mmask8 k, __m512d a);</p>
+<p>VGETEXPPD __m512d _mm512_getexp_round_pd(__m512d a, int sae);</p>
+<p>VGETEXPPD __m512d _mm512_mask_getexp_round_pd(__m512d s, __mmask8 k, __m512d a, int sae);</p>
+<p>VGETEXPPD __m512d _mm512_maskz_getexp_round_pd( __mmask8 k, __m512d a, int sae);</p>
+<p>VGETEXPPD __m256d _mm256_getexp_pd(__m256d a);</p>
+<p>VGETEXPPD __m256d _mm256_mask_getexp_pd(__m256d s, __mmask8 k, __m256d a);</p>
+<p>VGETEXPPD __m256d _mm256_maskz_getexp_pd( __mmask8 k, __m256d a);</p>
+<p>VGETEXPPD __m128d _mm_getexp_pd(__m128d a);</p>
+<p>VGETEXPPD __m128d _mm_mask_getexp_pd(__m128d s, __mmask8 k, __m128d a);</p>
+<p>VGETEXPPD __m128d _mm_maskz_getexp_pd( __mmask8 k, __m128d a);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Denormal.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-46, “Type E2 Class Exception Conditions.”</p>
+<p>Additionally:</p>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>If EVEX.vvvv != 1111B.</td></tr></table></div></body></html>

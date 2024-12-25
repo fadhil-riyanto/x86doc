@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>FXSAVE - Save x87 FPU, MMX Technology, and SSE State </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › FXSAVE - Save x87 FPU, MMX Technology, and SSE State </div>
+<div id="body">
+<h1>FXSAVE—Save x87 FPU, MMX Technology, and SSE State</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64-Bit Mode</th>
+<th>Compat/Leg Mode</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>NP 0F AE /0</p>
+<p>FXSAVE m512byte</p></td>
+<td>M</td>
+<td>Valid</td>
+<td>Valid</td>
+<td>Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.</td></tr>
+<tr>
+<td>
+<p>NP REX.W + 0F AE /0</p>
+<p>FXSAVE64 m512byte</p></td>
+<td>M</td>
+<td>Valid</td>
+<td>N.E.</td>
+<td>Save the x87 FPU, MMX, XMM, and MXCSR register state to m512byte.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>M</td>
+<td>ModRM:r/m (w)</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Saves the current state of the x87 FPU, MMX technology, XMM, and MXCSR registers to a 512-byte memory loca-tion specified in the destination operand. The content layout of the 512 byte region depends on whether the processor is operating in non-64-bit operating modes or 64-bit sub-mode of IA-32e mode.</p>
+<p>Bytes 464:511 are available to software use. The processor does not write to bytes 464:511 of an FXSAVE area.</p>
+<p>The operation of FXSAVE in non-64-bit modes is described first.</p>
+<h2>Non-64-Bit Mode Operation</h2>
+<p>Table 3-43 shows the layout of the state information in memory when the processor is operating in legacy modes.</p>
+<h3>Table 3-43.  Non-64-Bit-Mode Layout of FXSAVE and FXRSTOR Memory Region</h3>
+<svg width="766.8449925" height="480.01501499995356" viewBox="46.380005 350451.030000 511.229995 320.010010">
+<text x="57.66" y="350461.7952" style="font-size:9.000000pt" textLength="11.052899999999994" lengthAdjust="spacingAndGlyphs">15</text>
+<text x="82.19579999999999" y="350461.7952" style="font-size:9.000000pt" textLength="11.052899999999994" lengthAdjust="spacingAndGlyphs">14</text>
+<text x="115.7919" y="350461.7952" style="font-size:9.000000pt" textLength="11.052899999999994" lengthAdjust="spacingAndGlyphs">13</text>
+<text x="138.048" y="350461.7952" style="font-size:9.000000pt" textLength="13.332600000000042" lengthAdjust="spacingAndGlyphs">12</text>
+<text x="176.14320000000006" y="350461.7952" style="font-size:9.000000pt" textLength="11.052899999999994" lengthAdjust="spacingAndGlyphs">11</text>
+<text x="196.1790000000001" y="350461.7952" style="font-size:9.000000pt" textLength="11.052899999999966" lengthAdjust="spacingAndGlyphs">10</text>
+<text x="236.37480000000005" y="350461.7952" style="font-size:9.000000pt" textLength="5.534999999999997" lengthAdjust="spacingAndGlyphs">9</text>
+<text x="255.39270000000005" y="350461.7952" style="font-size:9.000000pt" textLength="7.814700000000016" lengthAdjust="spacingAndGlyphs">8</text>
+<text x="293.37" y="350461.7952" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">7</text>
+<text x="316.88790000000006" y="350461.7952" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">6</text>
+<text x="348.74609999999996" y="350461.7952" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">5</text>
+<text x="381.50430000000006" y="350461.7952" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">4</text>
+<text x="415.94190000000003" y="350461.7952" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">3</text>
+<text x="441.73950000000013" y="350461.7952" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">2</text>
+<text x="477.4371000000001" y="350461.7952" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="496.45500000000015" y="350461.7952" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="65.22" y="350477.43865820003" style="font-size:9.053900pt" textLength="20.49440804000001" lengthAdjust="spacingAndGlyphs">Rsvd</text>
+<text x="124.53934201999999" y="350477.43865820003" style="font-size:9.053900pt" textLength="18.020882560000018" lengthAdjust="spacingAndGlyphs">FCS</text>
+<text x="202.46173237000002" y="350477.43865820003" style="font-size:9.053900pt" textLength="36.509851750000024" lengthAdjust="spacingAndGlyphs">FIP[31:0]</text>
+<text x="298.67662228000006" y="350477.43865820003" style="font-size:9.053900pt" textLength="18.52790096000001" lengthAdjust="spacingAndGlyphs">FOP</text>
+<text x="341.28" y="350477.43865820003" style="font-size:9.053900pt" textLength="20.518853569999976" lengthAdjust="spacingAndGlyphs">Rsvd</text>
+<rect x="336.96" y="350467.02" width="29.100000000000023" height="16.01999999996042" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="375.72" y="350477.79120000004" style="font-size:9.000000pt" textLength="17.20799999999997" lengthAdjust="spacingAndGlyphs">FTW</text>
+<text x="421.68" y="350477.43865820003" style="font-size:9.053900pt" textLength="20.003686660000028" lengthAdjust="spacingAndGlyphs">FSW</text>
+<text x="479.51812398000004" y="350477.43865820003" style="font-size:9.053900pt" textLength="20.54782604999997" lengthAdjust="spacingAndGlyphs">FCW</text>
+<text x="535.4399" y="350477.7552" style="font-size:9.000000pt" textLength="5.534999999999968" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="73.08" y="350493.4586582" style="font-size:9.053900pt" textLength="62.91283493000002" lengthAdjust="spacingAndGlyphs">MXCSR_MASK</text>
+<text x="204.53447949000002" y="350493.4586582" style="font-size:9.053900pt" textLength="32.47724468999999" lengthAdjust="spacingAndGlyphs">MXCSR</text>
+<text x="296.22" y="350493.4586582" style="font-size:9.053900pt" textLength="23.440547100000003" lengthAdjust="spacingAndGlyphs">Rsrvd</text>
+<rect x="278.88" y="350483.04" width="58.079999999999984" height="15.960000000020955" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="360.7652531" y="350493.4586582" style="font-size:9.053900pt" textLength="18.047138870000026" lengthAdjust="spacingAndGlyphs">FDS</text>
+<text x="440.4540593400001" y="350493.4586582" style="font-size:9.053900pt" textLength="40.489946189999955" lengthAdjust="spacingAndGlyphs">FDP[31:0]</text>
+<text x="532.6799" y="350493.7752" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">16</text>
+<text x="114.36" y="350509.4786582" style="font-size:9.053900pt" textLength="38.44376479" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="350.32907953" y="350509.4786582" style="font-size:9.053900pt" textLength="38.97160716000002" lengthAdjust="spacingAndGlyphs">ST0/MM0</text>
+<text x="532.6799" y="350509.7952" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">32</text>
+<text x="114.36" y="350525.43865820003" style="font-size:9.053900pt" textLength="38.44376479" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="350.32907953" y="350525.43865820003" style="font-size:9.053900pt" textLength="38.97160716000002" lengthAdjust="spacingAndGlyphs">ST1/MM1</text>
+<text x="532.6799" y="350525.7552" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">48</text>
+<text x="114.36" y="350541.4586582" style="font-size:9.053900pt" textLength="38.44376479" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="350.32907953" y="350541.4586582" style="font-size:9.053900pt" textLength="38.97160716000002" lengthAdjust="spacingAndGlyphs">ST2/MM2</text>
+<text x="532.6799" y="350541.7752" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">64</text>
+<text x="114.36" y="350557.4786582" style="font-size:9.053900pt" textLength="38.44376479" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="350.32907953" y="350557.4786582" style="font-size:9.053900pt" textLength="38.97160716000002" lengthAdjust="spacingAndGlyphs">ST3/MM3</text>
+<text x="532.6799" y="350557.7952" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">80</text>
+<text x="114.36" y="350573.43865820003" style="font-size:9.053900pt" textLength="38.44376479" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="350.32907953" y="350573.43865820003" style="font-size:9.053900pt" textLength="38.97160716000002" lengthAdjust="spacingAndGlyphs">ST4/MM4</text>
+<text x="532.6799" y="350573.7552" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">96</text>
+<text x="114.36" y="350589.4586582" style="font-size:9.053900pt" textLength="38.44376479" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="350.32907953" y="350589.4586582" style="font-size:9.053900pt" textLength="38.97160716000002" lengthAdjust="spacingAndGlyphs">ST5/MM5</text>
+<text x="529.9199" y="350589.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">112</text>
+<text x="114.36" y="350605.4786582" style="font-size:9.053900pt" textLength="38.44376479" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="350.32907953" y="350605.4786582" style="font-size:9.053900pt" textLength="38.97160716000002" lengthAdjust="spacingAndGlyphs">ST6/MM6</text>
+<text x="529.9199" y="350605.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">128</text>
+<text x="114.36" y="350621.43865820003" style="font-size:9.053900pt" textLength="38.44376479" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="350.32907953" y="350621.43865820003" style="font-size:9.053900pt" textLength="38.97160716000002" lengthAdjust="spacingAndGlyphs">ST7/MM7</text>
+<text x="529.9199" y="350621.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">144</text>
+<text x="269.64" y="350637.4586582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM0</text>
+<text x="529.9199" y="350637.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">160</text>
+<text x="269.64" y="350653.4786582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM1</text>
+<text x="529.9199" y="350653.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">176</text>
+<text x="269.64" y="350669.43865820003" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM2</text>
+<text x="529.9199" y="350669.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">192</text>
+<text x="269.64" y="350685.4586582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM3</text>
+<text x="529.9199" y="350685.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">208</text>
+<text x="269.64" y="350701.4786582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM4</text>
+<text x="529.9199" y="350701.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">224</text>
+<text x="269.64" y="350717.43865820003" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM5</text>
+<text x="529.9199" y="350717.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">240</text>
+<text x="269.64" y="350733.4586582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM6</text>
+<text x="529.9199" y="350733.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">256</text>
+<text x="269.64" y="350749.4786582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM7</text>
+<text x="529.9199" y="350749.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">272</text>
+<text x="263.4" y="350765.43865820003" style="font-size:9.053900pt" textLength="38.437427060000005" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="529.9199" y="350765.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">288</text></svg>
+<h3>Table 3-43.  Non-64-Bit-Mode Layout of FXSAVE and FXRSTOR Memory Region (Contd.)</h3>
+<svg width="766.7550150000001" height="336.01499249995686" viewBox="45.899990 350937.030000 511.170010 224.009995">
+<text x="57.12" y="350947.7352" style="font-size:9.000000pt" textLength="11.052900000000001" lengthAdjust="spacingAndGlyphs">15</text>
+<text x="81.6558" y="350947.7352" style="font-size:9.000000pt" textLength="11.052899999999994" lengthAdjust="spacingAndGlyphs">14</text>
+<text x="115.2519" y="350947.7352" style="font-size:9.000000pt" textLength="11.052899999999994" lengthAdjust="spacingAndGlyphs">13</text>
+<text x="137.508" y="350947.7352" style="font-size:9.000000pt" textLength="13.332600000000014" lengthAdjust="spacingAndGlyphs">12</text>
+<text x="175.60320000000007" y="350947.7352" style="font-size:9.000000pt" textLength="11.052899999999994" lengthAdjust="spacingAndGlyphs">11</text>
+<text x="195.6390000000001" y="350947.7352" style="font-size:9.000000pt" textLength="11.052899999999966" lengthAdjust="spacingAndGlyphs">10</text>
+<text x="235.89510000000007" y="350947.7352" style="font-size:9.000000pt" textLength="5.534999999999997" lengthAdjust="spacingAndGlyphs">9</text>
+<text x="254.85270000000008" y="350947.7352" style="font-size:9.000000pt" textLength="7.814700000000016" lengthAdjust="spacingAndGlyphs">8</text>
+<text x="292.8903000000001" y="350947.7352" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">7</text>
+<text x="316.3479000000001" y="350947.7352" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">6</text>
+<text x="348.20610000000005" y="350947.7352" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">5</text>
+<text x="381.02370000000013" y="350947.7352" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">4</text>
+<text x="415.4613000000001" y="350947.7352" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">3</text>
+<text x="441.1995000000001" y="350947.7352" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">2</text>
+<text x="476.9574000000001" y="350947.7352" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="495.91500000000013" y="350947.7352" style="font-size:9.000000pt" textLength="5.535000000000025" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="262.86" y="350963.43865820003" style="font-size:9.053900pt" textLength="38.524344499999984" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="45.9" y="350953.02" width="472.38" height="15.959999999962747" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="529.3799" y="350963.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">304</text>
+<text x="262.86" y="350979.4586582" style="font-size:9.053900pt" textLength="38.524344499999984" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="45.9" y="350968.98" width="472.38" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="529.3799" y="350979.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">320</text>
+<text x="262.86" y="350995.4186582" style="font-size:9.053900pt" textLength="38.524344499999984" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="45.9" y="350985.0" width="472.38" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="529.3799" y="350995.7352" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">336</text>
+<text x="262.86" y="351011.43865820003" style="font-size:9.053900pt" textLength="38.524344499999984" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="45.9" y="351001.02" width="472.38" height="15.959999999962747" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="529.3799" y="351011.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">352</text>
+<text x="262.86" y="351027.4586582" style="font-size:9.053900pt" textLength="38.524344499999984" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="45.9" y="351016.98" width="472.38" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="529.3799" y="351027.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">368</text>
+<text x="262.86" y="351043.4186582" style="font-size:9.053900pt" textLength="38.524344499999984" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="45.9" y="351033.0" width="472.38" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="529.3799" y="351043.7352" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">384</text>
+<text x="262.86" y="351059.43865820003" style="font-size:9.053900pt" textLength="38.524344499999984" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="45.9" y="351049.02" width="472.38" height="15.959999999962747" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="529.3799" y="351059.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">400</text>
+<text x="262.86" y="351075.4586582" style="font-size:9.053900pt" textLength="38.524344499999984" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="45.9" y="351064.98" width="472.38" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="529.3799" y="351075.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">416</text>
+<text x="262.86" y="351091.4186582" style="font-size:9.053900pt" textLength="38.524344499999984" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="45.9" y="351081.0" width="472.38" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="529.3799" y="351091.7352" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">432</text>
+<text x="262.86" y="351107.43865820003" style="font-size:9.053900pt" textLength="38.524344499999984" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="45.9" y="351097.02" width="472.38" height="15.959999999962747" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="529.3799" y="351107.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">448</text>
+<text x="263.88" y="351123.4586582" style="font-size:9.053900pt" textLength="36.46458224999998" lengthAdjust="spacingAndGlyphs">Available</text>
+<text x="529.3799" y="351123.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">464</text>
+<text x="263.88" y="351139.4786582" style="font-size:9.053900pt" textLength="36.46458224999998" lengthAdjust="spacingAndGlyphs">Available</text>
+<text x="529.3799" y="351139.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">480</text>
+<text x="263.88" y="351155.43865820003" style="font-size:9.053900pt" textLength="36.46458224999998" lengthAdjust="spacingAndGlyphs">Available</text>
+<text x="529.3799" y="351155.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">496</text></svg>
+<p>The destination operand contains the first byte of the memory image, and it must be aligned on a 16-byte boundary. A misaligned destination operand will result in a general-protection (#GP) exception being generated (or in some cases, an alignment check exception [#AC]).</p>
+<p>The FXSAVE instruction is used when an operating system needs to perform a context switch or when an exception handler needs to save and examine the current state of the x87 FPU, MMX technology, and/or XMM and MXCSR registers.</p>
+<p>The fields in Table 3-43 are defined in Table 3-44.</p>
+<h3>Table 3-44.  Field Definitions</h3>
+<p><strong>Field</strong></p>
+<p><strong>Definition</strong></p>
+<table>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td>FCW</td>
+<td>x87 FPU Control Word (16 bits). See Figure 8-6 in the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 1, for the layout of the x87 FPU control word.</td></tr>
+<tr>
+<td>FSW</td>
+<td>x87 FPU Status Word (16 bits). See Figure 8-4 in the <em>Intel<sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 1, for the layout of the x87 FPU status word.</td></tr>
+<tr>
+<td>Abridged FTW</td>
+<td>x87 FPU Tag Word (8 bits). The tag information saved here is abridged, as described in the following paragraphs.</td></tr>
+<tr>
+<td>FOP</td>
+<td>x87 FPU Opcode (16 bits). The lower 11 bits of this field contain the opcode, upper 5 bits are reserved. See Figure 8-8 in the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 1, for the layout of the x87 FPU opcode field.</td></tr>
+<tr>
+<td>FIP</td>
+<td>
+<p>x87 FPU Instruction Pointer Offset (64 bits). The contents of this field differ depending on the current addressing mode (32-bit, 16-bit, or 64-bit) of the processor when the FXSAVE instruction was executed:</p>
+<p>32-bit mode — 32-bit IP offset.</p>
+<p>16-bit mode — low 16 bits are IP offset; high 16 bits are reserved.</p>
+<p>64-bit mode with REX.W — 64-bit IP offset.</p>
+<p>64-bit mode without REX.W — 32-bit IP offset.</p>
+<p>See “x87 FPU Instruction and Operand (Data) Pointers” in Chapter 8 of the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 1, for a description of the x87 FPU instruction pointer.</p></td></tr>
+<tr>
+<td>FCS</td>
+<td>x87 FPU Instruction Pointer Selector (16 bits). If CPUID.(EAX=07H,ECX=0H):EBX[bit 13] = 1, the processor deprecates FCS and FDS, and this field is saved as 0000H.</td></tr></table>
+<h3>Table 3-44.  Field Definitions  (Contd.)</h3>
+<p><strong>Field</strong></p>
+<p><strong>Definition</strong></p>
+<table>
+<tr>
+<td></td>
+<td></td></tr>
+<tr>
+<td>FDP</td>
+<td>
+<p>x87 FPU Instruction Operand (Data) Pointer Offset (64 bits). The contents of this field differ depending on the current addressing mode (32-bit, 16-bit, or 64-bit) of the processor when the FXSAVE instruction was executed:</p>
+<p>32-bit mode — 32-bit DP offset.</p>
+<p>16-bit mode — low 16 bits are DP offset; high 16 bits are reserved.</p>
+<p>64-bit mode with REX.W — 64-bit DP offset.</p>
+<p>64-bit mode without REX.W — 32-bit DP offset.</p>
+<p>See “x87 FPU Instruction and Operand (Data) Pointers” in Chapter 8 of the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 1, for a description of the x87 FPU operand pointer.</p></td></tr>
+<tr>
+<td>FDS</td>
+<td>x87 FPU Instruction Operand (Data) Pointer Selector (16 bits). If CPUID.(EAX=07H,ECX=0H):EBX[bit 13] = 1, the processor deprecates FCS and FDS, and this field is saved as 0000H.</td></tr>
+<tr>
+<td>MXCSR</td>
+<td>MXCSR Register State (32 bits). See Figure 10-3 in the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 1, for the layout of the MXCSR register. If the OSFXSR bit in control register CR4 is not set, the FXSAVE instruction may not save this register. This behavior is implementation dependent.</td></tr>
+<tr>
+<td>MXCSR_ MASK</td>
+<td>MXCSR_MASK (32 bits). This mask can be used to adjust values written to the MXCSR register, ensuring that reserved bits are set to 0. Set the mask bits and flags in MXCSR to the mode of operation desired for SSE and SSE2 SIMD floating-point instructions. See “Guidelines for Writing to the MXCSR Register” in Chapter 11 of the <em>Intel<sup>®</sup></em> 64 and IA-32 Architectures Software Developer’s Manual, Volume 1, for instructions for how to determine and use the MXCSR_MASK value.</td></tr>
+<tr>
+<td>ST0/MM0 through ST7/MM7</td>
+<td>x87 FPU or MMX technology registers. These 80-bit fields contain the x87 FPU data registers or the MMX technology registers, depending on the state of the processor prior to the execution of the FXSAVE instruction. If the processor had been executing x87 FPU instruction prior to the FXSAVE instruction, the x87 FPU data registers are saved; if it had been executing MMX instructions (or SSE or SSE2 instructions that operated on the MMX technology registers), the MMX technology registers are saved. When the MMX technology registers are saved, the high 16 bits of the field are reserved.</td></tr>
+<tr>
+<td>XMM0 through XMM7</td>
+<td>XMM registers (128 bits per field). If the OSFXSR bit in control register CR4 is not set, the FXSAVE instruction may not save these registers. This behavior is implementation dependent.</td></tr></table>
+<p>The FXSAVE instruction saves an abridged version of the x87 FPU tag word in the FTW field (unlike the FSAVE instruction, which saves the complete tag word). The tag information is saved in physical register order (R0 through R7), rather than in top-of-stack (TOS) order. With the FXSAVE instruction, however, only a single bit (1 for valid or 0 for empty) is saved for each tag. For example, assume that the tag word is currently set as follows:</p>
+<p>R7</p>
+<p>R6</p>
+<p>R5</p>
+<p>R4</p>
+<p>R3</p>
+<p>R2</p>
+<p>R1</p>
+<p>R0</p>
+<p>11</p>
+<p>xx</p>
+<p>xx</p>
+<p>xx</p>
+<p>11</p>
+<p>11</p>
+<p>11</p>
+<p>11</p>
+<p>Here, 11B indicates empty stack elements and “xx” indicates valid (00B), zero (01B), or special (10B).</p>
+<p>For this example, the FXSAVE instruction saves only the following 8 bits of information:</p>
+<p>R7</p>
+<p>R6</p>
+<p>R5</p>
+<p>R4</p>
+<p>R3</p>
+<p>R2</p>
+<p>R1</p>
+<p>R0</p>
+<p>0</p>
+<p>1</p>
+<p>1</p>
+<p>1</p>
+<p>0</p>
+<p>0</p>
+<p>0</p>
+<p>0</p>
+<p>Here, a 1 is saved for any valid, zero, or special tag, and a 0 is saved for any empty tag.</p>
+<p>The operation of the FXSAVE instruction differs from that of the FSAVE instruction, the as follows:</p>
+<p>The FSAVE format for FTW can be recreated from the FTW valid bits and the stored 80-bit floating-point data (assuming the stored data was not the contents of MMX technology registers) using Table 3-45.</p>
+<h3>Table 3-45.  Recreating FSAVE Format</h3>
+<p><strong>Exponent</strong></p>
+<p><strong>Exponent</strong></p>
+<p><strong>Fraction</strong></p>
+<p><strong>J and M</strong></p>
+<p><strong>FTW valid bit</strong></p>
+<table>
+<tr>
+<th>all 1’s</th>
+<th>all 0’s</th>
+<th>all 0’s</th>
+<th>bits</th>
+<th></th>
+<th>x87 FTW</th></tr>
+<tr>
+<td>
+<p>0</p>
+<p>0</p></td>
+<td>
+<p>0</p>
+<p>0</p></td>
+<td>
+<p>0</p>
+<p>0</p></td>
+<td>
+<p>0x</p>
+<p>1x</p></td>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>10</p>
+<p>Special</p>
+<p>00</p>
+<p>Valid</p></td></tr>
+<tr>
+<td>
+<p>0</p>
+<p>0</p></td>
+<td>
+<p>0</p>
+<p>0</p></td>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>00</p>
+<p>10</p></td>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>10</p>
+<p>Special</p>
+<p>00</p>
+<p>Valid</p></td></tr>
+<tr>
+<td>
+<p>0</p>
+<p>0</p></td>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>0</p>
+<p>0</p></td>
+<td>
+<p>0x</p>
+<p>1x</p></td>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>10</p>
+<p>Special</p>
+<p>10</p>
+<p>Special</p></td></tr>
+<tr>
+<td>
+<p>0</p>
+<p>0</p></td>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>00</p>
+<p>10</p></td>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>01</p>
+<p>Zero</p>
+<p>10</p>
+<p>Special</p></td></tr>
+<tr>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>0</p>
+<p>0</p></td>
+<td>
+<p>0</p>
+<p>0</p></td>
+<td>
+<p>1x</p>
+<p>1x</p></td>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>10</p>
+<p>Special</p>
+<p>10</p>
+<p>Special</p></td></tr>
+<tr>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>0</p>
+<p>0</p></td>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>00</p>
+<p>10</p></td>
+<td>
+<p>1</p>
+<p>1</p></td>
+<td>
+<p>10</p>
+<p>Special</p>
+<p>10</p>
+<p>Special</p></td></tr>
+<tr>
+<td>For all legal combinations above.</td>
+<td></td>
+<td></td>
+<td></td>
+<td>0</td>
+<td>
+<p>11</p>
+<p>Empty</p></td></tr></table>
+<p>The J-bit is defined to be the 1-bit binary integer to the left of the decimal place in the significand. The M-bit is defined to be the most significant bit of the fractional portion of the significand (i.e., the bit immediately to the right of the decimal place).</p>
+<p>When the M-bit is the most significant bit of the fractional portion of the significand, it must be 0 if the fraction is all 0’s.</p>
+<h2>IA-32e Mode Operation</h2>
+<p>In compatibility sub-mode of IA-32e mode, legacy SSE registers, XMM0 through XMM7, are saved according to the legacy FXSAVE map. In 64-bit mode, all of the SSE registers, XMM0 through XMM15, are saved. Additionally, there are two different layouts of the FXSAVE map in 64-bit mode, corresponding to FXSAVE64 (which requires REX.W=1) and FXSAVE (REX.W=0). In the FXSAVE64 map (Table 3-46), the FPU IP and FPU DP pointers are 64-bit wide. In the FXSAVE map for 64-bit mode (Table 3-47), the FPU IP and FPU DP pointers are 32-bits.</p>
+<h3>Table 3-46.  Layout of the 64-Bit Mode FXSAVE64 Map (Requires REX.W = 1)</h3>
+<svg width="765.405015" height="790.5149924999569" viewBox="46.859990 353313.030000 510.270010 527.009995">
+<text x="59.16" y="353323.134864" style="font-size:7.980000pt" textLength="9.348569999999995" lengthAdjust="spacingAndGlyphs">15</text>
+<text x="78.42052799999999" y="353323.134864" style="font-size:7.980000pt" textLength="9.34857000000001" lengthAdjust="spacingAndGlyphs">14</text>
+<text x="112.381014" y="353323.134864" style="font-size:7.980000pt" textLength="9.34857000000001" lengthAdjust="spacingAndGlyphs">13</text>
+<text x="131.581692" y="353323.134864" style="font-size:7.980000pt" textLength="9.348569999999967" lengthAdjust="spacingAndGlyphs">12</text>
+<text x="165.60202800000002" y="353323.134864" style="font-size:7.980000pt" textLength="9.348569999999995" lengthAdjust="spacingAndGlyphs">11</text>
+<text x="184.802706" y="353323.134864" style="font-size:7.980000pt" textLength="9.348570000000024" lengthAdjust="spacingAndGlyphs">10</text>
+<text x="220.50363000000002" y="353323.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">9</text>
+<text x="240.96435000000002" y="353323.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">8</text>
+<text x="272.76465" y="353323.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">7</text>
+<text x="295.205208" y="353323.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">6</text>
+<text x="333.1253700000001" y="353323.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">5</text>
+<text x="376.5054480000001" y="353323.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">4</text>
+<text x="415.7455020000001" y="353323.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">3</text>
+<text x="436.206222" y="353323.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">2</text>
+<text x="469.9265100000001" y="353323.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="488.40659400000004" y="353323.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="146.28" y="353338.4186582" style="font-size:9.053900pt" textLength="14.02177493000002" lengthAdjust="spacingAndGlyphs">FIP</text>
+<text x="277.08350408" y="353338.4186582" style="font-size:9.053900pt" textLength="18.521563230000027" lengthAdjust="spacingAndGlyphs">FOP</text>
+<text x="318.42" y="353338.134864" style="font-size:7.980000pt" textLength="32.109924000000035" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="312.9" y="353328.0" width="43.139999999999986" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="369.12" y="353338.4186582" style="font-size:9.053900pt" textLength="19.5202084" lengthAdjust="spacingAndGlyphs">FTW</text>
+<text x="418.31436565" y="353338.4186582" style="font-size:9.053900pt" textLength="20.027226799999994" lengthAdjust="spacingAndGlyphs">FSW</text>
+<text x="471.25614051" y="353338.4186582" style="font-size:9.053900pt" textLength="20.536961369999972" lengthAdjust="spacingAndGlyphs">FCW</text>
+<text x="529.86" y="353338.7352" style="font-size:9.000000pt" textLength="5.534999999999968" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="68.58" y="353354.43865820003" style="font-size:9.053900pt" textLength="62.96263137999999" lengthAdjust="spacingAndGlyphs">MXCSR_MASK</text>
+<text x="190.24359203" y="353354.43865820003" style="font-size:9.053900pt" textLength="32.50531177999997" lengthAdjust="spacingAndGlyphs">MXCSR</text>
+<text x="374.91055799" y="353354.43865820003" style="font-size:9.053900pt" textLength="18.049855039999954" lengthAdjust="spacingAndGlyphs">FDP</text>
+<text x="527.1" y="353354.7552" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">16</text>
+<text x="107.46" y="353370.4586582" style="font-size:9.053900pt" textLength="38.443764789999975" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.86" y="353359.98" width="159.59999999999997" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="337.78849983000003" y="353370.4586582" style="font-size:9.053900pt" textLength="38.972512549999976" lengthAdjust="spacingAndGlyphs">ST0/MM0</text>
+<text x="527.1" y="353370.7752" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">32</text>
+<text x="107.46" y="353386.4186582" style="font-size:9.053900pt" textLength="38.443764789999975" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.86" y="353376.0" width="159.59999999999997" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="337.78849983000003" y="353386.4186582" style="font-size:9.053900pt" textLength="38.972512549999976" lengthAdjust="spacingAndGlyphs">ST1/MM1</text>
+<text x="527.1" y="353386.7352" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">48</text>
+<text x="107.46" y="353402.43865820003" style="font-size:9.053900pt" textLength="38.443764789999975" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.86" y="353392.02" width="159.59999999999997" height="15.959999999962747" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="337.78849983000003" y="353402.43865820003" style="font-size:9.053900pt" textLength="38.972512549999976" lengthAdjust="spacingAndGlyphs">ST2/MM2</text>
+<text x="527.1" y="353402.7552" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">64</text>
+<text x="107.46" y="353418.4586582" style="font-size:9.053900pt" textLength="38.443764789999975" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.86" y="353407.98" width="159.59999999999997" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="337.78849983000003" y="353418.4586582" style="font-size:9.053900pt" textLength="38.972512549999976" lengthAdjust="spacingAndGlyphs">ST3/MM3</text>
+<text x="527.1" y="353418.7752" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">80</text>
+<text x="107.46" y="353434.4186582" style="font-size:9.053900pt" textLength="38.443764789999975" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.86" y="353424.0" width="159.59999999999997" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="337.78849983000003" y="353434.4186582" style="font-size:9.053900pt" textLength="38.972512549999976" lengthAdjust="spacingAndGlyphs">ST4/MM4</text>
+<text x="527.1" y="353434.7352" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">96</text>
+<text x="107.46" y="353450.43865820003" style="font-size:9.053900pt" textLength="38.443764789999975" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.86" y="353440.02" width="159.59999999999997" height="15.959999999962747" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="337.78849983000003" y="353450.43865820003" style="font-size:9.053900pt" textLength="38.972512549999976" lengthAdjust="spacingAndGlyphs">ST5/MM5</text>
+<text x="524.34" y="353450.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">112</text>
+<text x="107.46" y="353466.4586582" style="font-size:9.053900pt" textLength="38.443764789999975" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.86" y="353455.98" width="159.59999999999997" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="337.78849983000003" y="353466.4586582" style="font-size:9.053900pt" textLength="38.972512549999976" lengthAdjust="spacingAndGlyphs">ST6/MM6</text>
+<text x="524.34" y="353466.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">128</text>
+<text x="107.46" y="353482.4186582" style="font-size:9.053900pt" textLength="38.443764789999975" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.86" y="353472.0" width="159.59999999999997" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="337.78849983000003" y="353482.4186582" style="font-size:9.053900pt" textLength="38.972512549999976" lengthAdjust="spacingAndGlyphs">ST7/MM7</text>
+<text x="524.34" y="353482.7352" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">144</text>
+<text x="264.48" y="353498.43865820003" style="font-size:9.053900pt" textLength="26.034489449999967" lengthAdjust="spacingAndGlyphs">XMM0</text>
+<text x="524.34" y="353498.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">160</text>
+<text x="264.48" y="353514.4586582" style="font-size:9.053900pt" textLength="26.034489449999967" lengthAdjust="spacingAndGlyphs">XMM1</text>
+<text x="524.34" y="353514.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">176</text>
+<text x="264.48" y="353530.4786582" style="font-size:9.053900pt" textLength="26.034489449999967" lengthAdjust="spacingAndGlyphs">XMM2</text>
+<text x="524.34" y="353530.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">192</text>
+<text x="264.48" y="353546.43865820003" style="font-size:9.053900pt" textLength="26.034489449999967" lengthAdjust="spacingAndGlyphs">XMM3</text>
+<text x="524.34" y="353546.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">208</text>
+<text x="264.48" y="353562.4586582" style="font-size:9.053900pt" textLength="26.034489449999967" lengthAdjust="spacingAndGlyphs">XMM4</text>
+<text x="524.34" y="353562.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">224</text>
+<text x="264.48" y="353578.4786582" style="font-size:9.053900pt" textLength="26.034489449999967" lengthAdjust="spacingAndGlyphs">XMM5</text>
+<text x="524.34" y="353578.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">240</text>
+<text x="264.48" y="353594.43865820003" style="font-size:9.053900pt" textLength="26.034489449999967" lengthAdjust="spacingAndGlyphs">XMM6</text>
+<text x="524.34" y="353594.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">256</text>
+<text x="264.48" y="353610.4586582" style="font-size:9.053900pt" textLength="26.034489449999967" lengthAdjust="spacingAndGlyphs">XMM7</text>
+<text x="524.34" y="353610.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">272</text>
+<text x="264.48" y="353626.4786582" style="font-size:9.053900pt" textLength="26.034489449999967" lengthAdjust="spacingAndGlyphs">XMM8</text>
+<text x="524.34" y="353626.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">288</text>
+<text x="264.48" y="353642.43865820003" style="font-size:9.053900pt" textLength="26.034489449999967" lengthAdjust="spacingAndGlyphs">XMM9</text>
+<text x="524.34" y="353642.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">304</text>
+<text x="262.02" y="353658.4586582" style="font-size:9.053900pt" textLength="30.95347332" lengthAdjust="spacingAndGlyphs">XMM10</text>
+<text x="524.34" y="353658.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">320</text>
+<text x="262.02" y="353674.4786582" style="font-size:9.053900pt" textLength="30.95347332" lengthAdjust="spacingAndGlyphs">XMM11</text>
+<text x="524.34" y="353674.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">336</text>
+<text x="262.02" y="353690.43865820003" style="font-size:9.053900pt" textLength="30.95347332" lengthAdjust="spacingAndGlyphs">XMM12</text>
+<text x="524.34" y="353690.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">352</text>
+<text x="262.02" y="353706.4586582" style="font-size:9.053900pt" textLength="30.95347332" lengthAdjust="spacingAndGlyphs">XMM13</text>
+<text x="524.34" y="353706.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">368</text>
+<text x="262.02" y="353722.4786582" style="font-size:9.053900pt" textLength="30.95347332" lengthAdjust="spacingAndGlyphs">XMM14</text>
+<text x="524.34" y="353722.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">384</text>
+<text x="262.02" y="353738.43865820003" style="font-size:9.053900pt" textLength="30.95347332" lengthAdjust="spacingAndGlyphs">XMM15</text>
+<text x="524.34" y="353738.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">400</text>
+<text x="258.24" y="353754.4586582" style="font-size:9.053900pt" textLength="38.49084506999998" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="524.34" y="353754.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">416</text>
+<rect x="46.86" y="353744.04" width="461.22" height="15.960000000020955" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="258.24" y="353770.4786582" style="font-size:9.053900pt" textLength="38.49084506999998" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="524.34" y="353770.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">432</text>
+<rect x="46.86" y="353760.0" width="461.22" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="258.24" y="353786.43865820003" style="font-size:9.053900pt" textLength="38.49084506999998" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="524.34" y="353786.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">448</text>
+<rect x="46.86" y="353776.02" width="461.22" height="16.01999999996042" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="259.26" y="353802.4586582" style="font-size:9.053900pt" textLength="36.46367686000002" lengthAdjust="spacingAndGlyphs">Available</text>
+<text x="524.34" y="353802.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">464</text>
+<text x="259.26" y="353818.4786582" style="font-size:9.053900pt" textLength="36.46367686000002" lengthAdjust="spacingAndGlyphs">Available</text>
+<text x="524.34" y="353818.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">480</text>
+<text x="259.26" y="353834.43865820003" style="font-size:9.053900pt" textLength="36.46367686000002" lengthAdjust="spacingAndGlyphs">Available</text>
+<text x="524.34" y="353834.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">496</text></svg>
+<h3>Table 3-47.  Layout of the 64-Bit Mode FXSAVE Map (REX.W = 0)</h3>
+<svg width="764.145015" height="790.5149924999569" viewBox="46.739990 354105.030000 509.430010 527.009995">
+<text x="59.94" y="354115.134864" style="font-size:7.980000pt" textLength="9.348569999999995" lengthAdjust="spacingAndGlyphs">15</text>
+<text x="79.140678" y="354115.134864" style="font-size:7.980000pt" textLength="9.34857000000001" lengthAdjust="spacingAndGlyphs">14</text>
+<text x="114.841602" y="354115.134864" style="font-size:7.980000pt" textLength="28.608300000000014" lengthAdjust="spacingAndGlyphs">13   12</text>
+<text x="169.80225600000006" y="354115.134864" style="font-size:7.980000pt" textLength="9.348569999999967" lengthAdjust="spacingAndGlyphs">11</text>
+<text x="189.06278400000005" y="354115.134864" style="font-size:7.980000pt" textLength="9.348569999999995" lengthAdjust="spacingAndGlyphs">10</text>
+<text x="227.2829940000001" y="354115.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">9</text>
+<text x="247.80356400000008" y="354115.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">8</text>
+<text x="278.7037200000001" y="354115.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">7</text>
+<text x="297.18380400000007" y="354115.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">6</text>
+<text x="332.3444820000001" y="354115.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">5</text>
+<text x="377.7642480000001" y="354115.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">4</text>
+<text x="419.10463800000014" y="354115.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">3</text>
+<text x="435.60488400000014" y="354115.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">2</text>
+<text x="472.0248060000002" y="354115.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="488.5250520000002" y="354115.134864" style="font-size:7.980000pt" textLength="4.668299999999988" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="58.14" y="354130.134864" style="font-size:7.980000pt" textLength="32.150622" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.74" y="354120.0" width="54.96" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="120.18" y="354130.4186582" style="font-size:9.053900pt" textLength="18.054381989999996" lengthAdjust="spacingAndGlyphs">FCS</text>
+<text x="194.17571392000002" y="354130.4186582" style="font-size:9.053900pt" textLength="36.462771470000035" lengthAdjust="spacingAndGlyphs">FIP[31:0]</text>
+<text x="281.04335747000005" y="354130.4186582" style="font-size:9.053900pt" textLength="18.504360819999988" lengthAdjust="spacingAndGlyphs">FOP</text>
+<text x="318.6" y="354130.134864" style="font-size:7.980000pt" textLength="32.150622" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="312.42" y="354120.0" width="44.579999999999984" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="370.38" y="354130.4186582" style="font-size:9.053900pt" textLength="19.54465392999998" lengthAdjust="spacingAndGlyphs">FTW</text>
+<text x="419.71922805" y="354130.4186582" style="font-size:9.053900pt" textLength="19.99191658999996" lengthAdjust="spacingAndGlyphs">FSW</text>
+<text x="472.38576435" y="354130.4186582" style="font-size:9.053900pt" textLength="20.546015269999998" lengthAdjust="spacingAndGlyphs">FCW</text>
+<text x="529.86" y="354130.7352" style="font-size:9.000000pt" textLength="5.534999999999968" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="70.26" y="354146.43865820003" style="font-size:9.053900pt" textLength="62.927321169999985" lengthAdjust="spacingAndGlyphs">MXCSR_MASK</text>
+<text x="196.20880290000002" y="354146.43865820003" style="font-size:9.053900pt" textLength="32.46185306000004" lengthAdjust="spacingAndGlyphs">MXCSR</text>
+<text x="274.2" y="354146.15486400004" style="font-size:7.980000pt" textLength="32.150622" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="268.2" y="354136.02" width="44.21999999999997" height="15.959999999962747" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="350.28" y="354146.79120000004" style="font-size:9.000000pt" textLength="15.037199999999984" lengthAdjust="spacingAndGlyphs">FDS</text>
+<text x="435.9" y="354146.43865820003" style="font-size:9.053900pt" textLength="40.48723002000003" lengthAdjust="spacingAndGlyphs">FDP[31:0]</text>
+<text x="527.1" y="354146.7552" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">16</text>
+<text x="109.92" y="354162.4586582" style="font-size:9.053900pt" textLength="38.46911571" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.74" y="354151.98" width="164.82" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="340.81436858" y="354162.4586582" style="font-size:9.053900pt" textLength="39.013255100000094" lengthAdjust="spacingAndGlyphs">ST0/MM0</text>
+<text x="527.1" y="354162.7752" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">32</text>
+<text x="109.92" y="354178.4186582" style="font-size:9.053900pt" textLength="38.46911571" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.74" y="354168.0" width="164.82" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="340.81436858" y="354178.4186582" style="font-size:9.053900pt" textLength="39.013255100000094" lengthAdjust="spacingAndGlyphs">ST1/MM1</text>
+<text x="527.1" y="354178.7352" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">48</text>
+<text x="109.92" y="354194.43865820003" style="font-size:9.053900pt" textLength="38.46911571" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.74" y="354184.02" width="164.82" height="15.959999999962747" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="340.81436858" y="354194.43865820003" style="font-size:9.053900pt" textLength="39.013255100000094" lengthAdjust="spacingAndGlyphs">ST2/MM2</text>
+<text x="527.1" y="354194.7552" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">64</text>
+<text x="109.92" y="354210.4586582" style="font-size:9.053900pt" textLength="38.46911571" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.74" y="354199.98" width="164.82" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="340.81436858" y="354210.4586582" style="font-size:9.053900pt" textLength="39.013255100000094" lengthAdjust="spacingAndGlyphs">ST3/MM3</text>
+<text x="527.1" y="354210.7752" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">80</text>
+<text x="109.92" y="354226.4186582" style="font-size:9.053900pt" textLength="38.46911571" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.74" y="354216.0" width="164.82" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="340.81436858" y="354226.4186582" style="font-size:9.053900pt" textLength="39.013255100000094" lengthAdjust="spacingAndGlyphs">ST4/MM4</text>
+<text x="527.1" y="354226.7352" style="font-size:9.000000pt" textLength="11.052900000000022" lengthAdjust="spacingAndGlyphs">96</text>
+<text x="109.92" y="354242.43865820003" style="font-size:9.053900pt" textLength="38.46911571" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.74" y="354232.02" width="164.82" height="15.959999999962747" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="340.81436858" y="354242.43865820003" style="font-size:9.053900pt" textLength="39.013255100000094" lengthAdjust="spacingAndGlyphs">ST5/MM5</text>
+<text x="524.34" y="354242.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">112</text>
+<text x="109.92" y="354258.4586582" style="font-size:9.053900pt" textLength="38.46911571" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.74" y="354247.98" width="164.82" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="340.81436858" y="354258.4586582" style="font-size:9.053900pt" textLength="39.013255100000094" lengthAdjust="spacingAndGlyphs">ST6/MM6</text>
+<text x="524.34" y="354258.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">128</text>
+<text x="109.92" y="354274.4186582" style="font-size:9.053900pt" textLength="38.46911571" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<rect x="46.74" y="354264.0" width="164.82" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="340.81436858" y="354274.4186582" style="font-size:9.053900pt" textLength="39.013255100000094" lengthAdjust="spacingAndGlyphs">ST7/MM7</text>
+<text x="524.34" y="354274.7352" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">144</text>
+<text x="264.96" y="354290.43865820003" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM0</text>
+<text x="524.34" y="354290.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">160</text>
+<text x="264.96" y="354306.4586582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM1</text>
+<text x="524.34" y="354306.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">176</text>
+<text x="264.96" y="354322.4786582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM2</text>
+<text x="524.34" y="354322.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">192</text>
+<text x="264.96" y="354338.43865820003" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM3</text>
+<text x="524.34" y="354338.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">208</text>
+<text x="264.96" y="354354.4586582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM4</text>
+<text x="524.34" y="354354.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">224</text>
+<text x="264.96" y="354370.4786582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM5</text>
+<text x="524.34" y="354370.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">240</text>
+<text x="264.96" y="354386.43865820003" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM6</text>
+<text x="524.34" y="354386.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">256</text>
+<text x="264.96" y="354402.4586582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM7</text>
+<text x="524.34" y="354402.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">272</text>
+<text x="264.96" y="354418.4786582" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM8</text>
+<text x="524.34" y="354418.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">288</text>
+<text x="264.96" y="354434.43865820003" style="font-size:9.053900pt" textLength="25.97292292999998" lengthAdjust="spacingAndGlyphs">XMM9</text>
+<text x="524.34" y="354434.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">304</text>
+<text x="262.44" y="354450.4586582" style="font-size:9.053900pt" textLength="31.011418279999987" lengthAdjust="spacingAndGlyphs">XMM10</text>
+<text x="524.34" y="354450.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">320</text>
+<text x="262.44" y="354466.4786582" style="font-size:9.053900pt" textLength="31.011418279999987" lengthAdjust="spacingAndGlyphs">XMM11</text>
+<text x="524.34" y="354466.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">336</text>
+<text x="262.44" y="354482.43865820003" style="font-size:9.053900pt" textLength="31.011418279999987" lengthAdjust="spacingAndGlyphs">XMM12</text>
+<text x="524.34" y="354482.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">352</text>
+<text x="262.44" y="354498.4586582" style="font-size:9.053900pt" textLength="31.011418279999987" lengthAdjust="spacingAndGlyphs">XMM13</text>
+<text x="524.34" y="354498.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">368</text>
+<text x="262.44" y="354514.4786582" style="font-size:9.053900pt" textLength="31.011418279999987" lengthAdjust="spacingAndGlyphs">XMM14</text>
+<text x="524.34" y="354514.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">384</text>
+<text x="262.44" y="354530.43865820003" style="font-size:9.053900pt" textLength="31.011418279999987" lengthAdjust="spacingAndGlyphs">XMM15</text>
+<text x="524.34" y="354530.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">400</text>
+<text x="258.72" y="354546.4586582" style="font-size:9.053900pt" textLength="38.51438521" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="524.34" y="354546.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">416</text>
+<rect x="46.74" y="354536.04" width="462.36" height="15.960000000020955" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="258.72" y="354562.4786582" style="font-size:9.053900pt" textLength="38.51438521" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="524.34" y="354562.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">432</text>
+<rect x="46.74" y="354552.0" width="462.36" height="16.020000000018626" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="258.72" y="354578.43865820003" style="font-size:9.053900pt" textLength="38.51438521" lengthAdjust="spacingAndGlyphs">Reserved</text>
+<text x="524.34" y="354578.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">448</text>
+<rect x="46.74" y="354568.02" width="462.36" height="16.01999999996042" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="259.68" y="354594.4586582" style="font-size:9.053900pt" textLength="36.517094869999994" lengthAdjust="spacingAndGlyphs">Available</text>
+<text x="524.34" y="354594.7752" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">464</text>
+<text x="259.68" y="354610.4786582" style="font-size:9.053900pt" textLength="36.517094869999994" lengthAdjust="spacingAndGlyphs">Available</text>
+<text x="524.34" y="354610.7952" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">480</text>
+<text x="259.68" y="354626.43865820003" style="font-size:9.053900pt" textLength="36.517094869999994" lengthAdjust="spacingAndGlyphs">Available</text>
+<text x="524.34" y="354626.7552" style="font-size:9.000000pt" textLength="16.570799999999963" lengthAdjust="spacingAndGlyphs">496</text></svg>
+<h2>Operation</h2>
+<pre>IF 64-Bit Mode
+    THEN
+         IF REX.W = 1
+              THEN
+                    DEST := Save64BitPromotedFxsave(x87 FPU, MMX, XMM15-XMM0, MXCSR);
+              ELSE
+                    DEST := Save64BitDefaultFxsave(x87 FPU, MMX, XMM15-XMM0, MXCSR);
+         FI;
+    ELSE
+         DEST := SaveLegacyFxsave(x87 FPU, MMX, XMM7-XMM0, MXCSR);
+FI;</pre>
+<h2>Protected Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#GP(0)</td>
+<td>
+<p>For an illegal memory operand effective address in the CS, DS, ES, FS or GS segments.</p>
+<p>If a memory operand is not aligned on a 16-byte boundary, regardless of segment. (See the description of the alignment check exception [#AC] below.)</p></td></tr>
+<tr>
+<td>#SS(0)</td>
+<td>For an illegal address in the SS segment.</td></tr>
+<tr>
+<td>#PF(fault-code)</td>
+<td>For a page fault.</td></tr>
+<tr>
+<td>#NM</td>
+<td>
+<p>If CR0.TS[bit 3] = 1.</p>
+<p>If CR0.EM[bit 2] = 1.</p></td></tr>
+<tr>
+<td>#UD</td>
+<td>If CPUID.01H:EDX.FXSR[bit 24] = 0.</td></tr>
+<tr>
+<td>#UD</td>
+<td>If the LOCK prefix is used.</td></tr>
+<tr>
+<td>#AC</td>
+<td>If this exception is disabled a general protection exception (#GP) is signaled if the memory operand is not aligned on a 16-byte boundary, as described above. If the alignment check exception (#AC) is enabled (and the CPL is 3), signaling of #AC is not guaranteed and may vary with implementation, as follows. In all implementations where #AC is not signaled, a general protection exception is signaled in its place. In addition, the width of the alignment check may also vary with implementation. For instance, for a given implementation, an align-ment check exception might be signaled for a 2-byte misalignment, whereas a general protec-tion exception might be signaled for all other misalignments (4-, 8-, or 16-byte misalignments).</td></tr></table>
+<h2>Real-Address Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#GP</td>
+<td>
+<p>If a memory operand is not aligned on a 16-byte boundary, regardless of segment.</p>
+<p>If any part of the operand lies outside the effective address space from 0 to FFFFH.</p></td></tr>
+<tr>
+<td>#NM</td>
+<td>
+<p>If CR0.TS[bit 3] = 1.</p>
+<p>If CR0.EM[bit 2] = 1.</p></td></tr>
+<tr>
+<td>#UD</td>
+<td>
+<p>If CPUID.01H:EDX.FXSR[bit 24] = 0.</p>
+<p>If the LOCK prefix is used.</p></td></tr></table>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<p>Same exceptions as in real address mode.</p>
+<table class="exception-table">
+<tr>
+<td>#PF(fault-code)</td>
+<td>For a page fault.</td></tr>
+<tr>
+<td>#AC</td>
+<td>For unaligned memory reference.</td></tr>
+<tr>
+<td>#UD</td>
+<td>If the LOCK prefix is used.</td></tr></table>
+<h2>Compatibility Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>64-Bit Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#SS(0)</td>
+<td>If a memory address referencing the SS segment is in a non-canonical form.</td></tr>
+<tr>
+<td>#GP(0)</td>
+<td>
+<p>If the memory address is in a non-canonical form.</p>
+<p>If memory operand is not aligned on a 16-byte boundary, regardless of segment.</p></td></tr>
+<tr>
+<td>#PF(fault-code)</td>
+<td>For a page fault.</td></tr>
+<tr>
+<td>#NM</td>
+<td>
+<p>If CR0.TS[bit 3] = 1.</p>
+<p>If CR0.EM[bit 2] = 1.</p></td></tr>
+<tr>
+<td>#UD</td>
+<td>
+<p>If CPUID.01H:EDX.FXSR[bit 24] = 0.</p>
+<p>If the LOCK prefix is used.</p></td></tr>
+<tr>
+<td>#AC</td>
+<td>If this exception is disabled a general protection exception (#GP) is signaled if the memory operand is not aligned on a 16-byte boundary, as described above. If the alignment check exception (#AC) is enabled (and the CPL is 3), signaling of #AC is not guaranteed and may vary with implementation, as follows. In all implementations where #AC is not signaled, a general protection exception is signaled in its place. In addition, the width of the alignment check may also vary with implementation. For instance, for a given implementation, an align-ment check exception might be signaled for a 2-byte misalignment, whereas a general protec-tion exception might be signaled for all other misalignments (4-, 8-, or 16-byte misalignments).</td></tr></table>
+<h2>Implementation Note</h2>
+<p>The order in which the processor signals general-protection (#GP) and page-fault (#PF) exceptions when they both occur on an instruction boundary is given in Table 5-2 in the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Software Devel-oper’s Manual, Volume 3B. This order vary for FXSAVE for different processor implementations.</p></div></body></html>

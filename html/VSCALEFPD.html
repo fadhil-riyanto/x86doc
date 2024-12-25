@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VSCALEFPD - Scale Packed Float64 Values With Float64 Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VSCALEFPD - Scale Packed Float64 Values With Float64 Values </div>
+<div id="body">
+<h1>VSCALEFPD—Scale Packed Float64 Values With Float64 Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 2C /r VSCALEFPD xmm1 {k1}{z}, xmm2, xmm3/m128/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Scale the packed double precision floating-point values in xmm2 using values from xmm3/m128/m64bcst. Under writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 2C /r VSCALEFPD ymm1 {k1}{z}, ymm2, ymm3/m256/m64bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Scale the packed double precision floating-point values in ymm2 using values from ymm3/m256/m64bcst. Under writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 2C /r VSCALEFPD zmm1 {k1}{z}, zmm2, zmm3/m512/m64bcst{er}</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Scale the packed double precision floating-point values in zmm2 using values from zmm3/m512/m64bcst. Under writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Performs a floating-point scale of the packed double precision floating-point values in the first source operand by multiplying them by 2 to the power of the double precision floating-point values in second source operand.</p>
+<p>The equation of this operation is given by:</p>
+<p>zmm1 := zmm2*2<sup>floor(zmm3)</sup>. Floor(zmm3) means maximum integer value ≤ zmm3.</p>
+<p>If the result cannot be represented in double precision, then the proper overflow response (for positive scaling operand), or the proper underflow response (for negative scaling operand) is issued. The overflow and underflow responses are dependent on the rounding mode (for IEEE-compliant rounding), as well as on other settings in MXCSR (exception mask bits, FTZ bit), and on the SAE bit.</p>
+<p>The first source operand is a ZMM/YMM/XMM register. The second source operand is a ZMM/YMM/XMM register, a 512/256/128-bit memory location or a 512/256/128-bit vector broadcasted from a 64-bit memory location. The destination operand is a ZMM/YMM/XMM register conditionally updated with writemask k1.</p>
+<p>Handling of special-case input values are listed in Table 5-29 and Table 5-30.</p>
+<h3>Table 5-29. VSCALEFPD/SD/PS/SS Special Cases</h3>
+<table>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>Src2</td>
+<td></td>
+<td>Set IE</td></tr>
+<tr>
+<td></td>
+<td></td>
+<td>±NaN</td>
+<td>+Inf</td>
+<td>-Inf</td>
+<td>0/Denorm/Norm</td>
+<td></td></tr>
+<tr>
+<td>Src1</td>
+<td>±QNaN</td>
+<td>QNaN(Src1)</td>
+<td>+INF</td>
+<td>+0</td>
+<td>QNaN(Src1)</td>
+<td>IF either source is SNAN</td></tr>
+<tr>
+<td></td>
+<td>±SNaN</td>
+<td>QNaN(Src1)</td>
+<td>QNaN(Src1)</td>
+<td>QNaN(Src1)</td>
+<td>QNaN(Src1)</td>
+<td>YES</td></tr>
+<tr>
+<td></td>
+<td>±Inf</td>
+<td>QNaN(Src2)</td>
+<td>Src1</td>
+<td>QNaN_Indefinite</td>
+<td>Src1</td>
+<td>IF Src2 is SNAN or -INF</td></tr>
+<tr>
+<td></td>
+<td>±0</td>
+<td>QNaN(Src2)</td>
+<td>QNaN_Indefinite</td>
+<td>Src1</td>
+<td>Src1</td>
+<td>IF Src2 is SNAN or +INF</td></tr>
+<tr>
+<td></td>
+<td>Denorm/Norm</td>
+<td>QNaN(Src2)</td>
+<td>±INF (Src1 sign)</td>
+<td>±0 (Src1 sign)</td>
+<td>Compute Result</td>
+<td>IF Src2 is SNAN</td></tr></table>
+<h3>Table 5-30. Additional VSCALEFPD/SD Special Cases</h3>
+<table>
+<tr>
+<th>Special Case</th>
+<th> Returned value</th>
+<th>Faults</th></tr>
+<tr>
+<td>|result| &lt; 2<sup>-1074</sup></td>
+<td>±0 or ±Min-Denormal (Src1 sign)</td>
+<td>Underflow</td></tr>
+<tr>
+<td>|result| ≥ 2<sup>1024</sup></td>
+<td>±INF (Src1 sign) or ±Max-normal (Src1 sign)</td>
+<td>Overflow</td></tr></table>
+<p><strong>Operation</strong></p>
+<p>SCALE(SRC1, SRC2)</p>
+<p>{</p>
+<p>TMP_SRC2 := SRC2</p>
+<p>TMP_SRC1 := SRC1</p>
+<p>IF (SRC2 is denormal AND MXCSR.DAZ) THEN TMP_SRC2=0</p>
+<p>IF (SRC1 is denormal AND MXCSR.DAZ) THEN TMP_SRC1=0</p>
+<p>/* SRC2 is a 64 bits floating-point value */</p>
+<p>DEST[63:0] := TMP_SRC1[63:0] * POW(2, Floor(TMP_SRC2[63:0]))</p>
+<p>} VSCALEFPD (EVEX encoded versions)</p>
+<p>(KL, VL) = (2, 128), (4, 256), (8, 512)</p>
+<p>IF (VL = 512) AND (EVEX.b = 1) AND (SRC2 *is register*)</p>
+<p>THEN</p>
+<p>SET_ROUNDING_MODE_FOR_THIS_INSTRUCTION(EVEX.RC);</p>
+<p>ELSE</p>
+<p>SET_ROUNDING_MODE_FOR_THIS_INSTRUCTION(MXCSR.RC);</p>
+<p>FI;</p>
+<p>FOR j := 0 TO KL-1</p>
+<p>i := j * 64</p>
+<p>IF k1[j] OR *no writemask* THEN</p>
+<p>IF (EVEX.b = 1) AND (SRC2 *is memory*)</p>
+<p>THEN DEST[i+63:i] := SCALE(SRC1[i+63:i], SRC2[63:0]);</p>
+<p>ELSE DEST[i+63:i] := SCALE(SRC1[i+63:i], SRC2[i+63:i]);</p>
+<p>FI;</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[i+63:i] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[i+63:i] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>ENDFOR</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VSCALEFPD __m512d _mm512_scalef_round_pd(__m512d a, __m512d b, int rounding);</p>
+<p>VSCALEFPD __m512d _mm512_mask_scalef_round_pd(__m512d s, __mmask8 k, __m512d a, __m512d b, int rounding);</p>
+<p>VSCALEFPD __m512d _mm512_maskz_scalef_round_pd(__mmask8 k, __m512d a, __m512d b, int rounding);</p>
+<p>VSCALEFPD __m512d _mm512_scalef_pd(__m512d a, __m512d b);</p>
+<p>VSCALEFPD __m512d _mm512_mask_scalef_pd(__m512d s, __mmask8 k, __m512d a, __m512d b);</p>
+<p>VSCALEFPD __m512d _mm512_maskz_scalef_pd(__mmask8 k, __m512d a, __m512d b);</p>
+<p>VSCALEFPD __m256d _mm256_scalef_pd(__m256d a, __m256d b);</p>
+<p>VSCALEFPD __m256d _mm256_mask_scalef_pd(__m256d s, __mmask8 k, __m256d a, __m256d b);</p>
+<p>VSCALEFPD __m256d _mm256_maskz_scalef_pd(__mmask8 k, __m256d a, __m256d b);</p>
+<p>VSCALEFPD __m128d _mm_scalef_pd(__m128d a, __m128d b);</p>
+<p>VSCALEFPD __m128d _mm_mask_scalef_pd(__m128d s, __mmask8 k, __m128d a, __m128d b);</p>
+<p>VSCALEFPD __m128d _mm_maskz_scalef_pd(__mmask8 k, __m128d a, __m128d b);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Overflow, Underflow, Invalid, Precision, Denormal (for Src1). Denormal is not reported for Src2.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-46, “Type E2 Class Exception Conditions.”</p></div></body></html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VPEXPANDB/VPEXPANDW - Expand Byte/Word Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VPEXPANDB/VPEXPANDW - Expand Byte/Word Values </div>
+<div id="body">
+<h1>VPEXPANDB/VPEXPANDW—Expand Byte/Word Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 62 /r VPEXPANDB xmm1{k1}{z}, m128</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Expands up to 128 bits of packed byte values from m128 to xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 62 /r VPEXPANDB xmm1{k1}{z}, xmm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Expands up to 128 bits of packed byte values from xmm2 to xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 62 /r VPEXPANDB ymm1{k1}{z}, m256</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Expands up to 256 bits of packed byte values from m256 to ymm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 62 /r VPEXPANDB ymm1{k1}{z}, ymm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Expands up to 256 bits of packed byte values from ymm2 to ymm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 62 /r VPEXPANDB zmm1{k1}{z}, m512</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2</td>
+<td>Expands up to 512 bits of packed byte values from m512 to zmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 62 /r VPEXPANDB zmm1{k1}{z}, zmm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2</td>
+<td>Expands up to 512 bits of packed byte values from zmm2 to zmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 62 /r VPEXPANDW xmm1{k1}{z}, m128</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Expands up to 128 bits of packed word values from m128 to xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W1 62 /r VPEXPANDW xmm1{k1}{z}, xmm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Expands up to 128 bits of packed word values from xmm2 to xmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 62 /r VPEXPANDW ymm1{k1}{z}, m256</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Expands up to 256 bits of packed word values from m256 to ymm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W1 62 /r VPEXPANDW ymm1{k1}{z}, ymm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2 AVX512VL</td>
+<td>Expands up to 256 bits of packed word values from ymm2 to ymm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 62 /r VPEXPANDW zmm1{k1}{z}, m512</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512_VBMI2</td>
+<td>Expands up to 512 bits of packed word values from m512 to zmm1 with writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W1 62 /r VPEXPANDW zmm1{k1}{z}, zmm2</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VBMI2</td>
+<td>Expands up to 512 bits of packed byte integer values from zmm2 to zmm1 with writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Tuple1 Scalar</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Expands (loads) up to 64 byte integer values or 32 word integer values from the source operand (memory operand) to the destination operand (register operand), based on the active elements determined by the writemask operand.</p>
+<p>Note: EVEX.vvvv is reserved and must be 1111b otherwise instructions will #UD.</p>
+<p>Moves 128, 256 or 512 bits of packed byte integer values from the source operand (memory operand) to the desti-nation operand (register operand). This instruction is used to load from an int8 vector register or memory location while inserting the data into sparse elements of destination vector register using the active elements pointed out by the operand writemask.</p>
+<p>This instruction supports memory fault suppression.</p>
+<p>Note that the compressed displacement assumes a pre-scaling (N) corresponding to the size of one single element instead of the size of the full vector.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VPEXPANDB</strong></p>
+<p>(KL, VL) = (16, 128), (32, 256), (64, 512)</p>
+<p>k := 0</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF k1[j] OR *no writemask*:</p>
+<p>DEST.byte[j] := SRC.byte[k];</p>
+<p>k := k + 1</p>
+<p>ELSE:</p>
+<p>IF *merging-masking*:</p>
+<p>*DEST.byte[j] remains unchanged*</p>
+<p>ELSE:</p>
+<p>; zeroing-masking</p>
+<p>DEST.byte[j] := 0</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>VPEXPANDW</strong></p>
+<p>(KL, VL) = (8,128), (16,256), (32, 512)</p>
+<p>k := 0</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF k1[j] OR *no writemask*:</p>
+<p>DEST.word[j] := SRC.word[k];</p>
+<p>k := k + 1</p>
+<p>ELSE:</p>
+<p>IF *merging-masking*:</p>
+<p>*DEST.word[j] remains unchanged*</p>
+<p>ELSE:</p>
+<p> ; zeroing-masking</p>
+<p>DEST.word[j] := 0</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VPEXPAND __m128i _mm_mask_expand_epi8(__m128i, __mmask16, __m128i);</p>
+<p>VPEXPAND __m128i _mm_maskz_expand_epi8(__mmask16, __m128i);</p>
+<p>VPEXPAND __m128i _mm_mask_expandloadu_epi8(__m128i, __mmask16, const void*);</p>
+<p>VPEXPAND __m128i _mm_maskz_expandloadu_epi8(__mmask16, const void*);</p>
+<p>VPEXPAND __m256i _mm256_mask_expand_epi8(__m256i, __mmask32, __m256i);</p>
+<p>VPEXPAND __m256i _mm256_maskz_expand_epi8(__mmask32, __m256i);</p>
+<p>VPEXPAND __m256i _mm256_mask_expandloadu_epi8(__m256i, __mmask32, const void*);</p>
+<p>VPEXPAND __m256i _mm256_maskz_expandloadu_epi8(__mmask32, const void*);</p>
+<p>VPEXPAND __m512i _mm512_mask_expand_epi8(__m512i, __mmask64, __m512i);</p>
+<p>VPEXPAND __m512i _mm512_maskz_expand_epi8(__mmask64, __m512i);</p>
+<p>VPEXPAND __m512i _mm512_mask_expandloadu_epi8(__m512i, __mmask64, const void*);</p>
+<p>VPEXPAND __m512i _mm512_maskz_expandloadu_epi8(__mmask64, const void*);</p>
+<p>VPEXPANDW __m128i _mm_mask_expand_epi16(__m128i, __mmask8, __m128i);</p>
+<p>VPEXPANDW __m128i _mm_maskz_expand_epi16(__mmask8, __m128i);</p>
+<p>VPEXPANDW __m128i _mm_mask_expandloadu_epi16(__m128i, __mmask8, const void*);</p>
+<p>VPEXPANDW __m128i _mm_maskz_expandloadu_epi16(__mmask8, const void *);</p>
+<p>VPEXPANDW __m256i _mm256_mask_expand_epi16(__m256i, __mmask16, __m256i);</p>
+<p>VPEXPANDW __m256i _mm256_maskz_expand_epi16(__mmask16, __m256i);</p>
+<p>VPEXPANDW __m256i _mm256_mask_expandloadu_epi16(__m256i, __mmask16, const void*);</p>
+<p>VPEXPANDW __m256i _mm256_maskz_expandloadu_epi16(__mmask16, const void*);</p>
+<p>VPEXPANDW __m512i _mm512_mask_expand_epi16(__m512i, __mmask32, __m512i);</p>
+<p>VPEXPANDW __m512i _mm512_maskz_expand_epi16(__mmask32, __m512i);</p>
+<p>VPEXPANDW __m512i _mm512_mask_expandloadu_epi16(__m512i, __mmask32, const void*);</p>
+<p>VPEXPANDW __m512i _mm512_maskz_expandloadu_epi16(__mmask32, const void*);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-49, “Type E4 Class Exception Conditions.”</p></div></body></html>

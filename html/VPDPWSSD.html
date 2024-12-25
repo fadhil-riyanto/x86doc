@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VPDPWSSD - Multiply and Add Signed Word Integers </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VPDPWSSD - Multiply and Add Signed Word Integers </div>
+<div id="body">
+<h1>VPDPWSSD—Multiply and Add Signed Word Integers</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>VEX.128.66.0F38.W0 52 /r VPDPWSSD xmm1, xmm2, xmm3/m128</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX-VNNI</td>
+<td>Multiply groups of 2 pairs signed words in xmm3/m128 with corresponding signed words of xmm2, summing those products and adding them to doubleword result in xmm1.</td></tr>
+<tr>
+<td>VEX.256.66.0F38.W0 52 /r VPDPWSSD ymm1, ymm2, ymm3/m256</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX-VNNI</td>
+<td>Multiply groups of 2 pairs signed words in ymm3/m256 with corresponding signed words of ymm2, summing those products and adding them to doubleword result in ymm1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F38.W0 52 /r VPDPWSSD xmm1{k1}{z}, xmm2, xmm3/m128/m32bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VNNI AVX512VL</td>
+<td>Multiply groups of 2 pairs signed words in xmm3/m128/m32bcst with corresponding signed words of xmm2, summing those products and adding them to doubleword result in xmm1, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F38.W0 52 /r VPDPWSSD ymm1{k1}{z}, ymm2, ymm3/m256/m32bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VNNI AVX512VL</td>
+<td>Multiply groups of 2 pairs signed words in ymm3/m256/m32bcst with corresponding signed words of ymm2, summing those products and adding them to doubleword result in ymm1, under writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F38.W0 52 /r VPDPWSSD zmm1{k1}{z}, zmm2, zmm3/m512/m32bcst</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX512_VNNI</td>
+<td>Multiply groups of 2 pairs signed words in zmm3/m512/m32bcst with corresponding signed words of zmm2, summing those products and adding them to doubleword result in zmm1, under writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:reg (r, w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>Full</td>
+<td>ModRM:reg (r, w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Multiplies the individual signed words of the first source operand by the corresponding signed words of the second source operand, producing intermediate signed, doubleword results. The adjacent doubleword results are then summed and accumulated in the destination operand.</p>
+<p>This instruction supports memory fault suppression.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VPDPWSSD dest, src1, src2 (VEX encoded versions)</strong></p>
+<p>VL=(128, 256)</p>
+<p>KL=VL/32</p>
+<p>ORIGDEST := DEST</p>
+<p>FOR i := 0 TO KL-1:</p>
+<p>p1dword := SIGN_EXTEND(SRC1.word[2*i+0]) * SIGN_EXTEND(SRC2.word[2*i+0] )</p>
+<p>p2dword := SIGN_EXTEND(SRC1.word[2*i+1]) * SIGN_EXTEND(SRC2.word[2*i+1] )</p>
+<p>DEST.dword[i] := ORIGDEST.dword[i] + p1dword + p2dword</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>VPDPWSSD dest, src1, src2 (EVEX encoded versions)</strong></p>
+<p>(KL,VL)=(4,128), (8,256), (16,512)</p>
+<p>ORIGDEST := DEST</p>
+<p>FOR i := 0 TO KL-1:</p>
+<p>IF k1[i] or *no writemask*:</p>
+<p>IF SRC2 is memory and EVEX.b == 1:</p>
+<p>t := SRC2.dword[0]</p>
+<p>ELSE:</p>
+<p>t := SRC2.dword[i]</p>
+<p>p1dword := SIGN_EXTEND(SRC1.word[2*i]) * SIGN_EXTEND(t.word[0])</p>
+<p>p2dword := SIGN_EXTEND(SRC1.word[2*i+1]) * SIGN_EXTEND(t.word[1])</p>
+<p>DEST.dword[i] := ORIGDEST.dword[i] + p1dword + p2dword</p>
+<p>ELSE IF *zeroing*:</p>
+<p>DEST.dword[i] := 0</p>
+<p>ELSE:</p>
+<p> // Merge masking, dest element unchanged</p>
+<p>DEST.dword[i] := ORIGDEST.dword[i]</p>
+<p>DEST[MAX_VL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VPDPWSSD __m128i _mm_dpwssd_avx_epi32(__m128i, __m128i, __m128i);</p>
+<p>VPDPWSSD __m128i _mm_dpwssd_epi32(__m128i, __m128i, __m128i);</p>
+<p>VPDPWSSD __m128i _mm_mask_dpwssd_epi32(__m128i, __mmask8, __m128i, __m128i);</p>
+<p>VPDPWSSD __m128i _mm_maskz_dpwssd_epi32(__mmask8, __m128i, __m128i, __m128i);</p>
+<p>VPDPWSSD __m256i _mm256_dpwssd_avx_epi32(__m256i, __m256i, __m256i);</p>
+<p>VPDPWSSD __m256i _mm256_dpwssd_epi32(__m256i, __m256i, __m256i);</p>
+<p>VPDPWSSD __m256i _mm256_mask_dpwssd_epi32(__m256i, __mmask8, __m256i, __m256i);</p>
+<p>VPDPWSSD __m256i _mm256_maskz_dpwssd_epi32(__mmask8, __m256i, __m256i, __m256i);</p>
+<p>VPDPWSSD __m512i _mm512_dpwssd_epi32(__m512i, __m512i, __m512i);</p>
+<p>VPDPWSSD __m512i _mm512_mask_dpwssd_epi32(__m512i, __mmask16, __m512i, __m512i);</p>
+<p>VPDPWSSD __m512i _mm512_maskz_dpwssd_epi32(__mmask16, __m512i, __m512i, __m512i);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>None.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>Non-EVEX-encoded instruction, see Table 2-21, “Type 4 Class Exception Conditions.”</p>
+<p>EVEX-encoded instruction, see Table 2-49, “Type E4 Class Exception Conditions.”</p></div></body></html>

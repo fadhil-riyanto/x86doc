@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>RDPID - Read Processor ID </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › RDPID - Read Processor ID </div>
+<div id="body">
+<h1>RDPID—Read Processor ID</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32-bit Mode</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>F3 0F C7 /7 RDPID r32</td>
+<td>R</td>
+<td>N.E./V</td>
+<td>RDPID</td>
+<td>Read IA32_TSC_AUX into r32.</td></tr>
+<tr>
+<td>F3 0F C7 /7 RDPID r64</td>
+<td>R</td>
+<td>V/N.E.</td>
+<td>RDPID</td>
+<td>Read IA32_TSC_AUX into r64.</td></tr></table>
+<h3>Instruction Operand Encoding<sup>1</sup></h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>R</td>
+<td>ModRM:r/m (w)</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Reads the value of the IA32_TSC_AUX MSR (address C0000103H) into the destination register. The value of CS.D and operand-size prefixes (66H and REX.W) do not affect the behavior of the RDPID instruction.</p>
+<h2>Operation</h2>
+<pre>DEST := IA32_TSC_AUX</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Protected Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used.</p>
+<p>If CPUID.7H.0:ECX.RDPID[bit 22] = 0.</p></td></tr></table>
+<h2>Real-Address Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>Compatibility Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>64-Bit Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<p>1.ModRM.MOD = 011B required</p></div></body></html>

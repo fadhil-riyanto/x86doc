@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>INCSSPD/INCSSPQ - Increment Shadow Stack Pointer </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › INCSSPD/INCSSPQ - Increment Shadow Stack Pointer </div>
+<div id="body">
+<h1>INCSSPD/INCSSPQ—Increment Shadow Stack Pointer</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>F3 0F AE /05 INCSSPD r32</td>
+<td>R</td>
+<td>V/V</td>
+<td>CET_SS</td>
+<td>Increment SSP by 4 * r32[7:0].</td></tr>
+<tr>
+<td>F3 REX.W 0F AE /05 INCSSPQ r64</td>
+<td>R</td>
+<td>V/N.E.</td>
+<td>CET_SS</td>
+<td>Increment SSP by 8 * r64[7:0].</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>R</td>
+<td>N/A</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>This instruction can be used to increment the current shadow stack pointer by the operand size of the instruction times the unsigned 8-bit value specified by bits 7:0 in the source operand. The instruction performs a pop and discard of the first and last element on the shadow stack in the range specified by the unsigned 8-bit value in bits 7:0 of the source operand.</p>
+<h2>Operation</h2>
+<pre>IF CPL = 3
+    IF (CR4.CET &amp; IA32_U_CET.SH_STK_EN) = 0
+         THEN #UD; FI;
+ELSE
+    IF (CR4.CET &amp; IA32_S_CET.SH_STK_EN) = 0
+         THEN #UD; FI;
+FI;
+IF (operand size is 64-bit)
+    THEN
+         Range := R64[7:0];
+         shadow_stack_load 8 bytes from SSP;
+         IF Range &gt; 0
+              THEN shadow_stack_load 8 bytes from SSP + 8 * (Range - 1);
+         FI;
+         SSP := SSP + Range * 8;
+    ELSE
+         Range := R32[7:0];
+         shadow_stack_load 4 bytes from SSP;
+         IF Range &gt; 0
+              THEN shadow_stack_load 4 bytes from SSP + 4 * (Range - 1);
+         FI;
+         SSP := SSP + Range * 4;
+FI;</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>INCSSPD void _incsspd(int);</p>
+<p>INCSSPQ void _incsspq(int);</p>
+<h2>Protected Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used.</p>
+<p>If CR4.CET = 0.</p>
+<p>IF CPL = 3 and IA32_U_CET.SH_STK_EN = 0.</p>
+<p>IF CPL &lt; 3 and IA32_S_CET.SH_STK_EN = 0.</p></td></tr>
+<tr>
+<td>#PF(fault-code)</td>
+<td>If a page fault occurs.</td></tr></table>
+<h2>Real-Address Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>The INCSSP instruction is not recognized in real-address mode.</td></tr></table>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#UD</td>
+<td>The INCSSP instruction is not recognized in virtual-8086 mode.</td></tr></table>
+<h2>Compatibility Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>64-Bit Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p></div></body></html>

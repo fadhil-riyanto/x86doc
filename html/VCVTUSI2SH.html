@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VCVTUSI2SH - Convert Unsigned Doubleword Integer to an FP16 Value </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VCVTUSI2SH - Convert Unsigned Doubleword Integer to an FP16 Value </div>
+<div id="body">
+<h1>VCVTUSI2SH—Convert Unsigned Doubleword Integer to an FP16 Value</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.LLIG.F3.MAP5.W0 7B /r VCVTUSI2SH xmm1, xmm2, r32/m32 {er}</td>
+<td>A</td>
+<td>V/V<sup>1</sup></td>
+<td>AVX512-FP16</td>
+<td>Convert an unsigned doubleword integer from r32/m32 to an FP16 value, and store the result in xmm1. Bits 127:16 from xmm2 are copied to xmm1[127:16].</td></tr>
+<tr>
+<td>EVEX.LLIG.F3.MAP5.W1 7B /r VCVTUSI2SH xmm1, xmm2, r64/m64 {er}</td>
+<td>A</td>
+<td>V/N.E.</td>
+<td>AVX512-FP16</td>
+<td>Convert an unsigned quadword integer from r64/m64 to an FP16 value, and store the result in xmm1. Bits 127:16 from xmm2 are copied to xmm1[127:16].</td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1. Outside of 64b mode, the EVEX.W field is ignored. The instruction behaves as if W=0 was used.</p>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Scalar</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction converts an unsigned doubleword integer (or unsigned quadword integer if operand size is 64 bits) in the second source operand to a FP16 value in the destination operand. The result is stored in the low word of the destination operand. When conversion is inexact, the value returned is rounded according to the rounding control bits in the MXCSR register or embedded rounding controls.</p>
+<p>The second source operand can be a general-purpose register or a 32/64-bit memory location. The first source and destination operands are XMM registers. Bits 127:16 of the XMM register destination are copied from corresponding bits in the first source operand. Bits MAXVL-1:128 of the destination register are zeroed.</p>
+<p>If the result of the convert operation is overflow and MXCSR.OM=0 then a SIMD exception will be raised with OE=1, PE=1.</p>
+<p><strong>Operation</strong></p>
+<p><strong>VCVTUSI2SH dest, src1, src2</strong></p>
+<p>IF *SRC2 is a register* and (EVEX.b = 1):</p>
+<p>SET_RM(EVEX.RC)</p>
+<p>ELSE:</p>
+<p>SET_RM(MXCSR.RC)</p>
+<p>IF 64-mode and OperandSize == 64:</p>
+<p>DEST.fp16[0] := Convert_unsigned_integer64_to_fp16(SRC2.qword)</p>
+<p>ELSE:</p>
+<p>DEST.fp16[0] := Convert_unsigned_integer32_to_fp16(SRC2.dword)</p>
+<p>DEST[127:16] := SRC1[127:16]</p>
+<p>DEST[MAXVL-1:128] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VCVTUSI2SH __m128h _mm_cvt_roundu32_sh (__m128h a, unsigned int b, int rounding);</p>
+<p>VCVTUSI2SH __m128h _mm_cvt_roundu64_sh (__m128h a, unsigned __int64 b, int rounding);</p>
+<p>VCVTUSI2SH __m128h _mm_cvtu32_sh (__m128h a, unsigned int b);</p>
+<p>VCVTUSI2SH __m128h _mm_cvtu64_sh (__m128h a, unsigned __int64 b);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Overflow, Precision.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instructions, see Table 2-48, “Type E3NF Class Exception Conditions.”</p></div></body></html>

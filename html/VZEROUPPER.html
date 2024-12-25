@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VZEROUPPER - Zero Upper Bits of YMM and ZMM Registers </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VZEROUPPER - Zero Upper Bits of YMM and ZMM Registers </div>
+<div id="body">
+<h1>VZEROUPPER—Zero Upper Bits of YMM and ZMM Registers</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op /En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>VEX.128.0F.WIG 77</p>
+<p>VZEROUPPER</p></td>
+<td>ZO</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Zero bits in positions 128 and higher of some YMM and ZMM registers.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>ZO</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>In 64-bit mode, the instruction zeroes the bits in positions 128 and higher in YMM0-YMM15 and ZMM0-ZMM15. Outside 64-bit mode, it zeroes those bits only in YMM0-YMM7 and ZMM0-ZMM7. VZEROUPPER does not modify the lower 128 bits of these registers and it does not modify ZMM16-ZMM31.</p>
+<p>This instruction is recommended when transitioning between AVX and legacy SSE code; it will eliminate perfor-mance penalties caused by false dependencies.</p>
+<p>Note: VEX.vvvv is reserved and must be 1111b otherwise instructions will #UD. In Compatibility and legacy 32-bit mode only the lower 8 registers are modified.</p>
+<h2>Operation</h2>
+<pre>simd_reg_file[][] is a two dimensional array representing the SIMD register file containing all the overlapping xmm, ymm, and zmm registers present in that implementation. The major dimension is the register number: 0 for xmm0, ymm0, and zmm0; 1 for xmm1, ymm1, and zmm1; etc. The minor dimension size is the width of the implemented SIMD state measured in bits.</pre>
+<p><strong>VZEROUPPER</strong></p>
+<pre>IF (64-bit mode)
+    limit :=15
+ELSE
+    limit := 7
+FOR i in 0 .. limit:
+    simd_reg_file[i][MAXVL-1:128] := 0</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>VZEROUPPER:</p>
+<p> _mm256_zeroupper()</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>See Table 2-25, “Type 8 Class Exception Conditions.”</p></div></body></html>

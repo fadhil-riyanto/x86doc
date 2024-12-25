@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>HADDPS - Packed Single Precision Floating-Point Horizontal Add </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › HADDPS - Packed Single Precision Floating-Point Horizontal Add </div>
+<div id="body">
+<h1>HADDPS—Packed Single Precision Floating-Point Horizontal Add</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32-bit Mode</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>F2 0F 7C /r</p>
+<p>HADDPS xmm1, xmm2/m128</p></td>
+<td>RM</td>
+<td>V/V</td>
+<td>SSE3</td>
+<td>Horizontal add packed single precision floating-point values from xmm2/m128 to xmm1.</td></tr>
+<tr>
+<td>
+<p>VEX.128.F2.0F.WIG 7C /r</p>
+<p>VHADDPS xmm1, xmm2, xmm3/m128</p></td>
+<td>RVM</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Horizontal add packed single precision floating-point values from xmm2 and xmm3/mem.</td></tr>
+<tr>
+<td>
+<p>VEX.256.F2.0F.WIG 7C /r</p>
+<p>VHADDPS ymm1, ymm2, ymm3/m256</p></td>
+<td>RVM</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Horizontal add packed single precision floating-point values from ymm2 and ymm3/mem.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>RM</td>
+<td>ModRM:reg (r, w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>RVM</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Adds the single precision floating-point values in the first and second dwords of the destination operand and stores the result in the first dword of the destination operand.</p>
+<p>Adds single precision floating-point values in the third and fourth dword of the destination operand and stores the result in the second dword of the destination operand.</p>
+<p>Adds single precision floating-point values in the first and second dword of the source operand and stores the result in the third dword of the destination operand.</p>
+<p>Adds single precision floating-point values in the third and fourth dword of the source operand and stores the result in the fourth dword of the destination operand.</p>
+<p>In 64-bit mode, use of the REX.R prefix permits this instruction to access additional registers (XMM8-XMM15).</p>
+<p>See Figure 3-19 for HADDPS; see Figure 3-20 for VHADDPS.</p>
+<svg width="541.71" height="324.01350000003004" viewBox="118.465000 369963.723000 361.140000 216.009000">
+<rect x="118.465" y="369963.723" width="361.14" height="216.00900000002002" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M256.846000,370017.725000 L256.846000,370037.976000 L147.342000,370037.976000 L147.342000,370036.319000 L145.998000,370034.976000 L144.341000,370034.976000 L142.684000,370034.976000 L141.341000,370036.319000 L141.341000,370037.976000 L133.091000,370037.976000 L133.091000,370098.728000 L189.343000,370098.728000 L189.343000,370104.548000 " style="stroke:black"></path>
+<path d="M391.851000,370017.725000 L391.851000,370028.975000 L259.846000,370028.975000 L259.846000,370027.318000 L258.503000,370025.975000 L256.845000,370025.975000 L255.188000,370025.975000 L253.845000,370027.318000 L253.845000,370028.975000 L192.343000,370028.975000 L192.343000,370027.318000 L191.000000,370025.975000 L189.343000,370025.975000 L187.686000,370025.975000 L186.343000,370027.318000 L186.343000,370028.975000 L144.341000,370028.975000 L144.341000,370094.228000 L256.845000,370094.228000 L256.845000,370104.548000 " style="stroke:black"></path>
+<path d="M189.343000,370017.725000 L189.343000,370037.976000 " style="stroke:black"></path>
+<path d="M324.348000,370017.725000 L324.348000,370028.975000 " style="stroke:black"></path>
+<path d="M256.846000,370089.728000 L256.846000,370077.118000 " style="stroke:black"></path>
+<path d="M189.343000,370077.122000 L189.343000,370089.733000 L324.348000,370089.733000 L324.348000,370104.413000 " style="stroke:black"></path>
+<path d="M324.348000,370077.122000 L324.348000,370085.232000 L391.851000,370085.232000 L391.851000,370104.413000 " style="stroke:black"></path>
+<path d="M391.851000,370087.347000 L391.851000,370077.127000 " style="stroke:black"></path>
+<path d="M326.389000,370104.413000 L324.349000,370108.493000 L322.309000,370104.413000 L326.389000,370104.413000 " style="stroke:black"></path>
+<path d="M393.891000,370104.413000 L391.851000,370108.493000 L389.811000,370104.413000 L393.891000,370104.413000 " style="stroke:black"></path>
+<path d="M191.383000,370104.549000 L189.343000,370108.629000 L187.303000,370104.549000 L191.383000,370104.549000 " style="stroke:black"></path>
+<path d="M258.886000,370104.549000 L256.846000,370108.629000 L254.806000,370104.549000 L258.886000,370104.549000 " style="stroke:black"></path>
+<text x="228.6996" y="369981.49020672" style="font-size:8.000300pt" textLength="105.79596720000004" lengthAdjust="spacingAndGlyphs">HADDPS xmm1, xmm2/m128</text>
+<text x="432.07762639" y="370002.00377595" style="font-size:8.000300pt" textLength="24.0009" lengthAdjust="spacingAndGlyphs">xmm2/</text>
+<text x="174.3374" y="370006.80420672003" style="font-size:8.000300pt" textLength="28.913084200000014" lengthAdjust="spacingAndGlyphs">[127:96]</text>
+<text x="244.6152" y="370006.80420672003" style="font-size:8.000300pt" textLength="24.464917399999962" lengthAdjust="spacingAndGlyphs">[95:64]</text>
+<text x="312.118" y="370006.80420672003" style="font-size:8.000300pt" textLength="24.46491739999999" lengthAdjust="spacingAndGlyphs">[63:32]</text>
+<text x="381.8408" y="370006.80420672003" style="font-size:8.000300pt" textLength="20.016750599999966" lengthAdjust="spacingAndGlyphs">[31:0]</text>
+<text x="432.07762639" y="370011.60413595004" style="font-size:8.000300pt" textLength="20.00875030000003" lengthAdjust="spacingAndGlyphs">m128</text>
+<text x="432.07849834999996" y="370066.20003398" style="font-size:8.000300pt" textLength="21.776816600000018" lengthAdjust="spacingAndGlyphs">xmm1</text>
+<text x="174.3374" y="370066.20050672" style="font-size:8.000300pt" textLength="28.913084200000014" lengthAdjust="spacingAndGlyphs">[127:96]</text>
+<text x="244.6152" y="370066.20050672" style="font-size:8.000300pt" textLength="24.464917399999962" lengthAdjust="spacingAndGlyphs">[95:64]</text>
+<text x="312.118" y="370066.20050672" style="font-size:8.000300pt" textLength="24.46491739999999" lengthAdjust="spacingAndGlyphs">[63:32]</text>
+<text x="381.8408" y="370066.20050672" style="font-size:8.000300pt" textLength="20.016750599999966" lengthAdjust="spacingAndGlyphs">[31:0]</text>
+<text x="169.4072" y="370125.05190672004" style="font-size:7.273000pt" textLength="40.00877300000002" lengthAdjust="spacingAndGlyphs">xmm2/m128</text>
+<text x="237.485" y="370125.05190672004" style="font-size:7.273000pt" textLength="40.00877300000002" lengthAdjust="spacingAndGlyphs">xmm2/m128</text>
+<text x="432.07762639" y="370129.80936848" style="font-size:8.000300pt" textLength="32.30521139999996" lengthAdjust="spacingAndGlyphs">RESULT:</text>
+<text x="300.9675" y="370129.85220672004" style="font-size:7.273000pt" textLength="48.30726600000003" lengthAdjust="spacingAndGlyphs">xmm1[95:64] +</text>
+<text x="370.4304" y="370129.85220672004" style="font-size:7.273000pt" textLength="44.26347800000002" lengthAdjust="spacingAndGlyphs">xmm1[31:0] +</text>
+<text x="163.4266121" y="370134.65226672" style="font-size:7.273000pt" textLength="52.351054000000005" lengthAdjust="spacingAndGlyphs">[95:64] + xmm2/</text>
+<text x="233.4652129" y="370134.65226672" style="font-size:7.273000pt" textLength="48.307266" lengthAdjust="spacingAndGlyphs">[31:0] + xmm2/</text>
+<text x="432.07762639" y="370139.40972848004" style="font-size:8.000300pt" textLength="21.776816600000018" lengthAdjust="spacingAndGlyphs">xmm1</text>
+<text x="302.04754049999997" y="370139.45256672" style="font-size:7.273000pt" textLength="46.081728" lengthAdjust="spacingAndGlyphs">xmm1[127:96]</text>
+<text x="371.50025830000004" y="370139.45256672" style="font-size:7.273000pt" textLength="42.03793999999999" lengthAdjust="spacingAndGlyphs">xmm1[63:32]</text>
+<text x="167.2369368" y="370144.25262672" style="font-size:7.273000pt" textLength="44.474395000000015" lengthAdjust="spacingAndGlyphs">m128[127:96]</text>
+<text x="237.2755376" y="370144.25262672" style="font-size:7.273000pt" textLength="40.43060700000001" lengthAdjust="spacingAndGlyphs">m128[63:32]</text>
+<text x="174.89262082" y="370168.86068361" style="font-size:8.000300pt" textLength="28.913084200000014" lengthAdjust="spacingAndGlyphs">[127:96]</text>
+<text x="244.62563570999998" y="370168.86068361" style="font-size:8.000300pt" textLength="24.46491739999999" lengthAdjust="spacingAndGlyphs">[95:64]</text>
+<text x="307.62823163999997" y="370168.86068361" style="font-size:8.000300pt" textLength="24.46491739999999" lengthAdjust="spacingAndGlyphs">[63:32]</text>
+<text x="386.35118363999993" y="370168.86068361" style="font-size:8.000300pt" textLength="20.016750600000023" lengthAdjust="spacingAndGlyphs">[31:0]</text>
+<rect x="223.094" y="369990.724" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="290.597" y="369990.724" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="358.1" y="369990.724" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="223.094" y="370050.121" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="290.597" y="370050.121" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="358.1" y="370050.121" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="154.467" y="369990.724" width="68.62800000000001" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="154.467" y="370050.121" width="68.62800000000001" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="223.094" y="370108.492" width="67.50299999999999" height="47.151999999943655" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="290.597" y="370108.492" width="67.50299999999999" height="47.151999999943655" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="358.1" y="370108.492" width="67.50299999999999" height="47.151999999943655" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="154.467" y="370108.492" width="68.62800000000001" height="47.151999999943655" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="223.094" y="369990.724" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="290.597" y="369990.724" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="358.1" y="369990.724" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="223.094" y="370050.121" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="290.597" y="370050.121" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="358.1" y="370050.121" width="67.50299999999999" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="154.467" y="369990.724" width="68.62800000000001" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="154.467" y="370050.121" width="68.62800000000001" height="27.00099999998929" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="223.094" y="370108.492" width="67.50299999999999" height="47.151999999943655" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="290.597" y="370108.492" width="67.50299999999999" height="47.151999999943655" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="358.1" y="370108.492" width="67.50299999999999" height="47.151999999943655" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="154.467" y="370108.492" width="68.62800000000001" height="47.151999999943655" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<p>OM15994</p>
+<h3>Figure 3-19.  HADDPS—Packed Single Precision Floating-Point Horizontal Add</h3>
+<p>X7</p>
+<p>X6</p>
+<p>X5</p>
+<p>X4</p>
+<p>X3</p>
+<p>X2</p>
+<p>X1</p>
+<p>X0</p>
+<svg width="445.50003000000004" height="76.09500749994186" viewBox="170.820000 370283.579995 297.000020 50.730005">
+<rect x="170.82" y="370283.58" width="37.139999999999986" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<path d="M333.840000,370327.320000 L331.860000,370327.620000 L332.820000,370334.100000 L334.800000,370333.800000 " style="stroke:black"></path>
+<rect x="207.96" y="370283.58" width="37.140000000000015" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="245.1" y="370283.58" width="37.140000000000015" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="282.24" y="370283.58" width="37.079999999999984" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="319.32" y="370283.58" width="37.139999999999986" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="356.46" y="370283.58" width="37.139999999999986" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="393.6" y="370283.58" width="37.139999999999986" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="430.74" y="370283.58" width="37.079999999999984" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="181.92" y="370321.9925324" style="font-size:7.539800pt" textLength="9.17216670000002" lengthAdjust="spacingAndGlyphs">Y7</text>
+<rect x="170.82" y="370313.94" width="37.139999999999986" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="219.06" y="370321.9925324" style="font-size:7.539800pt" textLength="9.17216670000002" lengthAdjust="spacingAndGlyphs">Y6</text>
+<rect x="207.96" y="370313.94" width="37.140000000000015" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="256.14" y="370321.9925324" style="font-size:7.539800pt" textLength="9.232485099999963" lengthAdjust="spacingAndGlyphs">Y5</text>
+<rect x="245.1" y="370313.94" width="37.140000000000015" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="293.28" y="370321.9925324" style="font-size:7.539800pt" textLength="9.232485099999963" lengthAdjust="spacingAndGlyphs">Y4</text>
+<rect x="282.24" y="370313.94" width="37.079999999999984" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="330.42" y="370321.9925324" style="font-size:7.539800pt" textLength="9.172166699999991" lengthAdjust="spacingAndGlyphs">Y3</text>
+<rect x="319.32" y="370313.94" width="37.139999999999986" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="367.56" y="370321.9925324" style="font-size:7.539800pt" textLength="9.172166699999991" lengthAdjust="spacingAndGlyphs">Y2</text>
+<rect x="356.46" y="370313.94" width="37.139999999999986" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="404.7" y="370321.9925324" style="font-size:7.539800pt" textLength="9.172166699999991" lengthAdjust="spacingAndGlyphs">Y1</text>
+<rect x="393.6" y="370313.94" width="37.139999999999986" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="441.78" y="370321.9925324" style="font-size:7.539800pt" textLength="9.232485099999963" lengthAdjust="spacingAndGlyphs">Y0</text>
+<rect x="430.74" y="370313.94" width="37.079999999999984" height="13.5" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<p>SRC1</p>
+<p>SRC2</p>
+<p>DEST</p>
+<p>Y6+Y7</p>
+<p>Y4+Y5</p>
+<p>X6+X7</p>
+<p>X4+X5</p>
+<p>Y2+Y3</p>
+<p>Y0+Y1</p>
+<table>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>X2+X3</td>
+<td>X0+X1</td></tr></table>
+<h3>Figure 3-20.  VHADDPS Operation</h3>
+<p>128-bit Legacy SSE version: The second source can be an XMM register or an 128-bit memory location. The desti-nation is not distinct from the first source XMM register and the upper bits (MAXVL-1:128) of the corresponding YMM register destination are unmodified.</p>
+<p>VEX.128 encoded version: the first source operand is an XMM register or 128-bit memory location. The destination operand is an XMM register. The upper bits (MAXVL-1:128) of the corresponding YMM register destination are zeroed.</p>
+<p>VEX.256 encoded version: The first source operand is a YMM register. The second source operand can be a YMM register or a 256-bit memory location. The destination operand is a YMM register.</p>
+<h2>Operation</h2>
+<p><strong>HADDPS (128-bit Legacy SSE Version)</strong></p>
+<pre>DEST[31:0] := SRC1[63:32] + SRC1[31:0]
+DEST[63:32] := SRC1[127:96] + SRC1[95:64]
+DEST[95:64] := SRC2[63:32] + SRC2[31:0]
+DEST[127:96] := SRC2[127:96] + SRC2[95:64]
+DEST[MAXVL-1:128] (Unmodified)</pre>
+<p><strong>VHADDPS (VEX.128 Encoded Version)</strong></p>
+<pre>DEST[31:0] := SRC1[63:32] + SRC1[31:0]
+DEST[63:32] := SRC1[127:96] + SRC1[95:64]
+DEST[95:64] := SRC2[63:32] + SRC2[31:0]
+DEST[127:96] := SRC2[127:96] + SRC2[95:64]
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>VHADDPS (VEX.256 Encoded Version)</strong></p>
+<pre>DEST[31:0] := SRC1[63:32] + SRC1[31:0]
+DEST[63:32] := SRC1[127:96] + SRC1[95:64]
+DEST[95:64] := SRC2[63:32] + SRC2[31:0]
+DEST[127:96] := SRC2[127:96] + SRC2[95:64]
+DEST[159:128] := SRC1[191:160] + SRC1[159:128]
+DEST[191:160] := SRC1[255:224] + SRC1[223:192]
+DEST[223:192] := SRC2[191:160] + SRC2[159:128]
+DEST[255:224] := SRC2[255:224] + SRC2[223:192]</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>HADDPS __m128 _mm_hadd_ps (__m128 a, __m128 b);</p>
+<p>VHADDPS __m256 _mm256_hadd_ps (__m256 a, __m256 b);</p>
+<h2>Exceptions</h2>
+<p>When the source operand is a memory operand, the operand must be aligned on a 16-byte boundary or a general-protection exception (#GP) will be generated.</p>
+<h2>Numeric Exceptions</h2>
+<p>Overflow, Underflow, Invalid, Precision, Denormal.</p>
+<h2>Other Exceptions</h2>
+<p>See Table 2-19, “Type 2 Class Exception Conditions.”</p></div></body></html>

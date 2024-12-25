@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VMAXPH - Return Maximum of Packed FP16 Values </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VMAXPH - Return Maximum of Packed FP16 Values </div>
+<div id="body">
+<h1>VMAXPH—Return Maximum of Packed FP16 Values</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.128.NP.MAP5.W0 5F /r VMAXPH xmm1{k1}{z}, xmm2, xmm3/m128/m16bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16 AVX512VL</td>
+<td>Return the maximum packed FP16 values between xmm2 and xmm3/m128/m16bcst and store the result in xmm1 subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.NP.MAP5.W0 5F /r VMAXPH ymm1{k1}{z}, ymm2, ymm3/m256/m16bcst</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16 AVX512VL</td>
+<td>Return the maximum packed FP16 values between ymm2 and ymm3/m256/m16bcst and store the result in ymm1 subject to writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.NP.MAP5.W0 5F /r VMAXPH zmm1{k1}{z}, zmm2, zmm3/m512/m16bcst {sae}</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512-FP16</td>
+<td>Return the maximum packed FP16 values between zmm2 and zmm3/m512/m16bcst and store the result in zmm1 subject to writemask k1.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>This instruction performs a SIMD compare of the packed FP16 values in the first source operand and the second source operand and returns the maximum value for each pair of values to the destination operand.</p>
+<p>If the values being compared are both 0.0s (of either sign), the value in the second operand (source operand) is returned. If a value in the second operand is an SNaN, then SNaN is forwarded unchanged to the destination (that is, a QNaN version of the SNaN is not returned).</p>
+<p>If only one value is a NaN (SNaN or QNaN) for this instruction, the second operand (source operand), either a NaN or a valid floating-point value, is written to the result. If instead of this behavior, it is required that the NaN source operand (from either the first or second operand) be returned, the action of VMAXPH can be emulated using a sequence of instructions, such as, a comparison followed by AND, ANDN and OR.</p>
+<p>EVEX encoded versions: The first source operand (the second operand) is a ZMM/YMM/XMM register. The second source operand can be a ZMM/YMM/XMM register, a 512/256/128-bit memory location or a 512/256/128-bit vector broadcast from a 16-bit memory location. The destination operand is a ZMM/YMM/XMM register conditionally updated with writemask k1.</p>
+<p><strong>Operation</strong></p>
+<p>def MAX(SRC1, SRC2):</p>
+<p>IF (SRC1 = 0.0) and (SRC2 = 0.0):</p>
+<p>DEST := SRC2</p>
+<p>ELSE IF (SRC1 = NaN):</p>
+<p>DEST := SRC2</p>
+<p>ELSE IF (SRC2 = NaN):</p>
+<p>DEST := SRC2</p>
+<p>ELSE IF (SRC1 &gt; SRC2):</p>
+<p>DEST := SRC1</p>
+<p>ELSE:</p>
+<p>DEST := SRC2</p>
+<p><strong>VMAXPH dest, src1, src2</strong></p>
+<p>VL = 128, 256 or 512</p>
+<p>KL := VL/16</p>
+<p>FOR j := 0 TO KL-1:</p>
+<p>IF k1[j] OR *no writemask*:</p>
+<p>IF EVEX.b = 1:</p>
+<p>tsrc2 := SRC2.fp16[0]</p>
+<p>ELSE:</p>
+<p>tsrc2 := SRC2.fp16[j]</p>
+<p>DEST.fp16[j] := MAX(SRC1.fp16[j], tsrc2)</p>
+<p>ELSE IF *zeroing*:</p>
+<p>DEST.fp16[j] := 0</p>
+<p>// else dest.fp16[j] remains unchanged</p>
+<p>DEST[MAXVL-1:VL] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VMAXPH __m128h _mm_mask_max_ph (__m128h src, __mmask8 k, __m128h a, __m128h b);</p>
+<p>VMAXPH __m128h _mm_maskz_max_ph (__mmask8 k, __m128h a, __m128h b);</p>
+<p>VMAXPH __m128h _mm_max_ph (__m128h a, __m128h b);</p>
+<p>VMAXPH __m256h _mm256_mask_max_ph (__m256h src, __mmask16 k, __m256h a, __m256h b);</p>
+<p>VMAXPH __m256h _mm256_maskz_max_ph (__mmask16 k, __m256h a, __m256h b);</p>
+<p>VMAXPH __m256h _mm256_max_ph (__m256h a, __m256h b);</p>
+<p>VMAXPH __m512h _mm512_mask_max_ph (__m512h src, __mmask32 k, __m512h a, __m512h b);</p>
+<p>VMAXPH __m512h _mm512_maskz_max_ph (__mmask32 k, __m512h a, __m512h b);</p>
+<p>VMAXPH __m512h _mm512_max_ph (__m512h a, __m512h b);</p>
+<p>VMAXPH __m512h _mm512_mask_max_round_ph (__m512h src, __mmask32 k, __m512h a, __m512h b, int sae);</p>
+<p>VMAXPH __m512h _mm512_maskz_max_round_ph (__mmask32 k, __m512h a, __m512h b, int sae);</p>
+<p>VMAXPH __m512h _mm512_max_round_ph (__m512h a, __m512h b, int sae);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Invalid, Denormal.</p>
+<p><strong>Other Exceptions</strong></p>
+<p>EVEX-encoded instructions, see Table 2-46, “Type E2 Class Exception Conditions.”</p></div></body></html>

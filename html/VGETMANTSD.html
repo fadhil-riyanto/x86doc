@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>VGETMANTSD - Extract Float64 of Normalized Mantissas From Float64 Scalar </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › VGETMANTSD - Extract Float64 of Normalized Mantissas From Float64 Scalar </div>
+<div id="body">
+<h1>VGETMANTSD—Extract Float64 of Normalized Mantissas From Float64 Scalar</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>EVEX.LLIG.66.0F3A.W1 27 /r ib VGETMANTSD xmm1 {k1}{z}, xmm2, xmm3/m64{sae}, imm8</td>
+<td>A</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Extract the normalized mantissa of the low float64 element in xmm3/m64 using imm8 for sign control and mantissa interval normalization. Store the mantissa to xmm1 under the writemask k1 and merge with the other elements of xmm2.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>Tuple1 Scalar</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<p><strong>Description</strong></p>
+<p>Convert the double precision floating values in the low quadword element of the second source operand (the third operand) to double precision floating-point value with the mantissa normalization and sign control specified by the imm8 byte, see Figure 5-15. The converted result is written to the low quadword element of the destination operand (the first operand) using writemask k1. Bits (127:64) of the XMM register destination are copied from corresponding bits in the first source operand. The normalized mantissa is specified by interv (imm8[1:0]) and the sign control (sc) is specified by bits 3:2 of the immediate byte.</p>
+<p>The conversion operation is:</p>
+<p><em>GetMant</em>(<em>x</em>) = <em>±</em>2<em><sup>k</sup>|x.significand|</em></p>
+<p>where:</p>
+<p>1 <em>&lt;</em>= <em>|x.significand| &lt; </em>2</p>
+<p>Unbiased exponent k can be either 0 or -1, depending on the interval range defined by interv, the range of the significand and whether the exponent of the source is even or odd. The sign of the final result is determined by sc and the source sign. The encoded value of imm8[1:0] and sign control are shown in Figure 5-15.</p>
+<p>The converted double precision floating-point result is encoded according to the sign control, the unbiased expo-nent k (adding bias) and a mantissa normalized to the range specified by interv.</p>
+<p>The GetMant() function follows Table 5-8 when dealing with floating-point special numbers.</p>
+<p>If writemasking is used, the low quadword element of the destination operand is conditionally updated depending on the value of writemask register k1. If writemasking is not used, the low quadword element of the destination operand is unconditionally updated.</p>
+<p><strong>Operation</strong></p>
+<p>// getmant_fp64(src, sign_control, normalization_interval) is defined in the operation section of VGETMANTPD</p>
+<p><strong>VGETMANTSD (EVEX encoded version)</strong></p>
+<p>SignCtrl[1:0] := IMM8[3:2];</p>
+<p>Interv[1:0] := IMM8[1:0];</p>
+<p>IF k1[0] OR *no writemask*</p>
+<p>THEN DEST[63:0] :=</p>
+<p>getmant_fp64(src, sign_control, normalization_interval)</p>
+<p>ELSE</p>
+<p>IF *merging-masking*</p>
+<p>; merging-masking</p>
+<p>THEN *DEST[63:0] remains unchanged*</p>
+<p>ELSE</p>
+<p>; zeroing-masking</p>
+<p>DEST[63:0] := 0</p>
+<p>FI</p>
+<p>FI;</p>
+<p>DEST[127:64] := SRC1[127:64]</p>
+<p>DEST[MAXVL-1:128] := 0</p>
+<p><strong>Intel C/C++ Compiler Intrinsic Equivalent</strong></p>
+<p>VGETMANTSD __m128d _mm_getmant_sd( __m128d a, __m128 b, enum intv, enum sgn); VGETMANTSD __m128d _mm_mask_getmant_sd(__m128d s, __mmask8 k, __m128d a, __m128d b, enum intv, enum sgn); VGETMANTSD __m128d _mm_maskz_getmant_sd( __mmask8 k, __m128 a, __m128d b, enum intv, enum sgn); VGETMANTSD __m128d _mm_getmant_round_sd( __m128d a, __m128 b, enum intv, enum sgn, int r); VGETMANTSD __m128d _mm_mask_getmant_round_sd(__m128d s, __mmask8 k, __m128d a, __m128d b, enum intv, enum sgn, int r); VGETMANTSD __m128d _mm_maskz_getmant_round_sd( __mmask8 k, __m128d a, __m128d b, enum intv, enum sgn, int r);</p>
+<p><strong>SIMD Floating-Point Exceptions</strong></p>
+<p>Denormal, Invalid</p>
+<p><strong>Other Exceptions</strong></p>
+<p>See Table 2-47, “Type E3 Class Exception Conditions.”</p></div></body></html>

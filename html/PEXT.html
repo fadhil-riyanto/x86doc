@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>PEXT - Parallel Bits Extract </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › PEXT - Parallel Bits Extract </div>
+<div id="body">
+<h1>PEXT—Parallel Bits Extract</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32-bit Mode</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>VEX.LZ.F3.0F38.W0 F5 /r PEXT <em>r32a, r32b, r/m32</em></td>
+<td>RVM</td>
+<td>V/V</td>
+<td>BMI2</td>
+<td>Parallel extract of bits from <em>r32b</em> using mask in <em>r/m32</em>, result is written to <em>r32a</em>.</td></tr>
+<tr>
+<td>VEX.LZ.F3.0F38.W1 F5 /r PEXT<em> r64a, r64b, r/m64</em></td>
+<td>RVM</td>
+<td>V/N.E.</td>
+<td>BMI2</td>
+<td>Parallel extract of bits from <em>r64b</em> using mask in <em>r/m64</em>, result is written to <em>r64a</em>.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>RVM</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>PEXT uses a mask in the second source operand (the third operand) to transfer either contiguous or non-contig-uous bits in the first source operand (the second operand) to contiguous low order bit positions in the destination (the first operand). For each bit set in the MASK, PEXT extracts the corresponding bits from the first source operand and writes them into contiguous lower bits of destination operand. The remaining upper bits of destination are zeroed.</p>
+<p>SRC1</p>
+<svg width="234.72000000000003" height="97.73999999996158" viewBox="309.420005 215778.120010 156.480000 65.160000">
+<text x="315.54" y="215788.6038" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S7</text>
+<text x="333.66" y="215788.6038" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S6</text>
+<text x="351.78" y="215788.6038" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S5</text>
+<rect x="348.18" y="215778.6" width="19.319999999999993" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="328.8" y="215778.6" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="371.7" y="215788.6038" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S4</text>
+<text x="393.42" y="215788.6038" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S3</text>
+<text x="414.0" y="215788.6038" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S2</text>
+<rect x="406.02" y="215778.6" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="367.44" y="215778.66" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="386.64" y="215778.72" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="452.7" y="215788.6038" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S0</text>
+<rect x="444.66" y="215778.66" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="394.02" y="215833.3038" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="320.88089999999994" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="334.0208999999999" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="358.9805999999999" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="374.64059999999995" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="416.52029999999996" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="436.5003" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<text x="454.62" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<rect x="388.5" y="215825.16" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="407.88" y="215825.16" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="427.26" y="215825.16" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<svg width="148.14" height="97.02002249998623" viewBox="154.740000 215778.599995 98.760000 64.680015">
+<rect x="154.74" y="215778.6" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="174.12" y="215778.6" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="158.04" y="215788.6038" style="font-size:9.000000pt" textLength="81.51600000000002" lengthAdjust="spacingAndGlyphs">S31 S30 S29 S28 S27</text>
+<rect x="193.5" y="215778.6" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="212.76" y="215778.66" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="232.26" y="215778.6" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="160.26059999999995" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<rect x="156.66" y="215825.16" width="19.319999999999993" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="185.22029999999995" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<rect x="175.98" y="215825.16" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="202.14029999999994" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<rect x="195.36" y="215825.16" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="217.14059999999995" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">1</text>
+<text x="239.64059999999995" y="215834.0838" style="font-size:9.000000pt" textLength="5.7239999999999895" lengthAdjust="spacingAndGlyphs">0</text>
+<rect x="234.12" y="215825.16" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<p>S<sub>1</sub></p>
+<p>SRC2 (mask)</p>
+<p>S<sub>2</sub></p>
+<p>0</p>
+<p>0</p>
+<p>0</p>
+<p>0</p>
+<p>0</p>
+<p>0</p>
+<p>0</p>
+<p>0</p>
+<p>0</p>
+<p>S<sub>7</sub></p>
+<p>S<sub>5</sub></p>
+<p>DEST</p>
+<svg width="231.92999999999992" height="27.63002250001591" viewBox="314.400005 215881.139995 154.620000 18.420015">
+<rect x="333.78" y="215881.44" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="353.16" y="215881.44" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<text x="394.6203" y="215891.0235" style="font-size:9.000000pt" textLength="6.156000000000006" lengthAdjust="spacingAndGlyphs">S28</text>
+<rect x="411.0" y="215881.44" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect>
+<rect x="430.38" y="215881.44" width="19.379999999999995" height="18.119999999995343" style="fill:rgba(0,0,0,0);stroke:rgb(0,0,0);stroke-width:1pt;"></rect></svg>
+<p>bit 0</p>
+<p>bit 31</p>
+<h3>Figure 4-9.  PEXT Example</h3>
+<p>This instruction is not supported in real mode and virtual-8086 mode. The operand size is always 32 bits if not in 64-bit mode. In 64-bit mode operand size 64 requires VEX.W1. VEX.W1 is ignored in non-64-bit modes. An attempt to execute this instruction with VEX.L not equal to 0 will cause #UD.</p>
+<h2>Operation</h2>
+<pre>TEMP := SRC1;
+MASK := SRC2;
+DEST := 0 ;
+m := 0, k := 0;
+DO WHILE m &lt; OperandSize
+         IF MASK[ m] = 1 THEN
+              DEST[ k] := TEMP[ m];
+              k := k+ 1;
+         FI
+         m := m+ 1;
+OD</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>PEXT unsigned __int32 _pext_u32(unsigned __int32 src, unsigned __int32 mask);</p>
+<p>PEXT unsigned __int64 _pext_u64(unsigned __int64 src, unsigned __int32 mask);</p>
+<h2>SIMD Floating-Point Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>See Table 2-29, “Type 13 Class Exception Conditions.”</p></div></body></html>

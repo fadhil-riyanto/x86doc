@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>PXOR - Logical Exclusive OR </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › PXOR - Logical Exclusive OR </div>
+<div id="body">
+<h1>PXOR—Logical Exclusive OR</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32 bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>NP 0F EF /r<sup>1</sup></p>
+<p>PXOR mm, mm/m64</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>MMX</td>
+<td>Bitwise XOR of mm/m64 and mm.</td></tr>
+<tr>
+<td>
+<p>66 0F EF /r</p>
+<p>PXOR xmm1, xmm2/m128</p></td>
+<td>A</td>
+<td>V/V</td>
+<td>SSE2</td>
+<td>Bitwise XOR of xmm2/m128 and xmm1.</td></tr>
+<tr>
+<td>VEX.128.66.0F.WIG EF /r VPXOR xmm1, xmm2, xmm3/m128</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX</td>
+<td>Bitwise XOR of xmm3/m128 and xmm2.</td></tr>
+<tr>
+<td>VEX.256.66.0F.WIG EF /r VPXOR ymm1, ymm2, ymm3/m256</td>
+<td>B</td>
+<td>V/V</td>
+<td>AVX2</td>
+<td>Bitwise XOR of ymm3/m256 and ymm2.</td></tr>
+<tr>
+<td>EVEX.128.66.0F.W0 EF /r VPXORD xmm1 {k1}{z}, xmm2, xmm3/m128/m32bcst</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Bitwise XOR of packed doubleword integers in xmm2 and xmm3/m128 using writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F.W0 EF /r VPXORD ymm1 {k1}{z}, ymm2, ymm3/m256/m32bcst</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Bitwise XOR of packed doubleword integers in ymm2 and ymm3/m256 using writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F.W0 EF /r VPXORD zmm1 {k1}{z}, zmm2, zmm3/m512/m32bcst</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Bitwise XOR of packed doubleword integers in zmm2 and zmm3/m512/m32bcst using writemask k1.</td></tr>
+<tr>
+<td>EVEX.128.66.0F.W1 EF /r VPXORQ xmm1 {k1}{z}, xmm2, xmm3/m128/m64bcst</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Bitwise XOR of packed quadword integers in xmm2 and xmm3/m128 using writemask k1.</td></tr>
+<tr>
+<td>EVEX.256.66.0F.W1 EF /r VPXORQ ymm1 {k1}{z}, ymm2, ymm3/m256/m64bcst</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512VL AVX512F</td>
+<td>Bitwise XOR of packed quadword integers in ymm2 and ymm3/m256 using writemask k1.</td></tr>
+<tr>
+<td>EVEX.512.66.0F.W1 EF /r VPXORQ zmm1 {k1}{z}, zmm2, zmm3/m512/m64bcst</td>
+<td>C</td>
+<td>V/V</td>
+<td>AVX512F</td>
+<td>Bitwise XOR of packed quadword integers in zmm2 and zmm3/m512/m64bcst using writemask k1.</td></tr></table>
+<p><strong>NOTES:</strong></p>
+<p>1.  See note in Section 2.5, “Intel® AVX and Intel® SSE Instruction Exception Specification” in the Intel<em><sup>®</sup></em> 64 and IA-32 Architectures Soft-</p>
+<p>ware Developer’s Manual, Volume 2A and Section 23.25.3, “Exception Conditions of Legacy SIMD Instructions Operating on MMX Reg-isters” in the Intel<em><sup>® </sup></em>64 and IA-32 Architectures Software Developer’s Manual, Volume 3A.</p>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Tuple Type</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>A</td>
+<td>N/A</td>
+<td>ModRM:reg (r, w)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td>
+<td>N/A</td></tr>
+<tr>
+<td>B</td>
+<td>N/A</td>
+<td>ModRM:reg (w)</td>
+<td>VEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr>
+<tr>
+<td>C</td>
+<td>Full</td>
+<td>ModRM:reg (w)</td>
+<td>EVEX.vvvv (r)</td>
+<td>ModRM:r/m (r)</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Performs a bitwise logical exclusive-OR (XOR) operation on the source operand (second operand) and the destina-tion operand (first operand) and stores the result in the destination operand. Each bit of the result is 1 if the corre-sponding bits of the two operands are different; each bit is 0 if the corresponding bits of the operands are the same.</p>
+<p>In 64-bit mode and not encoded with VEX/EVEX, using a REX prefix in the form of REX.R permits this instruction to access additional registers (XMM8-XMM15).</p>
+<p>Legacy SSE instructions 64-bit operand: The source operand can be an MMX technology register or a 64-bit memory location. The destination operand is an MMX technology register.</p>
+<p>128-bit Legacy SSE version: The second source operand is an XMM register or a 128-bit memory location. The first source operand and destination operands are XMM registers. Bits (MAXVL-1:128) of the corresponding YMM desti-nation register remain unchanged.</p>
+<p>VEX.128 encoded version: The second source operand is an XMM register or a 128-bit memory location. The first source operand and destination operands are XMM registers. Bits (MAXVL-1:128) of the destination YMM register are zeroed.</p>
+<p>VEX.256 encoded version: The first source operand is a YMM register. The second source operand is a YMM register or a 256-bit memory location. The destination operand is a YMM register. The upper bits (MAXVL-1:256) of the corresponding register destination are zeroed.</p>
+<p>EVEX encoded versions: The first source operand is a ZMM/YMM/XMM register. The second source operand can be a ZMM/YMM/XMM register, a 512/256/128-bit memory location or a 512/256/128-bit vector broadcasted from a 32/64-bit memory location. The destination operand is a ZMM/YMM/XMM register conditionally updated with write-mask k1.</p>
+<h2>Operation</h2>
+<p><strong>PXOR (64-bit Operand)</strong></p>
+<pre>DEST := DEST XOR SRC</pre>
+<p><strong>PXOR (128-bit Legacy SSE Version)</strong></p>
+<pre>DEST := DEST XOR SRC
+DEST[MAXVL-1:128] (Unmodified)</pre>
+<p><strong>VPXOR (VEX.128 Encoded Version)</strong></p>
+<pre>DEST := SRC1 XOR SRC2
+DEST[MAXVL-1:128] := 0</pre>
+<p><strong>VPXOR (VEX.256 Encoded Version)</strong></p>
+<pre>DEST := SRC1 XOR SRC2
+DEST[MAXVL-1:256] := 0</pre>
+<p><strong>VPXORD (EVEX Encoded Versions)</strong></p>
+<pre>(KL, VL) = (4, 128), (8, 256), (16, 512)
+FOR j := 0 TO KL-1
+    i := j * 32
+    IF k1[j] OR *no writemask* THEN
+              IF (EVEX.b = 1) AND (SRC2 *is memory*)
+                    THEN DEST[i+31:i] := SRC1[i+31:i] BITWISE XOR SRC2[31:0]
+                    ELSE DEST[i+31:i] := SRC1[i+31:i] BITWISE XOR SRC2[i+31:i]
+              FI;
+    ELSE
+         IF *merging-masking*
+                                                    ; merging-masking
+              THEN *DEST[31:0] remains unchanged*
+              ELSE
+                                                    ; zeroing-masking
+                    DEST[31:0] := 0
+         FI;
+    FI;
+ENDFOR;
+DEST[MAXVL-1:VL] := 0</pre>
+<p><strong>VPXORQ (EVEX Encoded Versions)</strong></p>
+<pre>(KL, VL) = (2, 128), (4, 256), (8, 512)
+FOR j := 0 TO KL-1
+    i := j * 64
+    IF k1[j] OR *no writemask* THEN
+              IF (EVEX.b = 1) AND (SRC2 *is memory*)
+                    THEN DEST[i+63:i] := SRC1[i+63:i] BITWISE XOR SRC2[63:0]
+                    ELSE DEST[i+63:i] := SRC1[i+63:i] BITWISE XOR SRC2[i+63:i]
+              FI;
+    ELSE
+         IF *merging-masking*
+                                                    ; merging-masking
+              THEN *DEST[63:0] remains unchanged*
+              ELSE
+                                                    ; zeroing-masking
+                    DEST[63:0] := 0
+         FI;
+    FI;
+ENDFOR;
+DEST[MAXVL-1:VL] := 0</pre>
+<h2>Intel C/C++ Compiler Intrinsic Equivalent</h2>
+<p>VPXORD __m512i _mm512_xor_epi32(__m512i a, __m512i b)</p>
+<p>VPXORD __m512i _mm512_mask_xor_epi32(__m512i s, __mmask16 m, __m512i a, __m512i b)</p>
+<p>VPXORD __m512i _mm512_maskz_xor_epi32( __mmask16 m, __m512i a, __m512i b)</p>
+<p>VPXORD __m256i _mm256_xor_epi32(__m256i a, __m256i b)</p>
+<p>VPXORD __m256i _mm256_mask_xor_epi32(__m256i s, __mmask8 m, __m256i a, __m256i b)</p>
+<p>VPXORD __m256i _mm256_maskz_xor_epi32( __mmask8 m, __m256i a, __m256i b)</p>
+<p>VPXORD __m128i _mm_xor_epi32(__m128i a, __m128i b)</p>
+<p>VPXORD __m128i _mm_mask_xor_epi32(__m128i s, __mmask8 m, __m128i a, __m128i b)</p>
+<p>VPXORD __m128i _mm_maskz_xor_epi32( __mmask16 m, __m128i a, __m128i b)</p>
+<p>VPXORQ __m512i _mm512_xor_epi64( __m512i a, __m512i b);</p>
+<p>VPXORQ __m512i _mm512_mask_xor_epi64(__m512i s, __mmask8 m, __m512i a, __m512i b);</p>
+<p>VPXORQ __m512i _mm512_maskz_xor_epi64(__mmask8 m, __m512i a, __m512i b);</p>
+<p>VPXORQ __m256i _mm256_xor_epi64( __m256i a, __m256i b);</p>
+<p>VPXORQ __m256i _mm256_mask_xor_epi64(__m256i s, __mmask8 m, __m256i a, __m256i b);</p>
+<p>VPXORQ __m256i _mm256_maskz_xor_epi64(__mmask8 m, __m256i a, __m256i b);</p>
+<p>VPXORQ __m128i _mm_xor_epi64( __m128i a, __m128i b);</p>
+<p>VPXORQ __m128i _mm_mask_xor_epi64(__m128i s, __mmask8 m, __m128i a, __m128i b);</p>
+<p>VPXORQ __m128i _mm_maskz_xor_epi64(__mmask8 m, __m128i a, __m128i b);</p>
+<p>PXOR:__m64 _mm_xor_si64 (__m64 m1, __m64 m2)</p>
+<p>(V)PXOR:__m128i _mm_xor_si128 ( __m128i a, __m128i b)</p>
+<p>VPXOR:__m256i _mm256_xor_si256 ( __m256i a, __m256i b)</p>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>Numeric Exceptions</h2>
+<p>None.</p>
+<h2>Other Exceptions</h2>
+<p>Non-EVEX-encoded instruction, see Table 2-21, “Type 4 Class Exception Conditions.”</p>
+<p>EVEX-encoded instruction, see Table 2-49, “Type E4 Class Exception Conditions.”</p></div></body></html>

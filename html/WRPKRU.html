@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script src="script.js"></script>
+<title>WRPKRU - Write Data to User Page Key Register </title></head>
+<body>
+<div id="head">
+<a href="index.html">x86doc</a> › WRPKRU - Write Data to User Page Key Register </div>
+<div id="body">
+<h1>WRPKRU—Write Data to User Page Key Register</h1>
+<table>
+<tr>
+<th>Opcode/Instruction</th>
+<th>Op/En</th>
+<th>64/32bit Mode Support</th>
+<th>CPUID Feature Flag</th>
+<th>Description</th></tr>
+<tr>
+<td>
+<p>NP 0F 01 EF</p>
+<p>WRPKRU</p></td>
+<td>ZO</td>
+<td>V/V</td>
+<td>OSPKE</td>
+<td>Writes EAX into PKRU.</td></tr></table>
+<h3>Instruction Operand Encoding</h3>
+<table>
+<tr>
+<th>Op/En</th>
+<th>Operand 1</th>
+<th>Operand 2</th>
+<th>Operand 3</th>
+<th>Operand 4</th></tr>
+<tr>
+<td>ZO</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td></tr></table>
+<h2>Description</h2>
+<p>Writes the value of EAX into PKRU. ECX and EDX must be 0 when WRPKRU is executed; otherwise, a general-protection exception (#GP) occurs.</p>
+<p>WRPKRU can be executed only if CR4.PKE = 1; otherwise, an invalid-opcode exception (#UD) occurs. Software can discover the value of CR4.PKE by examining CPUID.(EAX=07H,ECX=0H):ECX.OSPKE [bit 4].</p>
+<p>On processors that support the Intel 64 Architecture, the high-order 32-bits of RCX, RDX, and RAX are ignored.</p>
+<p>WRPKRU will never execute speculatively. Memory accesses affected by PKRU register will not execute (even speculatively) until all prior executions of WRPKRU have completed execution and updated the PKRU register.</p>
+<h2>Operation</h2>
+<pre>IF (ECX = 0 AND EDX = 0)
+    THEN PKRU := EAX;
+    ELSE #GP(0);
+FI;</pre>
+<h2>Flags Affected</h2>
+<p>None.</p>
+<h2>C/C++ Compiler Intrinsic Equivalent</h2>
+<p>WRPKRU void _wrpkru(uint32_t);</p>
+<h2>Protected Mode Exceptions</h2>
+<table class="exception-table">
+<tr>
+<td>#GP(0)</td>
+<td>
+<p>If ECX ≠ 0.</p>
+<p>If EDX ≠ 0.</p></td></tr>
+<tr>
+<td>#UD</td>
+<td>
+<p>If the LOCK prefix is used.</p>
+<p>If CR4.PKE = 0.</p></td></tr></table>
+<h2>Real-Address Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>Virtual-8086 Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>Compatibility Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p>
+<h2>64-Bit Mode Exceptions</h2>
+<p>Same exceptions as in protected mode.</p></div></body></html>
