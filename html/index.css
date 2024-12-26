@@ -1,0 +1,18 @@
+h1 {
+        padding-top: 40px;
+        padding-left: 20%;
+        padding-right: 20%;
+        text-align: center;
+}
+body {
+        background-color: black;
+        color: white;
+}
+
+a {
+        color: greenyellow;
+}
+
+form {
+        text-align: center;
+}
