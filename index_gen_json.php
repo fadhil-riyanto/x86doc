@@ -3,11 +3,12 @@ function append($txt) {
 	file_put_contents('./html/index.html', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
 }
 
-$data = array_diff(scandir("./html"), array('.', '..', 'script.js', 'style.css', 'data.json'));
+$data = array_diff(scandir("./html"), array('.', '..', 'script.js', 'style.css', 'index.css', 'data.json'));
 
 $packed = [];
 foreach($data as $key => $data_s ) {
 	$full_noraw = [
+		"title" => explode(".", $data_s)[0],
 		"keyword" => explode("_", explode(".", $data_s)[0]),
 		"file" => $data_s
 	];
