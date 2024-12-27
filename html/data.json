@@ -1889,7 +1889,8 @@
         {
             "title": "MOVDQA,VMOVDQA32_64",
             "keyword": [
-                "MOVDQA,VMOVDQA32",
+                "MOVDQA",
+                "VMOVDQA32",
                 "64"
             ],
             "file": "MOVDQA,VMOVDQA32_64.html"
@@ -1897,7 +1898,8 @@
         {
             "title": "MOVDQU,VMOVDQU8_16_32_64",
             "keyword": [
-                "MOVDQU,VMOVDQU8",
+                "MOVDQU",
+                "VMOVDQU8",
                 "16",
                 "32",
                 "64"
@@ -4393,28 +4395,40 @@
         {
             "title": "VF[,N]MADD[132,213,231]PH",
             "keyword": [
-                "VF[,N]MADD[132,213,231]PH"
+                "VF[",
+                "N]MADD[132",
+                "213",
+                "231]PH"
             ],
             "file": "VF[,N]MADD[132,213,231]PH.html"
         },
         {
             "title": "VF[,N]MADD[132,213,231]SH",
             "keyword": [
-                "VF[,N]MADD[132,213,231]SH"
+                "VF[",
+                "N]MADD[132",
+                "213",
+                "231]SH"
             ],
             "file": "VF[,N]MADD[132,213,231]SH.html"
         },
         {
             "title": "VF[,N]MSUB[132,213,231]PH",
             "keyword": [
-                "VF[,N]MSUB[132,213,231]PH"
+                "VF[",
+                "N]MSUB[132",
+                "213",
+                "231]PH"
             ],
             "file": "VF[,N]MSUB[132,213,231]PH.html"
         },
         {
             "title": "VF[,N]MSUB[132,213,231]SH",
             "keyword": [
-                "VF[,N]MSUB[132,213,231]SH"
+                "VF[",
+                "N]MSUB[132",
+                "213",
+                "231]SH"
             ],
             "file": "VF[,N]MSUB[132,213,231]SH.html"
         },
